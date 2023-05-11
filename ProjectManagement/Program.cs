@@ -1,7 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using ProjectManagement.Model;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ProjectManagementDBContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
 
 var app = builder.Build();
 
