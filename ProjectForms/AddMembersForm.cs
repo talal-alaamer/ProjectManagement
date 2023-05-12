@@ -20,7 +20,10 @@ namespace ProjectForms
             InitializeComponent();
             context = new ProjectManagementDBContext();
             selectedProject = project;
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
         }
 
         private void AddMembersForm_Load(object sender, EventArgs e)

@@ -22,7 +22,10 @@ namespace Test
             InitializeComponent();
             context = new ProjectManagementDBContext();
             this.currentUser = currentUser;
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
@@ -35,9 +38,7 @@ namespace Test
 
         private void button3_Click(object sender, EventArgs e)
         {
-            frmCreateProject frmC = new frmCreateProject(currentUser);
-            this.Hide();
-            frmC.ShowDialog();
+
         }
 
         private void RefreshDataGridView()
@@ -78,9 +79,9 @@ namespace Test
 
             if (selectedProject != null)
             {
-                this.Hide();
+
                 EditProjectsForm editProjectsForm = new EditProjectsForm(selectedProject, context, currentUser);
-                editProjectsForm.Show();
+                editProjectsForm.ShowDialog();
 
             }
             else
@@ -159,7 +160,13 @@ namespace Test
             {
                 MessageBox.Show("Please select a project to delete.");
             }
-           
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            frmCreateProject Addform = new frmCreateProject(currentUser);
+            Addform.ShowDialog();
         }
     }
 }

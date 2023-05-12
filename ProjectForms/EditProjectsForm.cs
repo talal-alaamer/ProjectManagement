@@ -42,13 +42,7 @@ namespace Test
 
             this.DialogResult = DialogResult.OK;
             this.Close();
-            ProjectManager pr = new ProjectManager(currentUser);
-            pr.Show();
-
-
-
-
-
+         
         }
 
 
@@ -64,9 +58,7 @@ namespace Test
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
-            ProjectManager projectManagementForm = new ProjectManager(currentUser);
-            projectManagementForm.ShowDialog();
+            this.Close(); 
         }
     }
 }

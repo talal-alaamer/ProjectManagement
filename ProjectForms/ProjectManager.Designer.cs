@@ -130,7 +130,7 @@
             btnAdd.TabIndex = 13;
             btnAdd.Text = "Add New Project";
             btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += button3_Click;
+            btnAdd.Click += btnAdd_Click;
             // 
             // btnEdit
             // 

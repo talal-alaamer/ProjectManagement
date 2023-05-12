@@ -21,7 +21,10 @@ namespace ProjectForms
             InitializeComponent();
             this.selectedProject = selectedProject;
             context = new ProjectManagementDBContext();
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
         }
 
         private void ManageTasksForm_Load(object sender, EventArgs e)

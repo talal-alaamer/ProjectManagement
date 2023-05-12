@@ -11,7 +11,10 @@ namespace Test
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
