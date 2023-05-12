@@ -52,5 +52,8 @@ namespace ProjectManagement.Model
         public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
         [InverseProperty("ProjectManager")]
         public virtual ICollection<Project> Projects { get; set; }
+
+        [NotMapped] // This property won't be mapped to the database
+        public string UserName {get{ return FirstName + " " + LastName; } }
     }
 }

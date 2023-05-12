@@ -60,11 +60,12 @@
             // 
             // button1
             // 
-            button1.BackColor = Color.Transparent;
+            button1.BackColor = Color.FromArgb(0, 0, 64);
             button1.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 0);
             button1.FlatAppearance.BorderSize = 3;
+            button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.ForeColor = Color.Black;
+            button1.ForeColor = Color.White;
             button1.Location = new Point(175, 306);
             button1.Name = "button1";
             button1.Size = new Size(151, 33);

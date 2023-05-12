@@ -30,8 +30,8 @@ namespace Test
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
-    {
+            if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
+            {
                 MessageBox.Show("Please Do not leave the project name and description empty.");
                 return;
             }
@@ -47,8 +47,8 @@ namespace Test
 
 
 
-           
-            
+
+
         }
 
 
@@ -59,7 +59,7 @@ namespace Test
             // Display the project details and members in the text boxes and DataGridView
             txtProjectName.Text = selectedProject.ProjectName;
             txtDescription.Text = selectedProject.Description;
-            
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectManagement.Model;
+using ProjectForms;
 
 namespace Test
 {
@@ -124,8 +125,21 @@ namespace Test
 
         private void btnAddMember_Click(object sender, EventArgs e)
         {
+            if (dgvProjects.SelectedCells.Count > 0)
+            {
+                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (selectedProject != null)
+                {
+                    AddMembersForm addform = new AddMembersForm(selectedProject);
 
-
+                    addform.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to delete.");
+            }
         }
     }
 }
