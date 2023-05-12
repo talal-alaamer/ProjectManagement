@@ -40,6 +40,7 @@
             btnEdit = new Button();
             btnDeleteProject = new Button();
             btnAddMember = new Button();
+            btnManageTasks = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvProjects).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -161,12 +162,23 @@
             btnAddMember.UseVisualStyleBackColor = true;
             btnAddMember.Click += btnAddMember_Click;
             // 
+            // btnManageTasks
+            // 
+            btnManageTasks.Location = new Point(485, 245);
+            btnManageTasks.Name = "btnManageTasks";
+            btnManageTasks.Size = new Size(119, 23);
+            btnManageTasks.TabIndex = 17;
+            btnManageTasks.Text = "Manage tasks";
+            btnManageTasks.UseVisualStyleBackColor = true;
+            btnManageTasks.Click += btnManageTasks_Click;
+            // 
             // ProjectManager
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(619, 495);
+            Controls.Add(btnManageTasks);
             Controls.Add(btnAddMember);
             Controls.Add(btnDeleteProject);
             Controls.Add(btnEdit);
@@ -202,5 +214,6 @@
         private Button btnEdit;
         private Button btnDeleteProject;
         private Button btnAddMember;
+        private Button btnManageTasks;
     }
 }

@@ -141,5 +141,25 @@ namespace Test
                 MessageBox.Show("Please select a project to delete.");
             }
         }
+
+        private void btnManageTasks_Click(object sender, EventArgs e)
+        {
+            if (dgvProjects.SelectedCells.Count > 0)
+            {
+                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (selectedProject != null)
+                {
+                    ManageTasksForm MngTask = new ManageTasksForm(selectedProject);
+
+                    MngTask.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to delete.");
+            }
+           
+        }
     }
 }
