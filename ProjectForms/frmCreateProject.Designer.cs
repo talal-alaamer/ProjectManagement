@@ -47,7 +47,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(-1, -1);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(417, 118);
+            pictureBox1.Size = new Size(338, 118);
             pictureBox1.TabIndex = 7;
             pictureBox1.TabStop = false;
             // 
@@ -57,7 +57,7 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(58, 33);
+            label4.Location = new Point(12, 31);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
             label4.TabIndex = 9;
@@ -68,7 +68,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(310, 102);
+            label3.Location = new Point(232, 102);
             label3.Name = "label3";
             label3.Size = new Size(81, 15);
             label3.TabIndex = 10;
@@ -77,9 +77,9 @@
             // txtProjectName
             // 
             txtProjectName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectName.Location = new Point(141, 158);
+            txtProjectName.Location = new Point(12, 156);
             txtProjectName.Name = "txtProjectName";
-            txtProjectName.Size = new Size(263, 29);
+            txtProjectName.Size = new Size(314, 29);
             txtProjectName.TabIndex = 11;
             // 
             // txtProjectManagerId
@@ -88,10 +88,10 @@
             txtProjectManagerId.BorderStyle = BorderStyle.FixedSingle;
             txtProjectManagerId.Enabled = false;
             txtProjectManagerId.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectManagerId.Location = new Point(141, 321);
+            txtProjectManagerId.Location = new Point(12, 337);
             txtProjectManagerId.Name = "txtProjectManagerId";
             txtProjectManagerId.ReadOnly = true;
-            txtProjectManagerId.Size = new Size(263, 29);
+            txtProjectManagerId.Size = new Size(314, 29);
             txtProjectManagerId.TabIndex = 13;
             txtProjectManagerId.TextAlign = HorizontalAlignment.Center;
             // 
@@ -101,7 +101,7 @@
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label1.ForeColor = Color.Black;
-            label1.Location = new Point(28, 161);
+            label1.Location = new Point(12, 132);
             label1.Name = "label1";
             label1.Size = new Size(107, 21);
             label1.TabIndex = 14;
@@ -112,7 +112,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.Black;
-            label2.Location = new Point(43, 203);
+            label2.Location = new Point(12, 188);
             label2.Name = "label2";
             label2.Size = new Size(92, 21);
             label2.TabIndex = 15;
@@ -123,7 +123,7 @@
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label5.ForeColor = Color.Black;
-            label5.Location = new Point(1, 324);
+            label5.Location = new Point(12, 313);
             label5.Name = "label5";
             label5.Size = new Size(130, 21);
             label5.TabIndex = 16;
@@ -131,9 +131,9 @@
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(141, 203);
+            txtDescription.Location = new Point(12, 214);
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(263, 96);
+            txtDescription.Size = new Size(314, 96);
             txtDescription.TabIndex = 17;
             txtDescription.Text = "";
             // 
@@ -143,7 +143,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button1.ForeColor = Color.Transparent;
-            button1.Location = new Point(157, 372);
+            button1.Location = new Point(28, 400);
             button1.Name = "button1";
             button1.Size = new Size(114, 35);
             button1.TabIndex = 18;
@@ -153,11 +153,11 @@
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = SystemColors.Control;
+            btnCancel.BackColor = Color.DarkRed;
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancel.ForeColor = Color.Black;
-            btnCancel.Location = new Point(277, 372);
+            btnCancel.ForeColor = Color.White;
+            btnCancel.Location = new Point(199, 400);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(114, 35);
             btnCancel.TabIndex = 19;
@@ -170,7 +170,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(416, 419);
+            ClientSize = new Size(338, 460);
             Controls.Add(btnCancel);
             Controls.Add(button1);
             Controls.Add(txtDescription);

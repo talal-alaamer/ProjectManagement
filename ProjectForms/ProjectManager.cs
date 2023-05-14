@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectManagement.Model;
+using ProjectForms;
 
 namespace Test
 {
@@ -21,7 +22,10 @@ namespace Test
             InitializeComponent();
             context = new ProjectManagementDBContext();
             this.currentUser = currentUser;
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
@@ -34,9 +38,7 @@ namespace Test
 
         private void button3_Click(object sender, EventArgs e)
         {
-            frmCreateProject frmC = new frmCreateProject(currentUser);
-            this.Hide();
-            frmC.ShowDialog();
+
         }
 
         private void RefreshDataGridView()
@@ -77,9 +79,9 @@ namespace Test
 
             if (selectedProject != null)
             {
-                this.Hide();
+
                 EditProjectsForm editProjectsForm = new EditProjectsForm(selectedProject, context, currentUser);
-                editProjectsForm.Show();
+                editProjectsForm.ShowDialog();
 
             }
             else
@@ -124,8 +126,47 @@ namespace Test
 
         private void btnAddMember_Click(object sender, EventArgs e)
         {
+            if (dgvProjects.SelectedCells.Count > 0)
+            {
+                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (selectedProject != null)
+                {
+                    AddMembersForm addform = new AddMembersForm(selectedProject);
 
+                    addform.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to delete.");
+            }
+        }
 
+        private void btnManageTasks_Click(object sender, EventArgs e)
+        {
+            if (dgvProjects.SelectedCells.Count > 0)
+            {
+                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (selectedProject != null)
+                {
+                    ManageTasksForm MngTask = new ManageTasksForm(selectedProject);
+
+                    MngTask.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to delete.");
+            }
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            frmCreateProject Addform = new frmCreateProject(currentUser);
+            Addform.ShowDialog();
         }
     }
 }

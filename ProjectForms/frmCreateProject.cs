@@ -20,6 +20,8 @@ namespace Test
             InitializeComponent();
             context = new ProjectManagementDBContext();
             this.currentUser = currentUser;
+
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
@@ -44,9 +46,7 @@ namespace Test
 
                 if (MessageBox.Show("Project created successfully!", "Success", MessageBoxButtons.OK) == DialogResult.OK)
                 {
-                    ProjectManager projectManagementForm = new ProjectManager(currentUser);
-                    projectManagementForm.Show();
-                    this.Hide();
+                    this.Close();
                 }
             }
             catch (Exception ex)
@@ -63,8 +63,7 @@ namespace Test
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
-            ProjectManager projectManagementForm = new ProjectManager(currentUser);
-            projectManagementForm.Show();
+            
 
         }
     }
