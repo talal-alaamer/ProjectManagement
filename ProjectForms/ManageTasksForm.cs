@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace ProjectForms
     {
         private Project selectedProject;
         private ProjectManagementDBContext context;
+
         public ManageTasksForm(Project selectedProject)
         {
             InitializeComponent();
@@ -36,34 +38,47 @@ namespace ProjectForms
 
         private void btnCreateTask_Click(object sender, EventArgs e)
         {
-
-
-
-            // Create a new task with the selected project member and other details
-            var newTask = new ProjectManagement.Model.Task
+            if (string.IsNullOrWhiteSpace(txtTaskName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
             {
-                TaskName = txtTaskName.Text,
-                Description = txtDescription.Text,
-                Status = ddlStatus.Text,
-                AssignDate = DateTime.Now,
-                Deadline = dtpDeadline.Value,
-                ProjectId = selectedProject.ProjectId,
+                MessageBox.Show("Please Do not leave the task name and description empty.");
+                return;
+            }
+            else
+            {
+                if (ddlStatus.SelectedItem != null)
+                {
+                    // Create a new task with the selected project member and other details
+                    var newTask = new ProjectManagement.Model.Task
+                    {
+                        TaskName = txtTaskName.Text,
+                        Description = txtDescription.Text,
+                        Status = ddlStatus.Text,
+                        AssignDate = DateTime.Now,
+                        Deadline = dtpDeadline.Value,
+                        ProjectId = selectedProject.ProjectId,
 
-            };
+                    };
 
-            // Save the new task to the database
-            context.Tasks.Add(newTask);
-            context.SaveChanges();
+                    // Save the new task to the database
+                    context.Tasks.Add(newTask);
+                    context.SaveChanges();
 
-            // Show a success message to the user
-            MessageBox.Show("Task created successfully!");
+                    // Show a success message to the user
+                    MessageBox.Show("Task created successfully!");
 
-            // Clear the input fields
-            ClearFields();
+                    // Clear the input fields
+                    ClearFields();
 
-            // Refresh the DataGridView to show the updated task list
-            LoadTasks();
+                    // Refresh the DataGridView to show the updated task list
+                    LoadTasks();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a status to assign the Task.");
+                }
+            }
         }
+
 
 
 
@@ -86,12 +101,19 @@ namespace ProjectForms
 
             dgvTasks.DataSource = tasks;
         }
+
+
+
+
+
+
         private void ClearFields()
         {
             txtTaskName.Text = string.Empty;
             txtDescription.Text = string.Empty;
             ddlStatus.SelectedIndex = -1;
             dtpDeadline.Value = DateTime.Now;
+
 
         }
 

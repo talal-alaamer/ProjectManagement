@@ -77,9 +77,9 @@
             // 
             ddlMembers.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ddlMembers.FormattingEnabled = true;
-            ddlMembers.Location = new Point(12, 348);
+            ddlMembers.Location = new Point(22, 348);
             ddlMembers.Name = "ddlMembers";
-            ddlMembers.Size = new Size(311, 29);
+            ddlMembers.Size = new Size(284, 29);
             ddlMembers.TabIndex = 16;
             // 
             // btnSave
@@ -88,7 +88,7 @@
             btnSave.FlatStyle = FlatStyle.Popup;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(36, 405);
+            btnSave.Location = new Point(22, 405);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(106, 33);
             btnSave.TabIndex = 17;
@@ -113,17 +113,17 @@
             // dgvMembers
             // 
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMembers.Location = new Point(12, 160);
+            dgvMembers.Location = new Point(22, 160);
             dgvMembers.Name = "dgvMembers";
             dgvMembers.RowTemplate.Height = 25;
-            dgvMembers.Size = new Size(311, 150);
+            dgvMembers.Size = new Size(284, 150);
             dgvMembers.TabIndex = 19;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(11, 136);
+            label1.Location = new Point(22, 136);
             label1.Name = "label1";
             label1.Size = new Size(131, 21);
             label1.TabIndex = 20;
@@ -133,7 +133,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(12, 324);
+            label2.Location = new Point(22, 324);
             label2.Name = "label2";
             label2.Size = new Size(305, 21);
             label2.TabIndex = 21;

@@ -25,6 +25,7 @@ namespace Test
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            
 
         }
 
@@ -36,11 +37,7 @@ namespace Test
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void RefreshDataGridView()
         {
             dgvProjects.DataSource = context.Projects.Select(p => new
@@ -167,6 +164,26 @@ namespace Test
         {
             frmCreateProject Addform = new frmCreateProject(currentUser);
             Addform.ShowDialog();
+        }
+
+        private void btnDashboard_Click(object sender, EventArgs e)
+        {
+            if (dgvProjects.SelectedCells.Count > 0)
+            {
+                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (selectedProject != null)
+                {
+                    ProjectDashboard Pd  = new ProjectDashboard(selectedProject, context);
+
+                    Pd.ShowDialog();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a project to delete.");
+            }
+
         }
     }
 }

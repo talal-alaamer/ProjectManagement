@@ -43,5 +43,7 @@ namespace ProjectManagement.Model
         public virtual Project Project { get; set; } = null!;
         [InverseProperty("Task")]
         public virtual ICollection<Comment> Comments { get; set; }
+        
+        
     }
 }
