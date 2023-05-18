@@ -25,6 +25,7 @@ namespace ProjectManagement.Model
         public virtual DbSet<ProjectMember> ProjectMembers { get; set; } = null!;
         public virtual DbSet<Task> Tasks { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

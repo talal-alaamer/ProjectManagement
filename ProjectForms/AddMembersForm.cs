@@ -35,7 +35,7 @@ namespace ProjectForms
         private void LoadUsers()
         {
             // Retrieve all users from the database
-            var users = context.Users.ToList();
+            var users = context.Users.Where(i => i.RoleId == 2).ToList();
 
             // Bind the users to the ComboBox
             ddlMembers.DataSource = users;

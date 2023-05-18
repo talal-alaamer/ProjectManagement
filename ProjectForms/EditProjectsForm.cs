@@ -24,7 +24,9 @@ namespace Test
             this.selectedProject = project;
             this.context = context;
             this.currentUser = currentUser;
+
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
 
         }
@@ -58,7 +60,8 @@ namespace Test
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Close(); 
+            this.Close();
+            
         }
     }
 }

@@ -1,3 +1,4 @@
+using ProjectForms;
 using ProjectManagement;
 using ProjectManagement.Model;
 using System.Linq;
@@ -62,6 +63,9 @@ namespace Test
                     else if (user.RoleId == 2) // User
                     {
                         // Redirect user to user dashboard
+                        ProjectMembers M = new ProjectMembers(user);
+                        this.Hide();
+                        M.Show();
                     }
                     else
                     {

@@ -41,6 +41,7 @@
             btnDeleteProject = new Button();
             btnAddMember = new Button();
             btnManageTasks = new Button();
+            btnDashboard = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvProjects).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -57,9 +58,9 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
-            pictureBox1.Location = new Point(-1, 0);
+            pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(626, 118);
+            pictureBox1.Size = new Size(620, 118);
             pictureBox1.TabIndex = 6;
             pictureBox1.TabStop = false;
             // 
@@ -172,12 +173,23 @@
             btnManageTasks.UseVisualStyleBackColor = true;
             btnManageTasks.Click += btnManageTasks_Click;
             // 
+            // btnDashboard
+            // 
+            btnDashboard.Location = new Point(485, 462);
+            btnDashboard.Name = "btnDashboard";
+            btnDashboard.Size = new Size(119, 23);
+            btnDashboard.TabIndex = 18;
+            btnDashboard.Text = "Project dashboard";
+            btnDashboard.UseVisualStyleBackColor = true;
+            btnDashboard.Click += btnDashboard_Click;
+            // 
             // ProjectManager
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(619, 495);
+            Controls.Add(btnDashboard);
             Controls.Add(btnManageTasks);
             Controls.Add(btnAddMember);
             Controls.Add(btnDeleteProject);
@@ -215,5 +227,6 @@
         private Button btnDeleteProject;
         private Button btnAddMember;
         private Button btnManageTasks;
+        private Button btnDashboard;
     }
 }
