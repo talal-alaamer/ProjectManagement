@@ -12,6 +12,7 @@ namespace ProjectManagement.Model
         public Task()
         {
             Comments = new HashSet<Comment>();
+            Documents = new HashSet<Document>();
         }
 
         [Key]
@@ -23,27 +24,24 @@ namespace ProjectManagement.Model
         [Column("description")]
         [StringLength(1000)]
         public string? Description { get; set; }
-        [Column("status")]
-        [StringLength(50)]
-        public string Status { get; set; } = null!;
         [Column("assign_date", TypeName = "datetime")]
         public DateTime AssignDate { get; set; }
         [Column("deadline", TypeName = "datetime")]
         public DateTime? Deadline { get; set; }
+        [Column("status_id")]
+        public int StatusId { get; set; }
         [Column("project_id")]
         public int ProjectId { get; set; }
-        [Column("document_id")]
-        public int? DocumentId { get; set; }
 
-        [ForeignKey("DocumentId")]
-        [InverseProperty("Tasks")]
-        public virtual Document? Document { get; set; }
         [ForeignKey("ProjectId")]
         [InverseProperty("Tasks")]
         public virtual Project Project { get; set; } = null!;
+        [ForeignKey("StatusId")]
+        [InverseProperty("Tasks")]
+        public virtual TaskStatus Status { get; set; } = null!;
         [InverseProperty("Task")]
         public virtual ICollection<Comment> Comments { get; set; }
-        
-        
+        [InverseProperty("Task")]
+        public virtual ICollection<Document> Documents { get; set; }
     }
 }
