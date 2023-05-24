@@ -19,20 +19,21 @@ namespace ProjectManagement.Model
         public virtual DbSet<Audit> Audits { get; set; } = null!;
         public virtual DbSet<Comment> Comments { get; set; } = null!;
         public virtual DbSet<Document> Documents { get; set; } = null!;
+        public virtual DbSet<DocumentType> DocumentTypes { get; set; } = null!;
         public virtual DbSet<Log> Logs { get; set; } = null!;
         public virtual DbSet<Notification> Notifications { get; set; } = null!;
         public virtual DbSet<Project> Projects { get; set; } = null!;
         public virtual DbSet<ProjectMember> ProjectMembers { get; set; } = null!;
         public virtual DbSet<Task> Tasks { get; set; } = null!;
+        public virtual DbSet<TaskStatus> TaskStatuses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
-        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ProjectManagement;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=TALAL\\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;");
             }
         }
 
@@ -74,6 +75,18 @@ namespace ProjectManagement.Model
                     .IsRowVersion()
                     .IsConcurrencyToken();
 
+                entity.HasOne(d => d.Task)
+                    .WithMany(p => p.Documents)
+                    .HasForeignKey(d => d.TaskId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Document_Task1");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Documents)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Document_Type");
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.UserId)
@@ -89,7 +102,8 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Logs)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Log_User");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Log_User1");
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -97,7 +111,8 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Notifications)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Notification_User");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Notification_User1");
             });
 
             modelBuilder.Entity<Project>(entity =>
@@ -125,16 +140,17 @@ namespace ProjectManagement.Model
 
             modelBuilder.Entity<Task>(entity =>
             {
-                entity.HasOne(d => d.Document)
-                    .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.DocumentId)
-                    .HasConstraintName("FK_Task_Document");
-
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Task_Project");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Task_Status");
             });
 
             OnModelCreatingPartial(modelBuilder);
