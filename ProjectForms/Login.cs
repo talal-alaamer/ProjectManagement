@@ -1,18 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using ProjectForms;
 using ProjectManagement;
-using ProjectManagement.Model;
+using ProjectManagement.Areas.Identity.Data;
+using ProjectManagement.Data;
 using System.Linq;
+using System.Configuration;
 
 namespace Test
 {
     public partial class Login : Form
     {
-        ProjectManagementDBContext context;
+        IdentityContext identityContext;
+        private ServiceProvider? serviceProvider;
+
         public Login()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
-
+            identityContext = new IdentityContext();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -20,13 +36,12 @@ namespace Test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //hello
-            //ali commit
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-           /* try
+            try
             {
                 // Get the email and password from the form's text boxes
                 string email = txtEmail.Text;
@@ -43,52 +58,71 @@ namespace Test
                     MessageBox.Show("Please enter your password");
                     return;
                 }
-        */
-                // Get the user from the database using their email and password
-                Global.SelectedUser = context.Users
-                    .SingleOrDefault(u => u.UserId == 4);
 
-                /*if (user != null)
+                var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
+                if (signInResults == true)
                 {
-                    // Authentication successful
-                    // Check user's authorization
-                    if (user.RoleId == 1) // Admin
-                    {
-                        /*/// Redirect user to admin dashboard
-                        ProjectManager PM = new ProjectManager();
-                        this.Hide();
-                        PM.Show();
-
-                    /*}
-                    else if (user.RoleId == 2) // User
-                    {
-                        // Redirect user to user dashboard
-                        ProjectMembers M = new ProjectMembers(user);
-                        this.Hide();
-                        M.Show();
-                    }
-                    else
-                    {
-                        // Unauthorized access
-                        MessageBox.Show("You don't have permission to access this page");
-                    }
+                    ProjectManager PM = new ProjectManager();
+                    PM.Show();
+                    this.Hide();
                 }
                 else
                 {
-                    // Authentication failed
-                    MessageBox.Show("Invalid email or password");
+                    MessageBox.Show("Error. The username or password are not correct");
                 }
+
             }
             catch (Exception ex)
             {
                 // Handle any exceptions that may occur during the authentication process
                 MessageBox.Show($"An error occurred while trying to authenticate: {ex.Message}");
-            }*/
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
+        }
+
+
+        public async Task<bool> VerifyUserNamePassword(string userName, string password)
+        {
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            IServiceProvider serviceProvider;
+            serviceProvider = services.BuildServiceProvider();
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<Users>>();
+
+            var founduser = await userManager.FindByEmailAsync(txtEmail.Text);
+
+            if (founduser != null)
+            {
+                var passCheck = await userManager.CheckPasswordAsync(founduser, password) == true;
+
+                if (passCheck)
+                {
+                    //save into global class
+                    Global.SelectedUser = founduser;
+                }
+                return passCheck;
+            }
+            return false;
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<IdentityContext>();
+
+            // Register UserManager & RoleManager
+            services.AddIdentity<Users, IdentityRole>()
+               .AddEntityFrameworkStores<IdentityContext>()
+               .AddDefaultTokenProviders();
+
+            // UserManager & RoleManager require logging and HttpContext dependencies
+            services.AddLogging();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }
