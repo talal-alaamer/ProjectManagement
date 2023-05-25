@@ -16,28 +16,23 @@ namespace Test
     public partial class ProjectManager : Form
     {
         ProjectManagementDBContext context;
-        User currentUser;
-        public ProjectManager(User currentUser)
+
+        public ProjectManager()
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
-            this.currentUser = currentUser;
-
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            
+
 
         }
 
         private void ProjectManager_Load(object sender, EventArgs e)
         {
-
             RefreshDataGridView();
-
-
         }
 
-       
+
         private void RefreshDataGridView()
         {
             dgvProjects.DataSource = context.Projects.Select(p => new
@@ -72,12 +67,12 @@ namespace Test
         private void btnManage_Click(object sender, EventArgs e)
         {
             int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-            Project selectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
+            Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
 
-            if (selectedProject != null)
+            if (Global.SelectedProject != null)
             {
 
-                EditProjectsForm editProjectsForm = new EditProjectsForm(selectedProject, context, currentUser);
+                EditProjectsForm editProjectsForm = new EditProjectsForm(context);
                 editProjectsForm.ShowDialog();
 
             }
@@ -97,15 +92,15 @@ namespace Test
             if (dgvProjects.SelectedCells.Count > 0)
             {
                 int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
 
-                if (selectedProject != null)
+                if (Global.SelectedProject != null)
                 {
                     DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
                         // Delete the project and save changes to the database
-                        context.Projects.Remove(selectedProject);
+                        context.Projects.Remove(Global.SelectedProject);
                         context.SaveChanges();
                         RefreshDataGridView();
                     }
@@ -126,10 +121,10 @@ namespace Test
             if (dgvProjects.SelectedCells.Count > 0)
             {
                 int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
-                if (selectedProject != null)
+                Global.SelectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (Global.SelectedProject != null)
                 {
-                    AddMembersForm addform = new AddMembersForm(selectedProject);
+                    AddMembersForm addform = new AddMembersForm();
 
                     addform.ShowDialog();
                 }
@@ -145,11 +140,10 @@ namespace Test
             if (dgvProjects.SelectedCells.Count > 0)
             {
                 int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
-                if (selectedProject != null)
+                Global.SelectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (Global.SelectedProject != null)
                 {
-                    ManageTasksForm MngTask = new ManageTasksForm(selectedProject);
-
+                    ManageTasksForm MngTask = new ManageTasksForm();
                     MngTask.ShowDialog();
                 }
             }
@@ -162,7 +156,7 @@ namespace Test
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            frmCreateProject Addform = new frmCreateProject(currentUser);
+            frmCreateProject Addform = new frmCreateProject();
             Addform.ShowDialog();
         }
 
@@ -171,10 +165,10 @@ namespace Test
             if (dgvProjects.SelectedCells.Count > 0)
             {
                 int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                Project selectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
-                if (selectedProject != null)
+                Global.SelectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                if (Global.SelectedProject != null)
                 {
-                    ProjectDashboard Pd  = new ProjectDashboard(selectedProject, context);
+                    ProjectDashboard Pd = new ProjectDashboard(context);
 
                     Pd.ShowDialog();
                 }

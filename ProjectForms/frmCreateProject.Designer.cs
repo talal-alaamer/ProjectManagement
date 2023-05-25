@@ -125,9 +125,9 @@
             label5.ForeColor = Color.Black;
             label5.Location = new Point(12, 313);
             label5.Name = "label5";
-            label5.Size = new Size(130, 21);
+            label5.Size = new Size(138, 21);
             label5.TabIndex = 16;
-            label5.Text = "ProjectMangerID:";
+            label5.Text = "Project Manger ID:";
             // 
             // txtDescription
             // 

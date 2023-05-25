@@ -14,12 +14,12 @@ namespace ProjectForms
     public partial class AddMembersForm : Form
     {
         private ProjectManagementDBContext context;
-        private Project selectedProject;
-        public AddMembersForm(Project project)
+       
+        public AddMembersForm()
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
-            selectedProject = project;
+            
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -35,10 +35,10 @@ namespace ProjectForms
         private void LoadUsers()
         {
             // Retrieve all users from the database
-            var users = context.Users.Where(i => i.RoleId == 2).ToList();
+            //var users = context.Users.Where(i => i.RoleId == 2).ToList();
 
             // Bind the users to the ComboBox
-            ddlMembers.DataSource = users;
+           // ddlMembers.DataSource = users;
             ddlMembers.DisplayMember = "UserName";
             ddlMembers.ValueMember = "UserId";
         }
@@ -47,11 +47,11 @@ namespace ProjectForms
         {
             // Retrieve the project members for the selected project from the database
             var projectMembers = context.ProjectMembers
-                .Where(pm => pm.ProjectId == selectedProject.ProjectId)
+                .Where(pm => pm.ProjectId == Global.SelectedProject.ProjectId)
                 .Select(pm => new
                 {
                     Member_ID = pm.ProjectMemberId,
-                    Member_Name = pm.User.UserName // Display the user's full name as the member name
+                   // Member_Name = pm.User.UserName // Display the user's full name as the member name
                 })
                 .ToList();
 
@@ -70,7 +70,7 @@ namespace ProjectForms
             // Get the selected user from the drop-down list
             User selectedUser = (User)ddlMembers.SelectedItem;
 
-            bool isMember = selectedProject.ProjectMembers.Any(pm => pm.UserId == selectedUser.UserId);
+            bool isMember = Global.SelectedProject.ProjectMembers.Any(pm => pm.UserId == selectedUser.UserId);
             if (isMember)
             {
                 MessageBox.Show("Selected user is already a member of the project.");
@@ -81,7 +81,7 @@ namespace ProjectForms
             ProjectMember projectMember = new ProjectMember
             {
                 UserId = selectedUser.UserId,
-                ProjectId = selectedProject.ProjectId
+                ProjectId = Global.SelectedProject.ProjectId
             };
             context.ProjectMembers.Add(projectMember);
             context.SaveChanges();

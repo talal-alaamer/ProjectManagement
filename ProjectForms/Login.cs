@@ -26,7 +26,7 @@ namespace Test
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
+           /* try
             {
                 // Get the email and password from the form's text boxes
                 string email = txtEmail.Text;
@@ -43,23 +43,23 @@ namespace Test
                     MessageBox.Show("Please enter your password");
                     return;
                 }
-
+        */
                 // Get the user from the database using their email and password
-                var user = context.Users
-                    .SingleOrDefault(u => u.Email == email && u.Password == password);
+                Global.SelectedUser = context.Users
+                    .SingleOrDefault(u => u.UserId == 4);
 
-                if (user != null)
+                /*if (user != null)
                 {
                     // Authentication successful
                     // Check user's authorization
                     if (user.RoleId == 1) // Admin
                     {
-                        // Redirect user to admin dashboard
-                        ProjectManager PM = new ProjectManager(user);
+                        /*/// Redirect user to admin dashboard
+                        ProjectManager PM = new ProjectManager();
                         this.Hide();
                         PM.Show();
 
-                    }
+                    /*}
                     else if (user.RoleId == 2) // User
                     {
                         // Redirect user to user dashboard
@@ -83,7 +83,7 @@ namespace Test
             {
                 // Handle any exceptions that may occur during the authentication process
                 MessageBox.Show($"An error occurred while trying to authenticate: {ex.Message}");
-            }
+            }*/
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
