@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Model;
+﻿using ProjectForms;
+using ProjectManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,15 +16,14 @@ namespace Test
     public partial class EditProjectsForm : Form
     {
         private ProjectManagementDBContext context;
-        private Project selectedProject;
-        private User currentUser;
 
-        public EditProjectsForm(Project project, ProjectManagementDBContext context, User currentUser)
+
+
+        public EditProjectsForm(ProjectManagementDBContext context)
         {
             InitializeComponent();
-            this.selectedProject = project;
             this.context = context;
-            this.currentUser = currentUser;
+
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -37,14 +37,15 @@ namespace Test
                 MessageBox.Show("Please Do not leave the project name and description empty.");
                 return;
             }
-            // Update the project details and members in the database
-            selectedProject.ProjectName = txtProjectName.Text;
-            selectedProject.Description = txtDescription.Text;
+            // Update the project details and members in the database\
+
+            Global.SelectedProject.ProjectName = txtProjectName.Text;
+            Global.SelectedProject.Description = txtDescription.Text;
             context.SaveChanges();
 
             this.DialogResult = DialogResult.OK;
             this.Close();
-         
+
         }
 
 
@@ -53,15 +54,15 @@ namespace Test
         private void ManageProjectsForm_Load(object sender, EventArgs e)
         {
             // Display the project details and members in the text boxes and DataGridView
-            txtProjectName.Text = selectedProject.ProjectName;
-            txtDescription.Text = selectedProject.Description;
+            txtProjectName.Text = Global.SelectedProject.ProjectName;
+            txtDescription.Text = Global.SelectedProject.Description;
 
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
-            
+
         }
     }
 }

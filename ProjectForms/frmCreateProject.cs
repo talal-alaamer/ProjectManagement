@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Model;
+﻿using ProjectForms;
+using ProjectManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,12 +15,12 @@ namespace Test
     public partial class frmCreateProject : Form
     {
         ProjectManagementDBContext context;
-        private User currentUser;
-        public frmCreateProject(User currentUser)
+
+        public frmCreateProject()
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
-            this.currentUser = currentUser;
+
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -38,7 +39,7 @@ namespace Test
                 {
                     ProjectName = txtProjectName.Text.Trim(),
                     Description = txtDescription.Text.Trim(),
-                    ProjectManagerId = currentUser.UserId
+                    ProjectManagerId = Global.SelectedUser.UserId
                 };
 
                 context.Projects.Add(project);
@@ -57,7 +58,7 @@ namespace Test
 
         private void frmCreateProject_Load(object sender, EventArgs e)
         {
-            txtProjectManagerId.Text = currentUser.UserId.ToString();
+            txtProjectManagerId.Text = Global.SelectedUser.UserId.ToString();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

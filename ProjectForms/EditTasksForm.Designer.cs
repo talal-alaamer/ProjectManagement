@@ -1,6 +1,6 @@
-﻿namespace Test
+﻿namespace ProjectForms
 {
-    partial class EditProjectsForm
+    partial class EditTasksForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,25 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            txtProjectName = new TextBox();
             pictureBox1 = new PictureBox();
             label4 = new Label();
-            txtDescription = new RichTextBox();
-            label1 = new Label();
-            label2 = new Label();
             label3 = new Label();
+            txtTaskName = new TextBox();
+            txtDescription = new RichTextBox();
+            ddlStatus = new ComboBox();
+            dtpDeadline = new DateTimePicker();
             btnSave = new Button();
             btnCancel = new Button();
+            dtpAssignDate = new DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
-            // txtProjectName
-            // 
-            txtProjectName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectName.Location = new Point(12, 155);
-            txtProjectName.Name = "txtProjectName";
-            txtProjectName.Size = new Size(329, 29);
-            txtProjectName.TabIndex = 1;
             // 
             // pictureBox1
             // 
@@ -54,7 +47,7 @@
             pictureBox1.Location = new Point(-1, -1);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(359, 118);
-            pictureBox1.TabIndex = 7;
+            pictureBox1.TabIndex = 8;
             pictureBox1.TabStop = false;
             // 
             // label4
@@ -63,50 +56,55 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(31, 28);
+            label4.Location = new Point(34, 35);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
-            label4.TabIndex = 10;
+            label4.TabIndex = 11;
             label4.Text = "Project Manegment";
-            // 
-            // txtDescription
-            // 
-            txtDescription.Location = new Point(12, 239);
-            txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(329, 96);
-            txtDescription.TabIndex = 11;
-            txtDescription.Text = "";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 131);
-            label1.Name = "label1";
-            label1.Size = new Size(134, 21);
-            label1.TabIndex = 12;
-            label1.Text = "Edit Project name:";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(12, 215);
-            label2.Name = "label2";
-            label2.Size = new Size(172, 21);
-            label2.TabIndex = 13;
-            label2.Text = "Edit Project description:";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(242, 102);
+            label3.Location = new Point(258, 102);
             label3.Name = "label3";
-            label3.Size = new Size(104, 15);
-            label3.TabIndex = 14;
-            label3.Text = "Edit Project details";
+            label3.Size = new Size(89, 15);
+            label3.TabIndex = 15;
+            label3.Text = "Edit Task details";
+            // 
+            // txtTaskName
+            // 
+            txtTaskName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtTaskName.Location = new Point(70, 123);
+            txtTaskName.Name = "txtTaskName";
+            txtTaskName.Size = new Size(210, 29);
+            txtTaskName.TabIndex = 16;
+            // 
+            // txtDescription
+            // 
+            txtDescription.Location = new Point(70, 158);
+            txtDescription.Name = "txtDescription";
+            txtDescription.Size = new Size(210, 96);
+            txtDescription.TabIndex = 25;
+            txtDescription.Text = "";
+            // 
+            // ddlStatus
+            // 
+            ddlStatus.FormattingEnabled = true;
+            ddlStatus.Location = new Point(70, 260);
+            ddlStatus.Name = "ddlStatus";
+            ddlStatus.Size = new Size(210, 23);
+            ddlStatus.TabIndex = 27;
+            ddlStatus.SelectedIndexChanged += ddlStatus_SelectedIndexChanged;
+            // 
+            // dtpDeadline
+            // 
+            dtpDeadline.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            dtpDeadline.Location = new Point(70, 350);
+            dtpDeadline.Name = "dtpDeadline";
+            dtpDeadline.Size = new Size(210, 29);
+            dtpDeadline.TabIndex = 28;
             // 
             // btnSave
             // 
@@ -114,10 +112,10 @@
             btnSave.FlatStyle = FlatStyle.Popup;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.Transparent;
-            btnSave.Location = new Point(78, 361);
+            btnSave.Location = new Point(70, 466);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(106, 33);
-            btnSave.TabIndex = 15;
+            btnSave.TabIndex = 29;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
@@ -128,46 +126,56 @@
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(190, 361);
+            btnCancel.Location = new Point(182, 466);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(106, 33);
-            btnCancel.TabIndex = 16;
+            btnCancel.TabIndex = 30;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += btnCancel_Click;
             // 
-            // EditProjectsForm
+            // dtpAssignDate
+            // 
+            dtpAssignDate.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            dtpAssignDate.Location = new Point(70, 301);
+            dtpAssignDate.Name = "dtpAssignDate";
+            dtpAssignDate.Size = new Size(210, 29);
+            dtpAssignDate.TabIndex = 31;
+            // 
+            // EditTasksForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(358, 420);
+            ClientSize = new Size(359, 501);
+            Controls.Add(dtpAssignDate);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(dtpDeadline);
+            Controls.Add(ddlStatus);
             Controls.Add(txtDescription);
+            Controls.Add(txtTaskName);
+            Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
-            Controls.Add(txtProjectName);
-            Name = "EditProjectsForm";
-            Text = "ManageProjectsForm";
-            Load += ManageProjectsForm_Load;
+            Name = "EditTasksForm";
+            Text = "EditTasksForm";
+            Load += EditTasksForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private TextBox txtProjectName;
+
         private PictureBox pictureBox1;
         private Label label4;
-        private RichTextBox txtDescription;
-        private Label label1;
-        private Label label2;
         private Label label3;
+        private TextBox txtTaskName;
+        private RichTextBox txtDescription;
+        private ComboBox ddlStatus;
+        private DateTimePicker dtpDeadline;
         private Button btnSave;
         private Button btnCancel;
+        private DateTimePicker dtpAssignDate;
     }
 }
