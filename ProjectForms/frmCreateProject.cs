@@ -39,7 +39,7 @@ namespace Test
                 {
                     ProjectName = txtProjectName.Text.Trim(),
                     Description = txtDescription.Text.Trim(),
-                    ProjectManagerId = Global.SelectedUser.UserId
+                    //ProjectManagerId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId);
                 };
 
                 context.Projects.Add(project);
@@ -58,7 +58,7 @@ namespace Test
 
         private void frmCreateProject_Load(object sender, EventArgs e)
         {
-            txtProjectManagerId.Text = Global.SelectedUser.UserId.ToString();
+            //txtProjectManagerId.Text = Global.SelectedUser.UserId.ToString();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
