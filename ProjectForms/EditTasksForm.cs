@@ -16,7 +16,7 @@ namespace ProjectForms
     {
         private ProjectManagementDBContext context;
         private ProjectManagement.Model.Task selectedTask;
-        
+
 
         public EditTasksForm(ProjectManagementDBContext context, ProjectManagement.Model.Task Tasks)
         {
@@ -35,9 +35,9 @@ namespace ProjectForms
             ddlStatus.ValueMember = "TaskStatusId";
             ddlStatus.DisplayMember = "Status";
             dtpAssignDate.Value = selectedTask.AssignDate;
-            dtpDeadline.Value = (DateTime)selectedTask.Deadline;
+            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
             ddlStatus.SelectedItem = selectedTask.Status;
-            
+
 
         }
 

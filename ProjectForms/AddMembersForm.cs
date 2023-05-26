@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectManagement.Model;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using ProjectManagement.Areas.Identity;
+using ProjectManagement.Data;
 
 namespace ProjectForms
 {
@@ -34,13 +38,15 @@ namespace ProjectForms
         }
         private void LoadUsers()
         {
-            // Retrieve all users from the database
-            //var users = context.Users.Where(i => i.RoleId == 2).ToList();
+            
+            using (var context = new IdentityContext())
+            {
+                var users = context.Users.ToList();
+                ddlMembers.DataSource = users;
+                ddlMembers.DisplayMember = "UserName";
+                ddlMembers.ValueMember = "Id";
+            }
 
-            // Bind the users to the ComboBox
-           // ddlMembers.DataSource = users;
-            ddlMembers.DisplayMember = "UserName";
-            ddlMembers.ValueMember = "UserId";
         }
 
         private void LoadProjectMembers()
@@ -97,8 +103,10 @@ namespace ProjectForms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             // Close the form or dialog without making any changes
-            DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel; 
             Close();
+            ProjectManager PM = new ProjectManager();
+            PM.Show();
         }
 
 

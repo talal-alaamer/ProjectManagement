@@ -87,7 +87,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(2, 1);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(929, 118);
+            pictureBox1.Size = new Size(937, 118);
             pictureBox1.TabIndex = 8;
             pictureBox1.TabStop = false;
             // 
@@ -108,7 +108,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(819, 104);
+            label3.Location = new Point(838, 104);
             label3.Name = "label3";
             label3.Size = new Size(80, 15);
             label3.TabIndex = 16;
@@ -270,7 +270,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(930, 472);
+            ClientSize = new Size(937, 472);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
