@@ -17,18 +17,25 @@ using ProjectManagement.Areas.Identity.Data;
 using ProjectManagement.Data;
 using System.Linq;
 using System.Configuration;
+using ProjectManagement.Model;
 
-namespace Test
+namespace ProjectForms
 {
     public partial class Login : Form
     {
         IdentityContext identityContext;
+        ProjectManagementDBContext context;
         private ServiceProvider? serviceProvider;
+        
+
 
         public Login()
         {
             InitializeComponent();
             identityContext = new IdentityContext();
+            this.context = new ProjectManagementDBContext();
+            
+
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -62,6 +69,7 @@ namespace Test
                 var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
                 if (signInResults == true)
                 {
+                   
                     ProjectManager PM = new ProjectManager();
                     PM.Show();
                     this.Hide();
@@ -74,8 +82,18 @@ namespace Test
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process
-                MessageBox.Show($"An error occurred while trying to authenticate: {ex.Message}");
+                // Handle any exceptions that may occur during the authentication process and log them
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                if (userid != 0)
+                {
+                    LoggingService logger = new LoggingService(context);
+                    logger.LogException(ex, userid);
+                }
+                else
+                {
+                    MessageBox.Show($"No user found: {ex.Message}");
+                }
             }
         }
 

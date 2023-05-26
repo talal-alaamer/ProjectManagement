@@ -1,4 +1,4 @@
-﻿namespace Test
+﻿namespace ProjectForms
 {
     partial class ProjectManager
     {

@@ -10,45 +10,50 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace ProjectForms
 {
-    public partial class EditProjectsForm : Form
+    public partial class CreateProjectForm : Form
     {
-        private ProjectManagementDBContext context;
+        ProjectManagementDBContext context;
 
-
-
-        public EditProjectsForm(ProjectManagementDBContext context)
+        public CreateProjectForm()
         {
             InitializeComponent();
-            this.context = context;
+            context = new ProjectManagementDBContext();
 
 
-            this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
-
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
-        private void btnSave_Click(object sender, EventArgs e)
+
+        private void button1_Click(object sender, EventArgs e)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {
-                    MessageBox.Show("Please Do not leave the project name and description empty.");
+                    MessageBox.Show("Please enter a project name and description.");
                     return;
                 }
-                // Update the project details and members in the database\
+                
+                    Project project = new Project
+                    {
+                        ProjectName = txtProjectName.Text.Trim(),
+                        Description = txtDescription.Text.Trim(),
+                        ProjectManagerId = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId
+                    };
 
-                Global.SelectedProject.ProjectName = txtProjectName.Text;
-                Global.SelectedProject.Description = txtDescription.Text;
-                context.SaveChanges();
+                    context.Projects.Add(project);
+                    context.SaveChanges();
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-                ProjectManager PM = new ProjectManager();
-                PM.Show();
+                    if (MessageBox.Show("Project created successfully!", "Success", MessageBoxButtons.OK) == DialogResult.OK)
+                    {
+                        this.Close();
+                        ProjectManager PM = new ProjectManager();
+                        PM.Show();
+                }
+                
+                
             }
             catch (Exception ex)
             {
@@ -68,18 +73,11 @@ namespace ProjectForms
 
 
             }
-
         }
 
-
-
-
-        private void ManageProjectsForm_Load(object sender, EventArgs e)
+        private void frmCreateProject_Load(object sender, EventArgs e)
         {
-            // Display the project details and members in the text boxes and DataGridView
-            txtProjectName.Text = Global.SelectedProject.ProjectName;
-            txtDescription.Text = Global.SelectedProject.Description;
-
+            txtProjectManagerId.Text = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -87,6 +85,7 @@ namespace ProjectForms
             this.Close();
             ProjectManager PM = new ProjectManager();
             PM.Show();
+
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Test
+﻿namespace ProjectForms
 {
-    partial class frmCreateProject
+    partial class CreateProjectForm
     {
         /// <summary>
         /// Required designer variable.

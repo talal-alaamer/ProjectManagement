@@ -76,14 +76,14 @@
             // txtTaskName
             // 
             txtTaskName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtTaskName.Location = new Point(70, 123);
+            txtTaskName.Location = new Point(78, 160);
             txtTaskName.Name = "txtTaskName";
             txtTaskName.Size = new Size(210, 29);
             txtTaskName.TabIndex = 16;
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(70, 158);
+            txtDescription.Location = new Point(78, 204);
             txtDescription.Name = "txtDescription";
             txtDescription.Size = new Size(210, 96);
             txtDescription.TabIndex = 25;
@@ -92,7 +92,7 @@
             // ddlStatus
             // 
             ddlStatus.FormattingEnabled = true;
-            ddlStatus.Location = new Point(70, 260);
+            ddlStatus.Location = new Point(78, 306);
             ddlStatus.Name = "ddlStatus";
             ddlStatus.Size = new Size(210, 23);
             ddlStatus.TabIndex = 27;
@@ -101,7 +101,7 @@
             // dtpDeadline
             // 
             dtpDeadline.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            dtpDeadline.Location = new Point(70, 350);
+            dtpDeadline.Location = new Point(78, 380);
             dtpDeadline.Name = "dtpDeadline";
             dtpDeadline.Size = new Size(210, 29);
             dtpDeadline.TabIndex = 28;
@@ -136,7 +136,7 @@
             // dtpAssignDate
             // 
             dtpAssignDate.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            dtpAssignDate.Location = new Point(70, 301);
+            dtpAssignDate.Location = new Point(78, 345);
             dtpAssignDate.Name = "dtpAssignDate";
             dtpAssignDate.Size = new Size(210, 29);
             dtpAssignDate.TabIndex = 31;
