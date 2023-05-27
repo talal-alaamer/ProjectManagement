@@ -54,6 +54,11 @@
             btnClose = new Button();
             label9 = new Label();
             panel1 = new Panel();
+            panel5 = new Panel();
+            groupBox5 = new GroupBox();
+            lblNotStarted = new Label();
+            label8 = new Label();
+            pictureBox5 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
             panel4.SuspendLayout();
@@ -66,6 +71,9 @@
             groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             panel1.SuspendLayout();
+            panel5.SuspendLayout();
+            groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             SuspendLayout();
             // 
             // lblCompletedTasks
@@ -95,7 +103,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(-1, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(707, 118);
+            pictureBox1.Size = new Size(886, 118);
             pictureBox1.TabIndex = 7;
             pictureBox1.TabStop = false;
             // 
@@ -105,7 +113,7 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(212, 39);
+            label4.Location = new Point(297, 35);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
             label4.TabIndex = 13;
@@ -116,7 +124,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(575, 103);
+            label3.Location = new Point(757, 103);
             label3.Name = "label3";
             label3.Size = new Size(104, 15);
             label3.TabIndex = 17;
@@ -126,6 +134,7 @@
             // 
             groupBox1.AutoSize = true;
             groupBox1.BackColor = Color.Silver;
+            groupBox1.Controls.Add(panel5);
             groupBox1.Controls.Add(panel4);
             groupBox1.Controls.Add(panel3);
             groupBox1.Controls.Add(panel2);
@@ -133,7 +142,7 @@
             groupBox1.ForeColor = Color.Black;
             groupBox1.Location = new Point(12, 134);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(508, 308);
+            groupBox1.Size = new Size(675, 308);
             groupBox1.TabIndex = 19;
             groupBox1.TabStop = false;
             groupBox1.Text = "Dashboard";
@@ -171,10 +180,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 12.5F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(7, 143);
+            label1.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(2, 143);
             label1.Name = "label1";
-            label1.Size = new Size(137, 23);
+            label1.Size = new Size(146, 23);
             label1.TabIndex = 4;
             label1.Text = "Tasks Completed";
             // 
@@ -184,7 +193,7 @@
             panel3.Controls.Add(groupBox3);
             panel3.Controls.Add(label2);
             panel3.Controls.Add(pictureBox3);
-            panel3.Location = new Point(180, 28);
+            panel3.Location = new Point(183, 28);
             panel3.Name = "panel3";
             panel3.Size = new Size(149, 252);
             panel3.TabIndex = 8;
@@ -201,10 +210,10 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12.5F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(6, 143);
+            label2.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(-1, 143);
             label2.Name = "label2";
-            label2.Size = new Size(140, 23);
+            label2.Size = new Size(147, 23);
             label2.TabIndex = 5;
             label2.Text = "Tasks In-Progress";
             // 
@@ -224,7 +233,7 @@
             panel2.Controls.Add(groupBox4);
             panel2.Controls.Add(label5);
             panel2.Controls.Add(pictureBox4);
-            panel2.Location = new Point(339, 28);
+            panel2.Location = new Point(351, 28);
             panel2.Name = "panel2";
             panel2.Size = new Size(149, 252);
             panel2.TabIndex = 7;
@@ -252,10 +261,10 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 12.5F, FontStyle.Regular, GraphicsUnit.Point);
+            label5.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
             label5.Location = new Point(18, 143);
             label5.Name = "label5";
-            label5.Size = new Size(118, 23);
+            label5.Size = new Size(125, 23);
             label5.TabIndex = 8;
             label5.Text = "Tasks Overdue";
             // 
@@ -341,17 +350,68 @@
             panel1.Controls.Add(label6);
             panel1.Controls.Add(txtProjectID);
             panel1.ForeColor = SystemColors.Control;
-            panel1.Location = new Point(526, 145);
+            panel1.Location = new Point(693, 145);
             panel1.Name = "panel1";
             panel1.Size = new Size(169, 297);
             panel1.TabIndex = 26;
+            // 
+            // panel5
+            // 
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(groupBox5);
+            panel5.Controls.Add(label8);
+            panel5.Controls.Add(pictureBox5);
+            panel5.Location = new Point(518, 28);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(149, 252);
+            panel5.TabIndex = 10;
+            // 
+            // groupBox5
+            // 
+            groupBox5.Controls.Add(lblNotStarted);
+            groupBox5.Location = new Point(18, 182);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(111, 50);
+            groupBox5.TabIndex = 9;
+            groupBox5.TabStop = false;
+            // 
+            // lblNotStarted
+            // 
+            lblNotStarted.AutoSize = true;
+            lblNotStarted.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
+            lblNotStarted.Location = new Point(45, 16);
+            lblNotStarted.Name = "lblNotStarted";
+            lblNotStarted.Size = new Size(26, 30);
+            lblNotStarted.TabIndex = 2;
+            lblNotStarted.Text = "4";
+            lblNotStarted.TextAlign = ContentAlignment.BottomCenter;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(2, 143);
+            label8.Name = "label8";
+            label8.Size = new Size(146, 23);
+            label8.TabIndex = 8;
+            label8.Text = "Tasks not started";
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.Image = Properties.Resources.remove;
+            pictureBox5.Location = new Point(18, 19);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(111, 113);
+            pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox5.TabIndex = 7;
+            pictureBox5.TabStop = false;
             // 
             // ProjectDashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(707, 455);
+            ClientSize = new Size(873, 455);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
@@ -379,6 +439,11 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -410,5 +475,10 @@
         private Label lblOverdueTasks;
         private Label label5;
         private PictureBox pictureBox4;
+        private Panel panel5;
+        private GroupBox groupBox5;
+        private Label lblNotStarted;
+        private Label label8;
+        private PictureBox pictureBox5;
     }
 }

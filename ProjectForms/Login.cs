@@ -26,7 +26,7 @@ namespace ProjectForms
         IdentityContext identityContext;
         ProjectManagementDBContext context;
         private ServiceProvider? serviceProvider;
-        
+
 
 
         public Login()
@@ -34,19 +34,14 @@ namespace ProjectForms
             InitializeComponent();
             identityContext = new IdentityContext();
             this.context = new ProjectManagementDBContext();
-            
+
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void button1_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
             try
             {
@@ -69,7 +64,7 @@ namespace ProjectForms
                 var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
                 if (signInResults == true)
                 {
-                   
+
                     ProjectManager PM = new ProjectManager();
                     PM.Show();
                     this.Hide();
@@ -97,7 +92,7 @@ namespace ProjectForms
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+            private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
         }
@@ -142,5 +137,8 @@ namespace ProjectForms
             services.AddLogging();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
+
+        
+        
     }
 }
