@@ -51,17 +51,22 @@ namespace ProjectForms
             selectedTask.TaskName = txtTaskName.Text;
             selectedTask.Description = txtDescription.Text;
             selectedTask.StatusId = (int)ddlStatus.SelectedValue;
-            selectedTask.AssignDate = dtpDeadline.Value;
+            selectedTask.AssignDate = dtpAssignDate.Value;
+            selectedTask.Deadline = dtpDeadline.Value;
             context.SaveChanges();
+
+            MessageBox.Show("Success!");
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
 
         }
 
-        private void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            var selctedStatus = ddlStatus.SelectedValue.ToString();
-
-
-
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
         }
     }
 }

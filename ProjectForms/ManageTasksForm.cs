@@ -134,7 +134,7 @@ namespace ProjectForms
                         Task_Name = i.TaskName,
                         Description = i.Description,
                         Status = i.Status.Status,
-                        AssignDate = DateTime.Now,
+                        AssignDate = i.AssignDate,
                         Deadline = i.Deadline,
 
 
@@ -199,7 +199,8 @@ namespace ProjectForms
                 {
 
                     EditTasksForm ET = new EditTasksForm(context, selectedTask);
-                    ET.ShowDialog();
+                    this.Hide();
+                    ET.Show();
                 }
                 else
                 {
