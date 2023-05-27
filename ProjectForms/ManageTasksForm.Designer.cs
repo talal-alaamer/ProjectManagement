@@ -159,7 +159,7 @@
             // 
             btnCreateTask.BackColor = Color.FromArgb(0, 0, 64);
             btnCreateTask.BackgroundImageLayout = ImageLayout.None;
-            btnCreateTask.FlatStyle = FlatStyle.Popup;
+            btnCreateTask.FlatStyle = FlatStyle.Flat;
             btnCreateTask.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCreateTask.ForeColor = Color.White;
             btnCreateTask.Location = new Point(103, 286);
@@ -174,14 +174,14 @@
             // 
             btnCancel.BackColor = Color.DarkRed;
             btnCancel.BackgroundImageLayout = ImageLayout.None;
-            btnCancel.FlatStyle = FlatStyle.Popup;
+            btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
             btnCancel.Location = new Point(211, 286);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(102, 32);
             btnCancel.TabIndex = 22;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "Close";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
@@ -197,10 +197,10 @@
             // 
             btnManageStatus.BackColor = Color.FromArgb(0, 0, 64);
             btnManageStatus.BackgroundImageLayout = ImageLayout.None;
-            btnManageStatus.FlatStyle = FlatStyle.Popup;
+            btnManageStatus.FlatStyle = FlatStyle.Flat;
             btnManageStatus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnManageStatus.ForeColor = Color.White;
-            btnManageStatus.Location = new Point(17, 291);
+            btnManageStatus.Location = new Point(15, 291);
             btnManageStatus.Name = "btnManageStatus";
             btnManageStatus.Size = new Size(162, 32);
             btnManageStatus.TabIndex = 27;
@@ -221,10 +221,10 @@
             // 
             btnDelete.BackColor = Color.DarkRed;
             btnDelete.BackgroundImageLayout = ImageLayout.None;
-            btnDelete.FlatStyle = FlatStyle.Popup;
+            btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(389, 291);
+            btnDelete.Location = new Point(395, 291);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(162, 32);
             btnDelete.TabIndex = 29;
@@ -271,10 +271,10 @@
             // 
             btnAddComments.BackColor = Color.White;
             btnAddComments.BackgroundImageLayout = ImageLayout.None;
-            btnAddComments.FlatStyle = FlatStyle.Popup;
+            btnAddComments.FlatStyle = FlatStyle.Flat;
             btnAddComments.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAddComments.ForeColor = Color.Black;
-            btnAddComments.Location = new Point(203, 291);
+            btnAddComments.Location = new Point(209, 291);
             btnAddComments.Name = "btnAddComments";
             btnAddComments.Size = new Size(162, 32);
             btnAddComments.TabIndex = 30;

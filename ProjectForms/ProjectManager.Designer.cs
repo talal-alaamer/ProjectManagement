@@ -123,7 +123,7 @@
             // btnRest
             // 
             btnRest.BackColor = Color.FromArgb(0, 0, 64);
-            btnRest.FlatStyle = FlatStyle.Flat;
+            btnRest.FlatStyle = FlatStyle.Popup;
             btnRest.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnRest.ForeColor = Color.White;
             btnRest.Location = new Point(380, 440);

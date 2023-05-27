@@ -37,15 +37,17 @@
             label3 = new Label();
             btnSave = new Button();
             btnCancel = new Button();
+            groupBox1 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // txtProjectName
             // 
             txtProjectName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectName.Location = new Point(12, 155);
+            txtProjectName.Location = new Point(6, 43);
             txtProjectName.Name = "txtProjectName";
-            txtProjectName.Size = new Size(329, 29);
+            txtProjectName.Size = new Size(317, 29);
             txtProjectName.TabIndex = 1;
             // 
             // pictureBox1
@@ -71,9 +73,9 @@
             // 
             // txtDescription
             // 
-            txtDescription.Location = new Point(12, 239);
+            txtDescription.Location = new Point(18, 239);
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(329, 96);
+            txtDescription.Size = new Size(317, 96);
             txtDescription.TabIndex = 11;
             txtDescription.Text = "";
             // 
@@ -81,7 +83,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 131);
+            label1.Location = new Point(6, 19);
             label1.Name = "label1";
             label1.Size = new Size(134, 21);
             label1.TabIndex = 12;
@@ -91,7 +93,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(12, 215);
+            label2.Location = new Point(6, 92);
             label2.Name = "label2";
             label2.Size = new Size(172, 21);
             label2.TabIndex = 13;
@@ -111,7 +113,7 @@
             // btnSave
             // 
             btnSave.BackColor = Color.FromArgb(0, 0, 64);
-            btnSave.FlatStyle = FlatStyle.Popup;
+            btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.Transparent;
             btnSave.Location = new Point(78, 361);
@@ -125,7 +127,7 @@
             // btnCancel
             // 
             btnCancel.BackColor = Color.DarkRed;
-            btnCancel.FlatStyle = FlatStyle.Popup;
+            btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
             btnCancel.Location = new Point(190, 361);
@@ -136,25 +138,38 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(txtProjectName);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            groupBox1.Location = new Point(12, 123);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(334, 232);
+            groupBox1.TabIndex = 17;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Project info";
+            // 
             // EditProjectsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(358, 420);
+            ClientSize = new Size(358, 404);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(txtDescription);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
-            Controls.Add(txtProjectName);
+            Controls.Add(groupBox1);
             Name = "EditProjectsForm";
             Text = "ManageProjectsForm";
             Load += ManageProjectsForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -169,5 +184,6 @@
         private Label label3;
         private Button btnSave;
         private Button btnCancel;
+        private GroupBox groupBox1;
     }
 }

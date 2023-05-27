@@ -18,12 +18,12 @@ namespace ProjectForms
     public partial class AddMembersForm : Form
     {
         private ProjectManagementDBContext context;
-       
+
         public AddMembersForm()
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
-            
+
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -38,14 +38,11 @@ namespace ProjectForms
         }
         private void LoadUsers()
         {
-            
-            using (var context = new IdentityContext())
-            {
-                var users = context.Users.ToList();
-                ddlMembers.DataSource = users;
-                ddlMembers.DisplayMember = "UserName";
-                ddlMembers.ValueMember = "Id";
-            }
+
+            var users = context.Users.ToList();
+            ddlMembers.DataSource = users;
+            ddlMembers.DisplayMember = "Email";
+            ddlMembers.ValueMember = "UserId";
 
         }
 
@@ -57,7 +54,8 @@ namespace ProjectForms
                 .Select(pm => new
                 {
                     Member_ID = pm.ProjectMemberId,
-                   // Member_Name = pm.User.UserName // Display the user's full name as the member name
+                    Member_Email = pm.User.Email,
+                    Project_ID = pm.ProjectId
                 })
                 .ToList();
 
@@ -74,9 +72,11 @@ namespace ProjectForms
             }
 
             // Get the selected user from the drop-down list
-            User selectedUser = (User)ddlMembers.SelectedItem;
 
-            bool isMember = Global.SelectedProject.ProjectMembers.Any(pm => pm.UserId == selectedUser.UserId);
+
+            User selectedUser = ddlMembers.SelectedItem as User;
+
+            bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
             if (isMember)
             {
                 MessageBox.Show("Selected user is already a member of the project.");
@@ -95,15 +95,13 @@ namespace ProjectForms
             // Refresh the DataGridView to display the updated list of project members
             LoadProjectMembers();
             MessageBox.Show("User added as a project member successfully.");
-
-
-
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             // Close the form or dialog without making any changes
-            DialogResult = DialogResult.Cancel; 
+            DialogResult = DialogResult.Cancel;
             Close();
             ProjectManager PM = new ProjectManager();
             PM.Show();

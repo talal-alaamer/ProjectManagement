@@ -367,10 +367,10 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.White;
-            btnClose.FlatStyle = FlatStyle.Popup;
-            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnClose.ForeColor = Color.Black;
+            btnClose.BackColor = Color.DarkRed;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnClose.ForeColor = Color.White;
             btnClose.Location = new Point(38, 234);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);

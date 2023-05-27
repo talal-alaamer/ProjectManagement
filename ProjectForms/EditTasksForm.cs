@@ -29,7 +29,16 @@ namespace ProjectForms
 
         private void EditTasksForm_Load(object sender, EventArgs e)
         {
-            loadTasks();
+            txtTaskName.Text = selectedTask.TaskName;
+            txtDescription.Text = selectedTask.Description;
+            ddlStatus.DataSource = context.TaskStatuses.ToList();
+            ddlStatus.ValueMember = "TaskStatusId";
+            ddlStatus.DisplayMember = "Status";
+            dtpAssignDate.Value = selectedTask.AssignDate;
+            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
+            ddlStatus.SelectedItem = selectedTask.Status;
+
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -42,27 +51,22 @@ namespace ProjectForms
             selectedTask.TaskName = txtTaskName.Text;
             selectedTask.Description = txtDescription.Text;
             selectedTask.StatusId = (int)ddlStatus.SelectedValue;
-            selectedTask.AssignDate = dtpDeadline.Value;
+            selectedTask.AssignDate = dtpAssignDate.Value;
+            selectedTask.Deadline = dtpDeadline.Value;
             context.SaveChanges();
 
+            MessageBox.Show("Success!");
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
+
         }
 
-        private void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            var selctedStatus = ddlStatus.SelectedValue.ToString();
-
-
-
-        }
-        private void loadTasks() {
-            txtTaskName.Text = selectedTask.TaskName;
-            txtDescription.Text = selectedTask.Description;
-            ddlStatus.DataSource = context.TaskStatuses.ToList();
-            ddlStatus.ValueMember = "TaskStatusId";
-            ddlStatus.DisplayMember = "Status";
-            dtpAssignDate.Value = selectedTask.AssignDate;
-            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
-            ddlStatus.SelectedItem = selectedTask.Status;
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
         }
     }
 }
