@@ -35,7 +35,7 @@ namespace ProjectForms
             identityContext = new IdentityContext();
             this.context = new ProjectManagementDBContext();
             
-
+            // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -99,6 +99,7 @@ namespace ProjectForms
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            // adding a button event that once clicked the password will be shown instead of dots
             txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
         }
 

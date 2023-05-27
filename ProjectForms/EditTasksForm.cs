@@ -29,16 +29,7 @@ namespace ProjectForms
 
         private void EditTasksForm_Load(object sender, EventArgs e)
         {
-            txtTaskName.Text = selectedTask.TaskName;
-            txtDescription.Text = selectedTask.Description;
-            ddlStatus.DataSource = context.TaskStatuses.ToList();
-            ddlStatus.ValueMember = "TaskStatusId";
-            ddlStatus.DisplayMember = "Status";
-            dtpAssignDate.Value = selectedTask.AssignDate;
-            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
-            ddlStatus.SelectedItem = selectedTask.Status;
-
-
+            loadTasks();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -62,6 +53,16 @@ namespace ProjectForms
 
 
 
+        }
+        private void loadTasks() {
+            txtTaskName.Text = selectedTask.TaskName;
+            txtDescription.Text = selectedTask.Description;
+            ddlStatus.DataSource = context.TaskStatuses.ToList();
+            ddlStatus.ValueMember = "TaskStatusId";
+            ddlStatus.DisplayMember = "Status";
+            dtpAssignDate.Value = selectedTask.AssignDate;
+            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
+            ddlStatus.SelectedItem = selectedTask.Status;
         }
     }
 }

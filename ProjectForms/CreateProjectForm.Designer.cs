@@ -143,7 +143,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button1.ForeColor = Color.Transparent;
-            button1.Location = new Point(28, 400);
+            button1.Location = new Point(61, 400);
             button1.Name = "button1";
             button1.Size = new Size(114, 35);
             button1.TabIndex = 18;
@@ -157,7 +157,7 @@
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(199, 400);
+            btnCancel.Location = new Point(181, 400);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(114, 35);
             btnCancel.TabIndex = 19;
@@ -165,7 +165,7 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
-            // frmCreateProject
+            // CreateProjectForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -183,7 +183,7 @@
             Controls.Add(label4);
             Controls.Add(pictureBox1);
             ForeColor = Color.Transparent;
-            Name = "frmCreateProject";
+            Name = "CreateProjectForm";
             Text = "frmCreateProject";
             Load += frmCreateProject_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

@@ -277,5 +277,27 @@ namespace ProjectForms
             }
 
         }
+
+        private void btnAddComments_Click(object sender, EventArgs e)
+        {
+            if (dgvTasks.SelectedCells.Count > 0)
+            {
+                int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
+                ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+
+                if (selectedTask != null)
+                {
+
+                    CommentManagementForm CM = new CommentManagementForm(selectedTask);
+                    this.Close();
+                    CM.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Please select a task to add comments to.");
+                }
+
+            }
+        }
     }
 }
