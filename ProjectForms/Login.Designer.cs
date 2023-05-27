@@ -30,7 +30,7 @@
         {
             txtEmail = new TextBox();
             txtPassword = new TextBox();
-            button1 = new Button();
+            btnLogin = new Button();
             label1 = new Label();
             label2 = new Label();
             pictureBox1 = new PictureBox();
@@ -58,21 +58,21 @@
             txtPassword.TabIndex = 1;
             txtPassword.UseSystemPasswordChar = true;
             // 
-            // button1
+            // btnLogin
             // 
-            button1.BackColor = Color.FromArgb(0, 0, 64);
-            button1.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 0);
-            button1.FlatAppearance.BorderSize = 3;
-            button1.FlatStyle = FlatStyle.Popup;
-            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.ForeColor = Color.White;
-            button1.Location = new Point(175, 306);
-            button1.Name = "button1";
-            button1.Size = new Size(151, 33);
-            button1.TabIndex = 2;
-            button1.Text = "Login";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
+            btnLogin.BackColor = Color.FromArgb(0, 0, 64);
+            btnLogin.FlatAppearance.BorderColor = Color.FromArgb(255, 128, 0);
+            btnLogin.FlatAppearance.BorderSize = 3;
+            btnLogin.FlatStyle = FlatStyle.Popup;
+            btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnLogin.ForeColor = Color.White;
+            btnLogin.Location = new Point(175, 306);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(151, 33);
+            btnLogin.TabIndex = 2;
+            btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += btnLogin_Click;
             // 
             // label1
             // 
@@ -153,13 +153,13 @@
             Controls.Add(pictureBox1);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(button1);
+            Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtEmail);
             ForeColor = Color.White;
             Name = "Login";
             Text = "Login";
-            Load += Form1_Load;
+            Load += checkBox1_CheckedChanged;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -169,7 +169,7 @@
 
         private TextBox txtEmail;
         private TextBox txtPassword;
-        private Button button1;
+        private Button btnLogin;
         private Label label1;
         private Label label2;
         private PictureBox pictureBox1;

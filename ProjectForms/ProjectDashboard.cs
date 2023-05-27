@@ -42,64 +42,73 @@ namespace ProjectForms
 
         private void LoadProjectTasks()
         {
-            try
-            {
-                // Retrieve the tasks related to the selected project from the database
-                projectTasks = context.Tasks
-                    .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
-                    .ToList();
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
+            
+                try
                 {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
+                    // Retrieve all tasks related to the selected project from the database
+                    var allTasks = context.Tasks
+                        .Include(t => t.Status)
+                        .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
+                        .ToList();
+
+                    // Filter the tasks based on the project's task status
+                    projectTasks = allTasks
+                        .Where(t => t.Status != null)
+                        .ToList();
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show($"No user found: {ex.Message}");
+                    // Handle the exception
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                    int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
+                    if (userId != 0)
+                    {
+                        LoggingService logger = new LoggingService(context);
+                        logger.LogException(ex, userId);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No user found: {ex.Message}");
+                    }
                 }
+         }
 
-
-
-            }
-        }
+        
 
 
         private void DisplayStatistics()
         {
+
             try
             {
                 // Calculate and display the statistics based on the project tasks
 
-                // Number of tasks pending vs completed
-                //int tasksCompleted = projectTasks.Count(t => t.Status == "Completed");
-                //int tasksPending = projectTasks.Count(t => t.Status == "In-Progress");
+                // Number of tasks completed
+                int tasksCompleted = projectTasks.Count(t => t.Status.Status == "Completed");
+                lblCompletedTasks.Text = tasksCompleted.ToString();
 
-                //lblCompletedTasks.Text = tasksCompleted.ToString();
-                //lblPendingTasks.Text = tasksPending.ToString();
+                // Number of tasks in progress (excluding completed and overdue tasks)
+                int tasksInProgress = projectTasks.Count(t => t.Status.Status == "Ongoin");
+                lblPendingTasks.Text = tasksInProgress.ToString();
 
-                // Number of overdue tasks
+                // Number of tasks overdue
                 DateTime today = DateTime.Today;
-                //int overdueTasks = projectTasks.Count(t => t.Deadline < today && t.Status != "Completed");
+                int overdueTasks = projectTasks.Count(t => t.Deadline < today && t.Status.Status != "Completed");
+                lblOverdueTasks.Text = overdueTasks.ToString();
 
-                //lblOverdueTasks.Text = overdueTasks.ToString();
-
-
+                // Number of tasks not started
+                int tasksNotStarted = projectTasks.Count(t => t.Status.Status == "Not started");
+                lblNotStarted.Text = tasksNotStarted.ToString();
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
+                // Handle the exception
                 MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
+                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
+                if (userId != 0)
                 {
                     LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
+                    logger.LogException(ex, userId);
                 }
                 else
                 {
@@ -107,9 +116,7 @@ namespace ProjectForms
                 }
 
 
-
             }
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
