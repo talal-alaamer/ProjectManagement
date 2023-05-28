@@ -35,25 +35,25 @@ namespace ProjectForms
                     MessageBox.Show("Please enter a project name and description.");
                     return;
                 }
-                
-                    Project project = new Project
-                    {
-                        ProjectName = txtProjectName.Text.Trim(),
-                        Description = txtDescription.Text.Trim(),
-                        ProjectManagerId = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId
-                    };
 
-                    context.Projects.Add(project);
-                    context.SaveChanges();
+                Project project = new Project
+                {
+                    ProjectName = txtProjectName.Text.Trim(),
+                    Description = txtDescription.Text.Trim(),
+                    ProjectManagerId = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId
+                };
 
-                    if (MessageBox.Show("Project created successfully!", "Success", MessageBoxButtons.OK) == DialogResult.OK)
-                    {
-                        this.Close();
-                        ProjectManager PM = new ProjectManager();
-                        PM.Show();
+                context.Projects.Add(project);
+                context.SaveChanges();
+
+                if (MessageBox.Show("Project created successfully!", "Success", MessageBoxButtons.OK) == DialogResult.OK)
+                {
+                    this.Close();
+                    ProjectManager PM = new ProjectManager();
+                    PM.Show();
                 }
-                
-                
+
+
             }
             catch (Exception ex)
             {

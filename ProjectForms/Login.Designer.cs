@@ -146,7 +146,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(494, 388);
+            ClientSize = new Size(494, 379);
             Controls.Add(chkShowPassword);
             Controls.Add(label4);
             Controls.Add(label3);

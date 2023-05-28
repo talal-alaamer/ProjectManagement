@@ -110,7 +110,7 @@
             // btnFilter
             // 
             btnFilter.BackColor = Color.White;
-            btnFilter.FlatStyle = FlatStyle.Popup;
+            btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnFilter.Location = new Point(299, 440);
             btnFilter.Name = "btnFilter";

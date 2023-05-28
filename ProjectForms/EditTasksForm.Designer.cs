@@ -116,9 +116,9 @@
             // btnSave
             // 
             btnSave.BackColor = Color.FromArgb(0, 0, 64);
-            btnSave.FlatStyle = FlatStyle.Popup;
+            btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnSave.ForeColor = Color.Transparent;
+            btnSave.ForeColor = Color.White;
             btnSave.Location = new Point(105, 271);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(106, 33);
@@ -130,7 +130,7 @@
             // btnCancel
             // 
             btnCancel.BackColor = Color.DarkRed;
-            btnCancel.FlatStyle = FlatStyle.Popup;
+            btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
             btnCancel.Location = new Point(217, 271);
