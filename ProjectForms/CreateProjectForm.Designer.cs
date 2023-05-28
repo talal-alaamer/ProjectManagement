@@ -57,7 +57,7 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(12, 31);
+            label4.Location = new Point(25, 31);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
             label4.TabIndex = 9;
@@ -165,7 +165,7 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
-            // frmCreateProject
+            // CreateProjectForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -183,7 +183,7 @@
             Controls.Add(label4);
             Controls.Add(pictureBox1);
             ForeColor = Color.Transparent;
-            Name = "frmCreateProject";
+            Name = "CreateProjectForm";
             Text = "frmCreateProject";
             Load += frmCreateProject_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

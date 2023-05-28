@@ -42,38 +42,38 @@ namespace ProjectForms
 
         private void LoadProjectTasks()
         {
-            
-                try
-                {
-                    // Retrieve all tasks related to the selected project from the database
-                    var allTasks = context.Tasks
-                        .Include(t => t.Status)
-                        .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
-                        .ToList();
 
-                    // Filter the tasks based on the project's task status
-                    projectTasks = allTasks
-                        .Where(t => t.Status != null)
-                        .ToList();
-                }
-                catch (Exception ex)
-                {
-                    // Handle the exception
-                    MessageBox.Show($"An error occurred: {ex.Message}");
-                    int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
-                    if (userId != 0)
-                    {
-                        LoggingService logger = new LoggingService(context);
-                        logger.LogException(ex, userId);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"No user found: {ex.Message}");
-                    }
-                }
-         }
+            try
+            {
+                // Retrieve all tasks related to the selected project from the database
+                var allTasks = context.Tasks
+                    .Include(t => t.Status)
+                    .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
+                    .ToList();
 
-        
+                // Filter the tasks based on the project's task status
+                projectTasks = allTasks
+                    .Where(t => t.Status != null)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
+                if (userId != 0)
+                {
+                    LoggingService logger = new LoggingService(context);
+                    logger.LogException(ex, userId);
+                }
+                else
+                {
+                    MessageBox.Show($"No user found: {ex.Message}");
+                }
+            }
+        }
+
+
 
 
         private void DisplayStatistics()

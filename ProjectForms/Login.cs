@@ -92,7 +92,7 @@ namespace ProjectForms
             }
         }
 
-            private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
         }
@@ -138,7 +138,7 @@ namespace ProjectForms
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        
-        
+
+
     }
 }

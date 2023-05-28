@@ -35,6 +35,11 @@
             label4 = new Label();
             label3 = new Label();
             groupBox1 = new GroupBox();
+            panel5 = new Panel();
+            groupBox5 = new GroupBox();
+            lblNotStarted = new Label();
+            label8 = new Label();
+            pictureBox5 = new PictureBox();
             panel4 = new Panel();
             groupBox2 = new GroupBox();
             pictureBox2 = new PictureBox();
@@ -54,13 +59,11 @@
             btnClose = new Button();
             label9 = new Label();
             panel1 = new Panel();
-            panel5 = new Panel();
-            groupBox5 = new GroupBox();
-            lblNotStarted = new Label();
-            label8 = new Label();
-            pictureBox5 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
+            panel5.SuspendLayout();
+            groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             panel4.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -71,9 +74,6 @@
             groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             panel1.SuspendLayout();
-            panel5.SuspendLayout();
-            groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             SuspendLayout();
             // 
             // lblCompletedTasks
@@ -146,6 +146,57 @@
             groupBox1.TabIndex = 19;
             groupBox1.TabStop = false;
             groupBox1.Text = "Dashboard";
+            // 
+            // panel5
+            // 
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(groupBox5);
+            panel5.Controls.Add(label8);
+            panel5.Controls.Add(pictureBox5);
+            panel5.Location = new Point(518, 28);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(149, 252);
+            panel5.TabIndex = 10;
+            // 
+            // groupBox5
+            // 
+            groupBox5.Controls.Add(lblNotStarted);
+            groupBox5.Location = new Point(18, 182);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(111, 50);
+            groupBox5.TabIndex = 9;
+            groupBox5.TabStop = false;
+            // 
+            // lblNotStarted
+            // 
+            lblNotStarted.AutoSize = true;
+            lblNotStarted.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
+            lblNotStarted.Location = new Point(45, 16);
+            lblNotStarted.Name = "lblNotStarted";
+            lblNotStarted.Size = new Size(26, 30);
+            lblNotStarted.TabIndex = 2;
+            lblNotStarted.Text = "4";
+            lblNotStarted.TextAlign = ContentAlignment.BottomCenter;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(2, 143);
+            label8.Name = "label8";
+            label8.Size = new Size(146, 23);
+            label8.TabIndex = 8;
+            label8.Text = "Tasks not started";
+            // 
+            // pictureBox5
+            // 
+            pictureBox5.Image = Properties.Resources.remove;
+            pictureBox5.Location = new Point(18, 19);
+            pictureBox5.Name = "pictureBox5";
+            pictureBox5.Size = new Size(111, 113);
+            pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox5.TabIndex = 7;
+            pictureBox5.TabStop = false;
             // 
             // panel4
             // 
@@ -316,10 +367,10 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.White;
-            btnClose.FlatStyle = FlatStyle.Popup;
-            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnClose.ForeColor = Color.Black;
+            btnClose.BackColor = Color.DarkRed;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnClose.ForeColor = Color.White;
             btnClose.Location = new Point(38, 234);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);
@@ -355,57 +406,6 @@
             panel1.Size = new Size(169, 297);
             panel1.TabIndex = 26;
             // 
-            // panel5
-            // 
-            panel5.BorderStyle = BorderStyle.FixedSingle;
-            panel5.Controls.Add(groupBox5);
-            panel5.Controls.Add(label8);
-            panel5.Controls.Add(pictureBox5);
-            panel5.Location = new Point(518, 28);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(149, 252);
-            panel5.TabIndex = 10;
-            // 
-            // groupBox5
-            // 
-            groupBox5.Controls.Add(lblNotStarted);
-            groupBox5.Location = new Point(18, 182);
-            groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(111, 50);
-            groupBox5.TabIndex = 9;
-            groupBox5.TabStop = false;
-            // 
-            // lblNotStarted
-            // 
-            lblNotStarted.AutoSize = true;
-            lblNotStarted.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            lblNotStarted.Location = new Point(45, 16);
-            lblNotStarted.Name = "lblNotStarted";
-            lblNotStarted.Size = new Size(26, 30);
-            lblNotStarted.TabIndex = 2;
-            lblNotStarted.Text = "4";
-            lblNotStarted.TextAlign = ContentAlignment.BottomCenter;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 12.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label8.Location = new Point(2, 143);
-            label8.Name = "label8";
-            label8.Size = new Size(146, 23);
-            label8.TabIndex = 8;
-            label8.Text = "Tasks not started";
-            // 
-            // pictureBox5
-            // 
-            pictureBox5.Image = Properties.Resources.remove;
-            pictureBox5.Location = new Point(18, 19);
-            pictureBox5.Name = "pictureBox5";
-            pictureBox5.Size = new Size(111, 113);
-            pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox5.TabIndex = 7;
-            pictureBox5.TabStop = false;
-            // 
             // ProjectDashboard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -422,6 +422,11 @@
             Load += ProjectDashboard_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -439,11 +444,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel5.ResumeLayout(false);
-            panel5.PerformLayout();
-            groupBox5.ResumeLayout(false);
-            groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
