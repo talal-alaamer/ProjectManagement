@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Areas.Identity.Data;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Areas.Identity.Pages.Account
 {

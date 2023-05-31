@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("Document")]
     public partial class Document
@@ -14,27 +14,27 @@ namespace ProjectManagement.Model
         public int DocumentId { get; set; }
         [Column("document_name")]
         [StringLength(100)]
-        public string DocumentName { get; set; } = null!;
+        public string? DocumentName { get; set; }
         [Column("upload_time")]
-        public byte[] UploadTime { get; set; } = null!;
+        public byte[]? UploadTime { get; set; }
         [Column("path")]
         [StringLength(1000)]
-        public string Path { get; set; } = null!;
+        public string? Path { get; set; }
         [Column("type_id")]
-        public int TypeId { get; set; }
+        public int? TypeId { get; set; }
         [Column("user_id")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         [Column("task_id")]
-        public int TaskId { get; set; }
+        public int? TaskId { get; set; }
 
         [ForeignKey("TaskId")]
         [InverseProperty("Documents")]
-        public virtual Task Task { get; set; } = null!;
+        public virtual Task? Task { get; set; }
         [ForeignKey("TypeId")]
         [InverseProperty("Documents")]
-        public virtual DocumentType Type { get; set; } = null!;
+        public virtual DocumentType? Type { get; set; }
         [ForeignKey("UserId")]
         [InverseProperty("Documents")]
-        public virtual User User { get; set; } = null!;
+        public virtual User? User { get; set; }
     }
 }

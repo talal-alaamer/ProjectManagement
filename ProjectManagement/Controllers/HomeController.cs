@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 using System.Diagnostics;
 
 namespace ProjectManagement.Controllers

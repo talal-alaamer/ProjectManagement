@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("DocumentType")]
     public partial class DocumentType
@@ -19,7 +19,7 @@ namespace ProjectManagement.Model
         public int DocumentTypeId { get; set; }
         [Column("type")]
         [StringLength(50)]
-        public string Type { get; set; } = null!;
+        public string? Type { get; set; }
         [Column("description")]
         [StringLength(500)]
         public string? Description { get; set; }

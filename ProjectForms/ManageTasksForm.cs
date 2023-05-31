@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectManagement;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 using ProjectForms;
 
 namespace ProjectForms
@@ -72,7 +72,7 @@ namespace ProjectForms
                 {
 
                     // Create a new task with the selected project member and other details
-                    var newTask = new ProjectManagement.Model.Task
+                    var newTask = new ProjectManagementBusinessObjects.Task
                     {
                         TaskName = txtTaskName.Text,
                         Description = txtDescription.Text,
@@ -193,7 +193,7 @@ namespace ProjectForms
             try
             {
                 int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
-                ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
                 if (selectedTask != null)
                 {
@@ -234,7 +234,7 @@ namespace ProjectForms
                 if (dgvTasks.SelectedCells.Count > 0)
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
-                    ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                    ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
                     if (selectedTask != null)
                     {
@@ -283,7 +283,7 @@ namespace ProjectForms
             if (dgvTasks.SelectedCells.Count > 0)
             {
                 int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
-                ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
                 if (selectedTask != null)
                 {

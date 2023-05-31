@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     public partial class ProjectManagementDBContext : DbContext
     {
@@ -33,7 +33,7 @@ namespace ProjectManagement.Model
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=JASSIM\\JASSIMSQL;Initial Catalog=ProjectManagement;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Server=TALAL\\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;");
             }
         }
 
@@ -48,6 +48,7 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Audits)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Audit_User");
             });
 
@@ -60,12 +61,12 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.TaskId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Comment_Task");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_User");
             });
 
@@ -78,18 +79,17 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.TaskId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Document_Task1");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Document_Type");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Document_User");
             });
 
@@ -102,7 +102,6 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Logs)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Log_User1");
             });
 
@@ -111,7 +110,6 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Notifications)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Notification_User1");
             });
 
@@ -120,6 +118,7 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.ProjectManager)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.ProjectManagerId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Project_User");
             });
 
@@ -128,13 +127,11 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.ProjectMembers)
                     .HasForeignKey(d => d.ProjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProjectMember_Project1");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ProjectMembers)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProjectMember_User");
             });
 
@@ -143,13 +140,11 @@ namespace ProjectManagement.Model
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ProjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Task_Project");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.StatusId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Task_Status");
             });
 

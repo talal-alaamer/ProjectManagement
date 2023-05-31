@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Model;
+﻿using ProjectManagementBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,9 +15,9 @@ namespace ProjectForms
     public partial class CommentManagementForm : Form
     {
         private ProjectManagementDBContext context;
-        private ProjectManagement.Model.Task selectedTask;
+        private ProjectManagementBusinessObjects.Task selectedTask;
 
-        public CommentManagementForm(ProjectManagement.Model.Task task)
+        public CommentManagementForm(ProjectManagementBusinessObjects.Task task)
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
@@ -58,7 +58,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaskId,TaskName,Description,AssignDate,Deadline,StatusId,ProjectId")] Model.Task task)
+        public async Task<IActionResult> Create([Bind("TaskId,TaskName,Description,AssignDate,Deadline,StatusId,ProjectId")] ProjectManagementBusinessObjects.Task task)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName,Description,AssignDate,Deadline,StatusId,ProjectId")] Model.Task task)
+        public async Task<IActionResult> Edit(int id, [Bind("TaskId,TaskName,Description,AssignDate,Deadline,StatusId,ProjectId")] ProjectManagementBusinessObjects.Task task)
         {
             if (id != task.TaskId)
             {

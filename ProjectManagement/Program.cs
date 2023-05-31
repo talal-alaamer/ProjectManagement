@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Data;
 using ProjectManagement.Areas.Identity.Data;

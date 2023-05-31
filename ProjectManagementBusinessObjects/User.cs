@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("User")]
     public partial class User
@@ -25,7 +25,7 @@ namespace ProjectManagement.Model
         public int UserId { get; set; }
         [Column("email")]
         [StringLength(150)]
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; }
 
         [InverseProperty("User")]
         public virtual ICollection<Audit> Audits { get; set; }
