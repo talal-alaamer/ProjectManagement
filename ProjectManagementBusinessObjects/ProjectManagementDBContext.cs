@@ -33,7 +33,7 @@ namespace ProjectManagementBusinessObjects
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=TALAL\\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-BSUB3KC\\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;");
             }
         }
 
@@ -95,9 +95,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Log>(entity =>
             {
-                entity.Property(e => e.Timestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Logs)
@@ -137,6 +135,8 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Task>(entity =>
             {
+                entity.Property(e => e.AssignDate).HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ProjectId)

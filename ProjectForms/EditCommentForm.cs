@@ -33,16 +33,27 @@ namespace ProjectForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtComment.Text))
+            try
             {
-                MessageBox.Show("Please Do not leave comment text field empty");
-                return;
+                if (string.IsNullOrWhiteSpace(txtComment.Text))
+                {
+                    MessageBox.Show("Please Do not leave comment text field empty");
+                    return;
+                }
+                comment.CommentText = txtComment.Text;
+                comment.CommentTimestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
+                Context.SaveChanges();
+                MessageBox.Show("Success!");
+                this.Close();
             }
-            comment.CommentText = txtComment.Text;
-            comment.CommentTimestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
-            Context.SaveChanges();
-            MessageBox.Show("Success!");
-            this.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int id = Context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(Context);
+                log.LogException(ex, id);
+            }
+            
         }
 
         private void btnClose_Click(object sender, EventArgs e)

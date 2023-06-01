@@ -51,48 +51,72 @@ namespace ProjectForms
 
         private void btnAddComment_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtComment.Text))
+            try
             {
-                MessageBox.Show("Please enter a comment.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (string.IsNullOrWhiteSpace(txtComment.Text))
+                {
+                    MessageBox.Show("Please enter a comment.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                byte[] currentDateBytes = BitConverter.GetBytes(DateTime.Now.Ticks);
+                Comment newComment = new Comment
+                {
+                    CommentText = txtComment.Text,
+                    CommentTimestamp = currentDateBytes,
+                    UserId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId),
+                    TaskId = selectedTask.TaskId
+                };
+
+                context.Comments.Add(newComment);
+                context.SaveChanges();
+
+                LoadComments();
+                txtComment.Clear();
+
             }
-            byte[] currentDateBytes = BitConverter.GetBytes(DateTime.Now.Ticks);
-            Comment newComment = new Comment
+            catch(Exception ex)
             {
-                CommentText = txtComment.Text,
-                CommentTimestamp = currentDateBytes,
-                UserId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId),
-                TaskId = selectedTask.TaskId
-            };
-
-            context.Comments.Add(newComment);
-            context.SaveChanges();
-
-            LoadComments();
-            txtComment.Clear();
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int id = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
+            }
+           
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
-            Comment comment = context.Comments.Find(commentId);
 
-
-            if (comment != null)
+            try
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
+                Comment comment = context.Comments.Find(commentId);
+
+
+                if (comment != null)
                 {
-                    context.Comments.Remove(comment);
-                    context.SaveChanges();
-                    LoadComments();
-                    MessageBox.Show("Comment deleted successfully.");
+                    DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        context.Comments.Remove(comment);
+                        context.SaveChanges();
+                        LoadComments();
+                        MessageBox.Show("Comment deleted successfully.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Unable to find the selected comment.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Unable to find the selected comment.");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int id = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
             }
+           
 
 
 
@@ -101,21 +125,31 @@ namespace ProjectForms
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-            int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
-            Comment comment = context.Comments.Find(commentId);
-
-            if (comment != null)
+            try
             {
-                EditCommentForm editForm = new EditCommentForm(comment, context);
-                DialogResult result = editForm.ShowDialog();
+                int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
+                Comment comment = context.Comments.Find(commentId);
+
+                if (comment != null)
+                {
+                    EditCommentForm editForm = new EditCommentForm(comment, context);
+                    DialogResult result = editForm.ShowDialog();
 
 
+                }
+                else
+                {
+                    MessageBox.Show("Unable to find the selected comment.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Unable to find the selected comment.");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int id = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
             }
+           
 
         }
 
