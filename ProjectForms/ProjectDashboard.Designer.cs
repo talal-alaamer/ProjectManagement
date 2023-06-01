@@ -142,7 +142,7 @@
             groupBox1.ForeColor = Color.Black;
             groupBox1.Location = new Point(12, 134);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(675, 308);
+            groupBox1.Size = new Size(682, 309);
             groupBox1.TabIndex = 19;
             groupBox1.TabStop = false;
             groupBox1.Text = "Dashboard";
@@ -367,10 +367,10 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.DarkRed;
+            btnClose.BackColor = Color.White;
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnClose.ForeColor = Color.White;
+            btnClose.ForeColor = Color.Black;
             btnClose.Location = new Point(38, 234);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);
@@ -401,7 +401,7 @@
             panel1.Controls.Add(label6);
             panel1.Controls.Add(txtProjectID);
             panel1.ForeColor = SystemColors.Control;
-            panel1.Location = new Point(693, 145);
+            panel1.Location = new Point(700, 146);
             panel1.Name = "panel1";
             panel1.Size = new Size(169, 297);
             panel1.TabIndex = 26;

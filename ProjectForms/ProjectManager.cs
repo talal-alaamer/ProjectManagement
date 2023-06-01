@@ -31,20 +31,23 @@ namespace ProjectForms
         private void RefreshDataGridView()
         {
             int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            // Retrieve projects where the user is either the project manager or a member
             var projects = context.Projects
-    .Where(p => p.ProjectManagerId == userid || p.ProjectMembers.Any(pm => pm.UserId == userid))
-    .Select(p => new
-    {
-        Project_ID = p.ProjectId,
-        Project_Name = p.ProjectName,
-        Description = p.Description,
-        ManagerID = p.ProjectManagerId
-    })
-    .ToList();
+                                   .Where(p => p.ProjectManagerId == userid || p.ProjectMembers.Any(pm => pm.UserId == userid))
+                                   .Select(p => new
+                                             {
+                                             Project_ID = p.ProjectId,
+                                             Project_Name = p.ProjectName,
+                                             Description = p.Description,
+                                             ManagerID = p.ProjectManagerId
+                                             })
+                                             .ToList();
 
             dgvProjects.DataSource = projects;
+
             if (txtFilter.Text != "")
             {
+                // Filter projects based on the specified Project_ID
                 dgvProjects.DataSource = context.Projects.Select(p => new
                 {
                     Project_ID = p.ProjectId,
@@ -141,7 +144,13 @@ namespace ProjectForms
                             if (result == DialogResult.Yes)
                             {
                                 // Delete all associated tasks
-                                context.Tasks.RemoveRange(Global.SelectedProject.Tasks);
+                                var selectedtask = context.Tasks.Where(i=>i.ProjectId == selectedPid);
+                                if (selectedtask != null)
+                                {
+                                    
+                                    context.Tasks.RemoveRange(selectedtask);
+                                }
+                                
 
                                 // Delete the project
                                 context.Projects.Remove(Global.SelectedProject);
@@ -178,14 +187,6 @@ namespace ProjectForms
             }
 
         }
-
-
-
-
-
-
-
-
 
         private void btnAddMember_Click(object sender, EventArgs e)
         {

@@ -181,7 +181,7 @@
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(102, 32);
             btnCancel.TabIndex = 22;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "Close";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
@@ -200,7 +200,7 @@
             btnManageStatus.FlatStyle = FlatStyle.Popup;
             btnManageStatus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnManageStatus.ForeColor = Color.White;
-            btnManageStatus.Location = new Point(6, 291);
+            btnManageStatus.Location = new Point(40, 291);
             btnManageStatus.Name = "btnManageStatus";
             btnManageStatus.Size = new Size(162, 32);
             btnManageStatus.TabIndex = 27;
@@ -224,7 +224,7 @@
             btnDelete.FlatStyle = FlatStyle.Popup;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(406, 291);
+            btnDelete.Location = new Point(376, 291);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(162, 32);
             btnDelete.TabIndex = 29;

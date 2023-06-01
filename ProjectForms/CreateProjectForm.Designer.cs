@@ -145,7 +145,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button1.ForeColor = Color.Transparent;
-            button1.Location = new Point(28, 400);
+            button1.Location = new Point(49, 273);
             button1.Name = "button1";
             button1.Size = new Size(114, 35);
             button1.TabIndex = 18;
@@ -159,17 +159,19 @@
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(199, 400);
+            btnCancel.Location = new Point(169, 273);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(114, 35);
             btnCancel.TabIndex = 19;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "Close";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnCancel);
             groupBox1.Controls.Add(txtProjectName);
+            groupBox1.Controls.Add(button1);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(txtDescription);
@@ -188,8 +190,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(338, 460);
-            Controls.Add(btnCancel);
-            Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
