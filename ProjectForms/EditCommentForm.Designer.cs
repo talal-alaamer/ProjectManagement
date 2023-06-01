@@ -109,7 +109,7 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(174, 191);
+            btnClose.Location = new Point(163, 191);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);
             btnClose.TabIndex = 13;
@@ -123,7 +123,7 @@
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(51, 191);
+            btnSave.Location = new Point(62, 191);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(95, 34);
             btnSave.TabIndex = 12;

@@ -102,7 +102,7 @@
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(238, 342);
+            btnDelete.Location = new Point(234, 342);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(95, 34);
             btnDelete.TabIndex = 14;
@@ -112,10 +112,10 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.DarkRed;
+            btnClose.BackColor = Color.White;
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnClose.ForeColor = Color.White;
+            btnClose.ForeColor = Color.Black;
             btnClose.Location = new Point(252, 29);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);
@@ -144,7 +144,7 @@
             btnAddComment.FlatStyle = FlatStyle.Flat;
             btnAddComment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAddComment.ForeColor = Color.White;
-            btnAddComment.Location = new Point(27, 342);
+            btnAddComment.Location = new Point(32, 342);
             btnAddComment.Name = "btnAddComment";
             btnAddComment.Size = new Size(95, 34);
             btnAddComment.TabIndex = 11;

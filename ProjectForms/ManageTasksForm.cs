@@ -241,6 +241,11 @@ namespace ProjectForms
                         DialogResult result = MessageBox.Show("Are you sure you want to delete the selected task?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (result == DialogResult.Yes)
                         {
+                            var selectedComment = context.Comments.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                            if (selectedComment != null)
+                            { 
+                                context.Comments.RemoveRange(selectedComment);
+                            }
                             // Delete the project and save changes to the database
                             context.Tasks.Remove(selectedTask);
                             context.SaveChanges();
