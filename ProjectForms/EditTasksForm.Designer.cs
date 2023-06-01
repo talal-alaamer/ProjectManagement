@@ -163,6 +163,7 @@
             groupBox1.Size = new Size(335, 321);
             groupBox1.TabIndex = 32;
             groupBox1.TabStop = false;
+            groupBox1.Text = "Task Info";
             // 
             // label7
             // 

@@ -49,5 +49,10 @@ namespace ProjectForms
         {
             this.Close();
         }
+
+        private void btnClose_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

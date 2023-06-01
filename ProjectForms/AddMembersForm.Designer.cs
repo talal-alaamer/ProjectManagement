@@ -37,8 +37,11 @@
             dgvMembers = new DataGridView();
             label1 = new Label();
             label2 = new Label();
+            groupBox1 = new GroupBox();
+            btnDelete = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMembers).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // pictureBox1
@@ -88,9 +91,9 @@
             btnSave.FlatStyle = FlatStyle.Popup;
             btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(66, 405);
+            btnSave.Location = new Point(10, 277);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(106, 33);
+            btnSave.Size = new Size(103, 33);
             btnSave.TabIndex = 17;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = false;
@@ -98,22 +101,22 @@
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.DarkRed;
+            btnCancel.BackColor = Color.White;
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(178, 405);
+            btnCancel.ForeColor = Color.Black;
+            btnCancel.Location = new Point(218, 277);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(106, 33);
+            btnCancel.Size = new Size(91, 33);
             btnCancel.TabIndex = 18;
-            btnCancel.Text = "Cancel";
+            btnCancel.Text = "Close";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
             // dgvMembers
             // 
             dgvMembers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMembers.Location = new Point(22, 160);
+            dgvMembers.Location = new Point(10, 49);
             dgvMembers.Name = "dgvMembers";
             dgvMembers.RowTemplate.Height = 25;
             dgvMembers.Size = new Size(301, 150);
@@ -133,11 +136,38 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(22, 324);
+            label2.Location = new Point(4, 202);
             label2.Name = "label2";
             label2.Size = new Size(305, 21);
             label2.TabIndex = 21;
             label2.Text = "Choose a user to add as a Project Member:";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnDelete);
+            groupBox1.Controls.Add(dgvMembers);
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(btnCancel);
+            groupBox1.Controls.Add(btnSave);
+            groupBox1.Location = new Point(12, 122);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(315, 316);
+            groupBox1.TabIndex = 22;
+            groupBox1.TabStop = false;
+            // 
+            // btnDelete
+            // 
+            btnDelete.BackColor = Color.DarkRed;
+            btnDelete.FlatStyle = FlatStyle.Popup;
+            btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnDelete.ForeColor = Color.White;
+            btnDelete.Location = new Point(119, 277);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(93, 33);
+            btnDelete.TabIndex = 22;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = false;
+            btnDelete.Click += btnDelete_Click;
             // 
             // AddMembersForm
             // 
@@ -145,20 +175,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(339, 450);
-            Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(dgvMembers);
-            Controls.Add(btnCancel);
-            Controls.Add(btnSave);
             Controls.Add(ddlMembers);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
+            Controls.Add(groupBox1);
             Name = "AddMembersForm";
             Text = "AddMembersForm";
             Load += AddMembersForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMembers).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -174,5 +203,7 @@
         private DataGridView dgvMembers;
         private Label label1;
         private Label label2;
+        private GroupBox groupBox1;
+        private Button btnDelete;
     }
 }
