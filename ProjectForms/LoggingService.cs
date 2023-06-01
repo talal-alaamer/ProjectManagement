@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ProjectForms
 {
     internal class LoggingService
     {
-        private readonly ProjectManagementDBContext context;
+        private ProjectManagementDBContext context;
 
         public LoggingService(ProjectManagementDBContext dbContext)
         {
@@ -34,17 +35,20 @@ namespace ProjectForms
             context.SaveChanges();
         }
 
-        public void LogUserAction(string action, int userId)
+        public void LogUserAction(string action, int userId,string userAction, string TableName)
         {
-            // Log the user action
-            // ...
+            
+            //var entity = context.YourTableName.Find(recordId);
 
+            // Serialize the entity to capture its old value
+            //var serializer = new JsonSerializer();
+            //var oldValue = serializer.Serialize(entity);
             // Save the user action details to the "Audit" table
             var audit = new Audit
             {
                 Timestamp = BitConverter.GetBytes(DateTime.Now.Ticks),
-                ChangeType = "User Action",
-                TableName = "YourTableName",
+                ChangeType = userAction,
+                TableName = TableName,
                 RecordId = 0, // Set the appropriate record ID if applicable
                 OldValue = null,
                 CurrentValue = action,

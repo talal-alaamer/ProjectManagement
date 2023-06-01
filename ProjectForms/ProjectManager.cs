@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ProjectManagementBusinessObjects;
 using ProjectForms;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace ProjectForms
 {
@@ -24,19 +25,24 @@ namespace ProjectForms
         private void ProjectManager_Load(object sender, EventArgs e)
         {
             RefreshDataGridView();
+
         }
 
         private void RefreshDataGridView()
         {
             int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-            dgvProjects.DataSource = context.Projects.Select(p => new
-            {
-                Project_ID = p.ProjectId,
-                Project_Name = p.ProjectName,
-                Description = p.Description,
-                ManagerID = p.ProjectManagerId
-            }).Where(i => i.ManagerID == userid).ToList();
+            var projects = context.Projects
+    .Where(p => p.ProjectManagerId == userid || p.ProjectMembers.Any(pm => pm.UserId == userid))
+    .Select(p => new
+    {
+        Project_ID = p.ProjectId,
+        Project_Name = p.ProjectName,
+        Description = p.Description,
+        ManagerID = p.ProjectManagerId
+    })
+    .ToList();
 
+            dgvProjects.DataSource = projects;
             if (txtFilter.Text != "")
             {
                 dgvProjects.DataSource = context.Projects.Select(p => new
@@ -58,20 +64,42 @@ namespace ProjectForms
 
         private void btnManage_Click(object sender, EventArgs e)
         {
+            var selecteduserID = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
+
+
+            int selectedRow = dgvProjects.SelectedCells[0].RowIndex;
+            DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
+
+            // Access the value in the 4th column
+            string managerID = fourthColumnCell.Value?.ToString();
             try
             {
-                int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
-
-                if (Global.SelectedProject != null)
+                if (dgvProjects.SelectedCells.Count > 0)
                 {
-                    EditProjectsForm editProjectsForm = new EditProjectsForm(context);
-                    this.Hide();
-                    editProjectsForm.Show();
+                    if (selecteduserID == managerID)
+                    {
+                        int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                        Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
+
+                        if (Global.SelectedProject != null)
+                        {
+                            EditProjectsForm editProjectsForm = new EditProjectsForm(context);
+                            this.Hide();
+                            editProjectsForm.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Selected project not found.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("You are not authorized to edit the project.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Selected project not found.");
+                    MessageBox.Show("Please select a project.");
                 }
             }
             catch (Exception ex)
@@ -88,39 +116,59 @@ namespace ProjectForms
 
         private void btnDeleteProject_Click(object sender, EventArgs e)
         {
+            var selecteduserID = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
+
+
+            int selectedRow = dgvProjects.SelectedCells[0].RowIndex;
+            DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
+
+            // Access the value in the 4th column
+            string managerID = fourthColumnCell.Value?.ToString();
 
             try
             {
+
                 if (dgvProjects.SelectedCells.Count > 0)
                 {
-                    int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                    Global.SelectedProject = context.Projects.Include(p => p.Tasks).FirstOrDefault(i => i.ProjectId == selectedPid);
-
-                    if (Global.SelectedProject != null)
+                    if (selecteduserID == managerID)
                     {
-                        DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (result == DialogResult.Yes)
+                        int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                        Global.SelectedProject = context.Projects.Include(p => p.Tasks).FirstOrDefault(i => i.ProjectId == selectedPid);
+
+                        if (Global.SelectedProject != null)
                         {
-                            // Delete all associated tasks
-                            context.Tasks.RemoveRange(Global.SelectedProject.Tasks);
+                            DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (result == DialogResult.Yes)
+                            {
+                                // Delete all associated tasks
+                                context.Tasks.RemoveRange(Global.SelectedProject.Tasks);
 
-                            // Delete the project
-                            context.Projects.Remove(Global.SelectedProject);
+                                // Delete the project
+                                context.Projects.Remove(Global.SelectedProject);
 
-                            // Save changes to the database
-                            context.SaveChanges();
+                                // Save changes to the database
+                                context.SaveChanges();
 
-                            RefreshDataGridView();
+                                RefreshDataGridView();
+                            }
+                            else
+                            {
+                                MessageBox.Show("No Project has been deleted.");
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("No Project has been deleted.");
+                            MessageBox.Show("Please select a project.");
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Please select a project.");
+                        MessageBox.Show("You are not authorized to delete the project.");
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a project.");
                 }
             }
             catch (Exception ex)
@@ -141,17 +189,35 @@ namespace ProjectForms
 
         private void btnAddMember_Click(object sender, EventArgs e)
         {
+
+            var selecteduserID = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
+
+
+            int selectedRow = dgvProjects.SelectedCells[0].RowIndex;
+            DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
+
+            // Access the value in the 4th column
+            string managerID = fourthColumnCell.Value?.ToString();
             try
             {
+
                 if (dgvProjects.SelectedCells.Count > 0)
                 {
-                    int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                    Global.SelectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
-                    if (Global.SelectedProject != null)
+
+                    if (selecteduserID == managerID)
                     {
-                        AddMembersForm addform = new AddMembersForm();
-                        this.Hide();
-                        addform.Show();
+                        int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
+                        Global.SelectedProject = context.Projects.FirstOrDefault(p => p.ProjectId == selectedPid);
+                        if (Global.SelectedProject != null)
+                        {
+                            AddMembersForm addform = new AddMembersForm();
+                            this.Hide();
+                            addform.Show();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("You are not authorized to add members to the project.");
                     }
                 }
                 else

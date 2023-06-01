@@ -100,6 +100,8 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+
+           
             // Close the form or dialog without making any changes
             DialogResult = DialogResult.Cancel;
             Close();
@@ -107,6 +109,27 @@ namespace ProjectForms
             PM.Show();
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int memberId = Convert.ToInt32(dgvMembers.SelectedCells[0].OwningRow.Cells[0].Value);
+            ProjectMember Member = context.ProjectMembers.Find(memberId);
 
+
+            if (Member != null)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    context.ProjectMembers.Remove(Member);
+                    context.SaveChanges();
+                    LoadProjectMembers();
+                    MessageBox.Show("Project Member deleted successfully.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Unable to find the selected Project Member.");
+            }
+        }
     }
 }

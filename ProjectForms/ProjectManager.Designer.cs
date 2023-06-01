@@ -30,7 +30,6 @@
         {
             dgvProjects = new DataGridView();
             pictureBox1 = new PictureBox();
-            label3 = new Label();
             label4 = new Label();
             txtFilter = new TextBox();
             lblFilter = new Label();
@@ -65,17 +64,6 @@
             pictureBox1.Size = new Size(665, 118);
             pictureBox1.TabIndex = 6;
             pictureBox1.TabStop = false;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = SystemColors.ScrollBar;
-            label3.ForeColor = Color.Black;
-            label3.Location = new Point(553, 103);
-            label3.Name = "label3";
-            label3.Size = new Size(94, 15);
-            label3.TabIndex = 7;
-            label3.Text = "Project Manager";
             // 
             // label4
             // 
@@ -237,7 +225,6 @@
             Controls.Add(lblFilter);
             Controls.Add(txtFilter);
             Controls.Add(label4);
-            Controls.Add(label3);
             Controls.Add(pictureBox1);
             Controls.Add(dgvProjects);
             Controls.Add(groupBox1);
@@ -255,7 +242,6 @@
 
         private DataGridView dgvProjects;
         private PictureBox pictureBox1;
-        private Label label3;
         private Label label4;
         private TextBox txtFilter;
         private Label lblFilter;
