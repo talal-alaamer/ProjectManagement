@@ -115,6 +115,7 @@
             btnClose.TabIndex = 13;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = false;
+            btnClose.Click += btnClose_Click_1;
             // 
             // btnSave
             // 
