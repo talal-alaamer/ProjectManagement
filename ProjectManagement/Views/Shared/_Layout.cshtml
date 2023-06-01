@@ -29,10 +29,10 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item text-dark" asp-controller="Audit Trail" asp-action="Index">Audit Trail</a>
-                                    <a class="dropdown-item text-dark" asp-controller="Log" asp-action="Index">Logs</a>
+                                    <a class="dropdown-item text-dark" asp-controller="Audits" asp-action="Index">Audit Trail</a>
+                                    <a class="dropdown-item text-dark" asp-controller="Logs" asp-action="Index">Logs</a>
                                 </div>
                             </li>
                         }

@@ -138,17 +138,17 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 myUser.Email = user.Email;
-                _context.Users.Add(myUser);
-                _context.SaveChanges();
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    _context.Users.Add(myUser);
+                    _context.SaveChanges();
                     _logger.LogInformation("User created a new account with password.");
 
                     if(Input.Role == null || Input.Role == "0")
                     {
-                        await _userManager.AddToRoleAsync(user, "Employee");
+                        await _userManager.AddToRoleAsync(user, "User");
                     }
                     else
                     {

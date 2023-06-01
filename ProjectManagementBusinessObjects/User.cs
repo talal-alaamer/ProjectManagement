@@ -18,6 +18,7 @@ namespace ProjectManagementBusinessObjects
             Notifications = new HashSet<Notification>();
             ProjectMembers = new HashSet<ProjectMember>();
             Projects = new HashSet<Project>();
+            Tasks = new HashSet<Task>();
         }
 
         [Key]
@@ -41,5 +42,7 @@ namespace ProjectManagementBusinessObjects
         public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
         [InverseProperty("ProjectManager")]
         public virtual ICollection<Project> Projects { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

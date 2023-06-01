@@ -146,6 +146,11 @@ namespace ProjectManagementBusinessObjects
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_Task_Status");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Task_User");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -34,12 +34,19 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectManager.UserId)
+                @Html.DisplayFor(modelItem => item.ProjectManager.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+                    @if (item.ProjectManagerId == ViewBag.userId)
+                    {
+                        <a class="mx-2" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+                    }
+                    <a class="mx-2" asp-action="Details" asp-route-id="@item.ProjectId">Details</a>
+                    @if (item.ProjectManagerId == ViewBag.userId)
+                    {
+                        <a class="mx-2" asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+                    }
+                    <a class="mx-2" asp-controller="Tasks" asp-action="Index" asp-route-id="@item.ProjectId">View Tasks</a>
             </td>
         </tr>
 }

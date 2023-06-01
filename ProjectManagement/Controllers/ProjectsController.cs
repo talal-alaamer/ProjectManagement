@@ -2,26 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagement.Areas.Identity.Data;
 using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly ProjectManagementDBContext _context;
+        private readonly UserManager<Users> _userManager;
 
-        public ProjectsController(ProjectManagementDBContext context)
+        public ProjectsController(ProjectManagementDBContext context, UserManager<Users> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            var projectManagementDBContext = _context.Projects.Include(p => p.ProjectManager);
+            int userId = GetIdAsync().Result;
+            ViewBag.userId = userId;
+            var projectManagementDBContext = _context.Projects.Where(x => _context.ProjectMembers.Any(y=> y.UserId == userId && y.ProjectId==x.ProjectId) || x.ProjectManagerId==userId).Include(p => p.ProjectManager);
             return View(await projectManagementDBContext.ToListAsync());
         }
 
@@ -45,9 +53,10 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewData["ProjectManagerId"] = new SelectList(_context.Users, "UserId", "UserId");
+            int userId = GetIdAsync().Result;
+            ViewBag.ProjectManagerId = userId;
             return View();
         }
 
@@ -64,7 +73,8 @@ namespace ProjectManagement.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectManagerId"] = new SelectList(_context.Users, "UserId", "UserId", project.ProjectManagerId);
+            int userId = GetIdAsync().Result;
+            ViewBag.ProjectManagerId = userId;
             return View(project);
         }
 
@@ -81,7 +91,8 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectManagerId"] = new SelectList(_context.Users, "UserId", "UserId", project.ProjectManagerId);
+            int userId = GetIdAsync().Result;
+            ViewBag.ProjectManagerId = userId;
             return View(project);
         }
 
@@ -117,7 +128,8 @@ namespace ProjectManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectManagerId"] = new SelectList(_context.Users, "UserId", "UserId", project.ProjectManagerId);
+            int userId = GetIdAsync().Result;
+            ViewBag.ProjectManagerId = userId;
             return View(project);
         }
 
@@ -162,6 +174,14 @@ namespace ProjectManagement.Controllers
         private bool ProjectExists(int id)
         {
           return (_context.Projects?.Any(e => e.ProjectId == id)).GetValueOrDefault();
+        }
+
+        private async Task<int> GetIdAsync()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            String email = currentUser.Email;
+            int userId = Convert.ToInt32(_context.Users.Where(x => x.Email == email).FirstOrDefault().UserId);
+            return userId;
         }
     }
 }

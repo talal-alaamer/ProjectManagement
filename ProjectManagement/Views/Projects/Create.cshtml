@@ -24,8 +24,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProjectManagerId" class="control-label"></label>
-                <select asp-for="ProjectManagerId" class ="form-control" asp-items="ViewBag.ProjectManagerId"></select>
-            </div>
+                <input readonly asp-for="ProjectManagerId" class="form-control" value="@ViewBag.ProjectManagerId" />
+            </div><br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

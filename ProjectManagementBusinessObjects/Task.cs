@@ -32,6 +32,8 @@ namespace ProjectManagementBusinessObjects
         public int? StatusId { get; set; }
         [Column("project_id")]
         public int? ProjectId { get; set; }
+        [Column("user_id")]
+        public int? UserId { get; set; }
 
         [ForeignKey("ProjectId")]
         [InverseProperty("Tasks")]
@@ -39,6 +41,9 @@ namespace ProjectManagementBusinessObjects
         [ForeignKey("StatusId")]
         [InverseProperty("Tasks")]
         public virtual TaskStatus? Status { get; set; }
+        [ForeignKey("UserId")]
+        [InverseProperty("Tasks")]
+        public virtual User? User { get; set; }
         [InverseProperty("Task")]
         public virtual ICollection<Comment> Comments { get; set; }
         [InverseProperty("Task")]
