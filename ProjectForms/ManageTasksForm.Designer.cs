@@ -46,6 +46,7 @@
             btnDelete = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
+            btnAddComments = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvTasks).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
@@ -87,7 +88,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(2, 1);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(929, 118);
+            pictureBox1.Size = new Size(937, 118);
             pictureBox1.TabIndex = 8;
             pictureBox1.TabStop = false;
             // 
@@ -108,7 +109,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(819, 104);
+            label3.Location = new Point(838, 104);
             label3.Name = "label3";
             label3.Size = new Size(80, 15);
             label3.TabIndex = 16;
@@ -199,7 +200,7 @@
             btnManageStatus.FlatStyle = FlatStyle.Popup;
             btnManageStatus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnManageStatus.ForeColor = Color.White;
-            btnManageStatus.Location = new Point(132, 291);
+            btnManageStatus.Location = new Point(6, 291);
             btnManageStatus.Name = "btnManageStatus";
             btnManageStatus.Size = new Size(162, 32);
             btnManageStatus.TabIndex = 27;
@@ -223,7 +224,7 @@
             btnDelete.FlatStyle = FlatStyle.Popup;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(300, 291);
+            btnDelete.Location = new Point(406, 291);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(162, 32);
             btnDelete.TabIndex = 29;
@@ -254,6 +255,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnAddComments);
             groupBox2.Controls.Add(btnDelete);
             groupBox2.Controls.Add(btnManageStatus);
             groupBox2.Controls.Add(dgvTasks);
@@ -265,12 +267,27 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Select a Task from the table to delete or edit";
             // 
+            // btnAddComments
+            // 
+            btnAddComments.BackColor = Color.White;
+            btnAddComments.BackgroundImageLayout = ImageLayout.None;
+            btnAddComments.FlatStyle = FlatStyle.Flat;
+            btnAddComments.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddComments.ForeColor = Color.Black;
+            btnAddComments.Location = new Point(208, 291);
+            btnAddComments.Name = "btnAddComments";
+            btnAddComments.Size = new Size(162, 32);
+            btnAddComments.TabIndex = 30;
+            btnAddComments.Text = "Add Comments";
+            btnAddComments.UseVisualStyleBackColor = false;
+            btnAddComments.Click += btnAddComments_Click;
+            // 
             // ManageTasksForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(930, 472);
+            ClientSize = new Size(937, 472);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
@@ -307,5 +324,6 @@
         private Button btnDelete;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
+        private Button btnAddComments;
     }
 }

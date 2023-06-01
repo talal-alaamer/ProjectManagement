@@ -7,19 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using ProjectManagement.Areas.Identity;
+using ProjectManagement.Data;
 
 namespace ProjectForms
 {
     public partial class AddMembersForm : Form
     {
         private ProjectManagementDBContext context;
-       
+
         public AddMembersForm()
         {
             InitializeComponent();
             context = new ProjectManagementDBContext();
-            
+
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -34,13 +38,12 @@ namespace ProjectForms
         }
         private void LoadUsers()
         {
-            // Retrieve all users from the database
-            //var users = context.Users.Where(i => i.RoleId == 2).ToList();
 
-            // Bind the users to the ComboBox
-           // ddlMembers.DataSource = users;
-            ddlMembers.DisplayMember = "UserName";
+            var users = context.Users.ToList();
+            ddlMembers.DataSource = users;
+            ddlMembers.DisplayMember = "Email";
             ddlMembers.ValueMember = "UserId";
+
         }
 
         private void LoadProjectMembers()
@@ -51,7 +54,8 @@ namespace ProjectForms
                 .Select(pm => new
                 {
                     Member_ID = pm.ProjectMemberId,
-                   // Member_Name = pm.User.UserName // Display the user's full name as the member name
+                    Member_Email = pm.User.Email,
+                    Project_ID = pm.ProjectId
                 })
                 .ToList();
 
@@ -68,9 +72,11 @@ namespace ProjectForms
             }
 
             // Get the selected user from the drop-down list
-            User selectedUser = (User)ddlMembers.SelectedItem;
 
-            bool isMember = Global.SelectedProject.ProjectMembers.Any(pm => pm.UserId == selectedUser.UserId);
+
+            User selectedUser = ddlMembers.SelectedItem as User;
+
+            bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
             if (isMember)
             {
                 MessageBox.Show("Selected user is already a member of the project.");
@@ -89,18 +95,41 @@ namespace ProjectForms
             // Refresh the DataGridView to display the updated list of project members
             LoadProjectMembers();
             MessageBox.Show("User added as a project member successfully.");
-
-
-
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+
+           
             // Close the form or dialog without making any changes
             DialogResult = DialogResult.Cancel;
             Close();
+            ProjectManager PM = new ProjectManager();
+            PM.Show();
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            int memberId = Convert.ToInt32(dgvMembers.SelectedCells[0].OwningRow.Cells[0].Value);
+            ProjectMember Member = context.ProjectMembers.Find(memberId);
 
+
+            if (Member != null)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    context.ProjectMembers.Remove(Member);
+                    context.SaveChanges();
+                    LoadProjectMembers();
+                    MessageBox.Show("Project Member deleted successfully.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Unable to find the selected Project Member.");
+            }
+        }
     }
 }

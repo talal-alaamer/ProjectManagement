@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("TaskStatus")]
     public partial class TaskStatus
@@ -19,7 +19,7 @@ namespace ProjectManagement.Model
         public int TaskStatusId { get; set; }
         [Column("status")]
         [StringLength(50)]
-        public string Status { get; set; } = null!;
+        public string? Status { get; set; }
         [Column("description")]
         [StringLength(500)]
         public string? Description { get; set; }

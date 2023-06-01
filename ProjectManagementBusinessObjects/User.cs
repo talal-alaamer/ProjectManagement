@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("User")]
     public partial class User
@@ -18,6 +18,7 @@ namespace ProjectManagement.Model
             Notifications = new HashSet<Notification>();
             ProjectMembers = new HashSet<ProjectMember>();
             Projects = new HashSet<Project>();
+            Tasks = new HashSet<Task>();
         }
 
         [Key]
@@ -25,7 +26,7 @@ namespace ProjectManagement.Model
         public int UserId { get; set; }
         [Column("email")]
         [StringLength(150)]
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; }
 
         [InverseProperty("User")]
         public virtual ICollection<Audit> Audits { get; set; }
@@ -41,5 +42,7 @@ namespace ProjectManagement.Model
         public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
         [InverseProperty("ProjectManager")]
         public virtual ICollection<Project> Projects { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

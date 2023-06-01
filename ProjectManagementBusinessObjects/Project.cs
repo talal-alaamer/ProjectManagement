@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("Project")]
     public partial class Project
@@ -20,16 +20,16 @@ namespace ProjectManagement.Model
         public int ProjectId { get; set; }
         [Column("project_name")]
         [StringLength(100)]
-        public string ProjectName { get; set; } = null!;
+        public string? ProjectName { get; set; }
         [Column("description")]
         [StringLength(1000)]
         public string? Description { get; set; }
         [Column("project_manager_id")]
-        public int ProjectManagerId { get; set; }
+        public int? ProjectManagerId { get; set; }
 
         [ForeignKey("ProjectManagerId")]
         [InverseProperty("Projects")]
-        public virtual User ProjectManager { get; set; } = null!;
+        public virtual User? ProjectManager { get; set; }
         [InverseProperty("Project")]
         public virtual ICollection<ProjectMember> ProjectMembers { get; set; }
         [InverseProperty("Project")]

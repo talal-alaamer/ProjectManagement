@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Model;
+﻿using ProjectManagementBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +15,10 @@ namespace ProjectForms
     public partial class EditTasksForm : Form
     {
         private ProjectManagementDBContext context;
-        private ProjectManagement.Model.Task selectedTask;
-        
+        private ProjectManagementBusinessObjects.Task selectedTask;
 
-        public EditTasksForm(ProjectManagementDBContext context, ProjectManagement.Model.Task Tasks)
+
+        public EditTasksForm(ProjectManagementDBContext context, ProjectManagementBusinessObjects.Task Tasks)
         {
             this.selectedTask = Tasks;
             this.context = context;
@@ -34,10 +34,10 @@ namespace ProjectForms
             ddlStatus.DataSource = context.TaskStatuses.ToList();
             ddlStatus.ValueMember = "TaskStatusId";
             ddlStatus.DisplayMember = "Status";
-            dtpAssignDate.Value = selectedTask.AssignDate;
-            dtpDeadline.Value = (DateTime)selectedTask.Deadline;
+            dtpAssignDate.Value = Convert.ToDateTime(selectedTask.AssignDate);
+            dtpDeadline.Value = selectedTask.Deadline ?? DateTime.MinValue;
             ddlStatus.SelectedItem = selectedTask.Status;
-            
+
 
         }
 
@@ -51,17 +51,22 @@ namespace ProjectForms
             selectedTask.TaskName = txtTaskName.Text;
             selectedTask.Description = txtDescription.Text;
             selectedTask.StatusId = (int)ddlStatus.SelectedValue;
-            selectedTask.AssignDate = dtpDeadline.Value;
+            selectedTask.AssignDate = dtpAssignDate.Value;
+            selectedTask.Deadline = dtpDeadline.Value;
             context.SaveChanges();
+
+            MessageBox.Show("Success!");
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
 
         }
 
-        private void ddlStatus_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            var selctedStatus = ddlStatus.SelectedValue.ToString();
-
-
-
+            ManageTasksForm MN = new ManageTasksForm();
+            this.Close();
+            MN.Show();
         }
     }
 }

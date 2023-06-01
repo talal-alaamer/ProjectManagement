@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectForms
 {
     public partial class ProjectDashboard : Form
     {
-        
-        ProjectManagementDBContext context;
-        List<ProjectManagement.Model.Task> projectTasks;
 
-        public ProjectDashboard( ProjectManagementDBContext context)
+        ProjectManagementDBContext context;
+        List<ProjectManagementBusinessObjects.Task> projectTasks;
+
+        public ProjectDashboard(ProjectManagementDBContext context)
         {
             InitializeComponent();
-            
+            this.projectTasks = new List<ProjectManagementBusinessObjects.Task>();
             this.context = context;
 
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -42,38 +42,88 @@ namespace ProjectForms
 
         private void LoadProjectTasks()
         {
-            // Retrieve the tasks related to the selected project from the database
-            projectTasks = context.Tasks
-                .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
-                .ToList();
+
+            try
+            {
+                // Retrieve all tasks related to the selected project from the database
+                var allTasks = context.Tasks
+                    .Include(t => t.Status)
+                    .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
+                    .ToList();
+
+                // Filter the tasks based on the project's task status
+                projectTasks = allTasks
+                    .Where(t => t.Status != null)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
+                if (userId != 0)
+                {
+                    LoggingService logger = new LoggingService(context);
+                    logger.LogException(ex, userId);
+                }
+                else
+                {
+                    MessageBox.Show($"No user found: {ex.Message}");
+                }
+            }
         }
+
+
 
 
         private void DisplayStatistics()
         {
-            // Calculate and display the statistics based on the project tasks
 
-            // Number of tasks pending vs completed
-            //int tasksCompleted = projectTasks.Count(t => t.Status == "Completed");
-            //int tasksPending = projectTasks.Count(t => t.Status == "In-Progress");
+            try
+            {
+                // Calculate and display the statistics based on the project tasks
 
-            //lblCompletedTasks.Text = tasksCompleted.ToString();
-            //lblPendingTasks.Text = tasksPending.ToString();
+                // Number of tasks completed
+                int tasksCompleted = projectTasks.Count(t => t.Status.Status == "Completed");
+                lblCompletedTasks.Text = tasksCompleted.ToString();
 
-            // Number of overdue tasks
-            DateTime today = DateTime.Today;
-            //int overdueTasks = projectTasks.Count(t => t.Deadline < today && t.Status != "Completed");
+                // Number of tasks in progress (excluding completed and overdue tasks)
+                int tasksInProgress = projectTasks.Count(t => t.Status.Status == "Ongoin");
+                lblPendingTasks.Text = tasksInProgress.ToString();
 
-            //lblOverdueTasks.Text = overdueTasks.ToString();
+                // Number of tasks overdue
+                DateTime today = DateTime.Today;
+                int overdueTasks = projectTasks.Count(t => t.Deadline < today && t.Status.Status != "Completed");
+                lblOverdueTasks.Text = overdueTasks.ToString();
+
+                // Number of tasks not started
+                int tasksNotStarted = projectTasks.Count(t => t.Status.Status == "Not started");
+                lblNotStarted.Text = tasksNotStarted.ToString();
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
+                if (userId != 0)
+                {
+                    LoggingService logger = new LoggingService(context);
+                    logger.LogException(ex, userId);
+                }
+                else
+                {
+                    MessageBox.Show($"No user found: {ex.Message}");
+                }
 
 
-
-
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+            ProjectManager PM = new ProjectManager();
+            PM.Show();
         }
     }
 }

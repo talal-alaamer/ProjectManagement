@@ -17,29 +17,31 @@ using ProjectManagement.Areas.Identity.Data;
 using ProjectManagement.Data;
 using System.Linq;
 using System.Configuration;
+using ProjectManagementBusinessObjects;
 
-namespace Test
+namespace ProjectForms
 {
     public partial class Login : Form
     {
         IdentityContext identityContext;
+        ProjectManagementDBContext context;
         private ServiceProvider? serviceProvider;
+
+
 
         public Login()
         {
             InitializeComponent();
             identityContext = new IdentityContext();
+            this.context = new ProjectManagementDBContext();
+
+
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void button1_Click(object sender, EventArgs e)
+        private async void btnLogin_Click(object sender, EventArgs e)
         {
             try
             {
@@ -58,10 +60,10 @@ namespace Test
                     MessageBox.Show("Please enter your password");
                     return;
                 }
-
                 var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
                 if (signInResults == true)
                 {
+
                     ProjectManager PM = new ProjectManager();
                     PM.Show();
                     this.Hide();
@@ -74,8 +76,19 @@ namespace Test
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process
-                MessageBox.Show($"An error occurred while trying to authenticate: {ex.Message}");
+                // Handle any exceptions that may occur during the authentication process and log them
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                /*int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                if (userid != 0)
+                {
+                    LoggingService logger = new LoggingService(context);
+                    logger.LogException(ex, userid);
+                }
+                else
+                {
+                    MessageBox.Show($"No user found: {ex.Message}");
+                }
+                */
             }
         }
 
@@ -89,11 +102,9 @@ namespace Test
         {
             var services = new ServiceCollection();
             ConfigureServices(services);
-            IServiceProvider serviceProvider;
+            //IServiceProvider serviceProvider;
             serviceProvider = services.BuildServiceProvider();
-
             var userManager = serviceProvider.GetRequiredService<UserManager<Users>>();
-
             var founduser = await userManager.FindByEmailAsync(txtEmail.Text);
 
             if (founduser != null)
@@ -124,5 +135,8 @@ namespace Test
             services.AddLogging();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
+
+
+
     }
 }

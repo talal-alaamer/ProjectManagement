@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManagement.Model
+namespace ProjectManagementBusinessObjects
 {
     [Table("Task")]
     public partial class Task
@@ -20,25 +20,30 @@ namespace ProjectManagement.Model
         public int TaskId { get; set; }
         [Column("task_name")]
         [StringLength(100)]
-        public string TaskName { get; set; } = null!;
+        public string? TaskName { get; set; }
         [Column("description")]
         [StringLength(1000)]
         public string? Description { get; set; }
         [Column("assign_date", TypeName = "datetime")]
-        public DateTime AssignDate { get; set; }
+        public DateTime? AssignDate { get; set; }
         [Column("deadline", TypeName = "datetime")]
         public DateTime? Deadline { get; set; }
         [Column("status_id")]
-        public int StatusId { get; set; }
+        public int? StatusId { get; set; }
         [Column("project_id")]
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
+        [Column("user_id")]
+        public int? UserId { get; set; }
 
         [ForeignKey("ProjectId")]
         [InverseProperty("Tasks")]
-        public virtual Project Project { get; set; } = null!;
+        public virtual Project? Project { get; set; }
         [ForeignKey("StatusId")]
         [InverseProperty("Tasks")]
-        public virtual TaskStatus Status { get; set; } = null!;
+        public virtual TaskStatus? Status { get; set; }
+        [ForeignKey("UserId")]
+        [InverseProperty("Tasks")]
+        public virtual User? User { get; set; }
         [InverseProperty("Task")]
         public virtual ICollection<Comment> Comments { get; set; }
         [InverseProperty("Task")]

@@ -1,5 +1,5 @@
 ﻿using ProjectManagement.Areas.Identity.Data;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
