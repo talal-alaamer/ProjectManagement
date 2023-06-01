@@ -43,22 +43,33 @@ namespace ProjectForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtTaskName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text) || ddlStatus.SelectedValue == null)
+            try
             {
-                MessageBox.Show("Please Do not leave the project name and description empty.");
-                return;
-            }
-            selectedTask.TaskName = txtTaskName.Text;
-            selectedTask.Description = txtDescription.Text;
-            selectedTask.StatusId = (int)ddlStatus.SelectedValue;
-            selectedTask.AssignDate = dtpAssignDate.Value;
-            selectedTask.Deadline = dtpDeadline.Value;
-            context.SaveChanges();
+                if (string.IsNullOrWhiteSpace(txtTaskName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text) || ddlStatus.SelectedValue == null)
+                {
+                    MessageBox.Show("Please Do not leave the project name and description empty.");
+                    return;
+                }
+                selectedTask.TaskName = txtTaskName.Text;
+                selectedTask.Description = txtDescription.Text;
+                selectedTask.StatusId = (int)ddlStatus.SelectedValue;
+                selectedTask.AssignDate = dtpAssignDate.Value;
+                selectedTask.Deadline = dtpDeadline.Value;
+                context.SaveChanges();
 
-            MessageBox.Show("Success!");
-            ManageTasksForm MN = new ManageTasksForm();
-            this.Close();
-            MN.Show();
+                MessageBox.Show("Success!");
+                ManageTasksForm MN = new ManageTasksForm();
+                this.Close();
+                MN.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                int id = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
+            }
+           
 
         }
 

@@ -27,7 +27,6 @@ namespace ProjectForms
             {
                 Source = exception.Source,
                 Exception = exception.ToString(),
-                Timestamp = BitConverter.GetBytes(DateTime.Now.Ticks),
                 UserId = userId
             };
 
