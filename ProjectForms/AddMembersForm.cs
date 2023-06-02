@@ -65,6 +65,8 @@ namespace ProjectForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            try
+            {
                 if (ddlMembers.SelectedItem == null)
                 {
                     MessageBox.Show("Please select a user.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -72,9 +74,7 @@ namespace ProjectForms
                 }
 
                 // Get the selected user from the drop-down list
-
-
-               User selectedUser = ddlMembers.SelectedItem as User;
+                User selectedUser = ddlMembers.SelectedItem as User;
 
                 bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
                 if (isMember)
@@ -95,6 +95,15 @@ namespace ProjectForms
                 // Refresh the DataGridView to display the updated list of project members
                 LoadProjectMembers();
                 MessageBox.Show("User added as a project member successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+
+                int id = context.Users.Where(x=> x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
+            }
         }
 
 

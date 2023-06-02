@@ -49,7 +49,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(-2, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(379, 118);
+            pictureBox1.Size = new Size(488, 118);
             pictureBox1.TabIndex = 7;
             pictureBox1.TabStop = false;
             // 
@@ -59,7 +59,7 @@
             dgvComments.Location = new Point(10, 168);
             dgvComments.Name = "dgvComments";
             dgvComments.RowTemplate.Height = 25;
-            dgvComments.Size = new Size(337, 168);
+            dgvComments.Size = new Size(438, 168);
             dgvComments.TabIndex = 8;
             // 
             // label1
@@ -83,7 +83,7 @@
             groupBox1.Controls.Add(dgvComments);
             groupBox1.Location = new Point(11, 129);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(356, 393);
+            groupBox1.Size = new Size(463, 389);
             groupBox1.TabIndex = 11;
             groupBox1.TabStop = false;
             groupBox1.Text = "Comment Info";
@@ -92,7 +92,7 @@
             // 
             txtComment.Location = new Point(10, 69);
             txtComment.Name = "txtComment";
-            txtComment.Size = new Size(337, 93);
+            txtComment.Size = new Size(438, 93);
             txtComment.TabIndex = 15;
             txtComment.Text = "";
             // 
@@ -102,9 +102,9 @@
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(238, 342);
+            btnDelete.Location = new Point(301, 342);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(95, 34);
+            btnDelete.Size = new Size(148, 34);
             btnDelete.TabIndex = 14;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = false;
@@ -112,11 +112,11 @@
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.DarkRed;
+            btnClose.BackColor = Color.White;
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(252, 29);
+            btnClose.ForeColor = Color.Black;
+            btnClose.Location = new Point(352, 29);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(95, 34);
             btnClose.TabIndex = 13;
@@ -130,9 +130,9 @@
             btnEdit.FlatStyle = FlatStyle.Flat;
             btnEdit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnEdit.ForeColor = Color.Black;
-            btnEdit.Location = new Point(133, 342);
+            btnEdit.Location = new Point(158, 342);
             btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(95, 34);
+            btnEdit.Size = new Size(137, 34);
             btnEdit.TabIndex = 12;
             btnEdit.Text = "Edit";
             btnEdit.UseVisualStyleBackColor = false;
@@ -144,9 +144,9 @@
             btnAddComment.FlatStyle = FlatStyle.Flat;
             btnAddComment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAddComment.ForeColor = Color.White;
-            btnAddComment.Location = new Point(27, 342);
+            btnAddComment.Location = new Point(10, 342);
             btnAddComment.Name = "btnAddComment";
-            btnAddComment.Size = new Size(95, 34);
+            btnAddComment.Size = new Size(142, 34);
             btnAddComment.TabIndex = 11;
             btnAddComment.Text = "Add";
             btnAddComment.UseVisualStyleBackColor = false;
@@ -158,7 +158,7 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(43, 35);
+            label4.Location = new Point(105, 36);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
             label4.TabIndex = 12;
@@ -169,7 +169,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(255, 103);
+            label3.Location = new Point(363, 103);
             label3.Name = "label3";
             label3.Size = new Size(112, 15);
             label3.TabIndex = 13;
@@ -180,7 +180,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(379, 530);
+            ClientSize = new Size(486, 525);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
