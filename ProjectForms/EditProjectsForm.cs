@@ -39,10 +39,21 @@ namespace ProjectForms
                     MessageBox.Show("Please Do not leave the project name and description empty.");
                     return;
                 }
-                // Update the project details and members in the database\
-
+                // Update the project details and members in the database and add there changes to the audit table
+                var oldvalue = GetProjectValues(Global.SelectedProject);
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 Global.SelectedProject.ProjectName = txtProjectName.Text;
                 Global.SelectedProject.Description = txtDescription.Text;
+                var auditLog = new Audit
+                {
+                    ChangeType = "Edit",
+                    TableName = "Tasks",
+                    RecordId = Global.SelectedProject.ProjectId,
+                    CurrentValue = GetProjectValues(Global.SelectedProject),
+                    OldValue = oldvalue,
+                    UserId = userid,
+                };
+                context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
                 context.SaveChanges();
 
                 this.DialogResult = DialogResult.OK;
@@ -64,22 +75,15 @@ namespace ProjectForms
                 {
                     MessageBox.Show($"No user found: {ex.Message}");
                 }
-
-
-
             }
 
         }
-
-
-
 
         private void ManageProjectsForm_Load(object sender, EventArgs e)
         {
             // Display the project details and members in the text boxes and DataGridView
             txtProjectName.Text = Global.SelectedProject.ProjectName;
             txtDescription.Text = Global.SelectedProject.Description;
-
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -87,6 +91,12 @@ namespace ProjectForms
             this.Close();
             ProjectManager PM = new ProjectManager();
             PM.Show();
+        }
+
+        //method to get the details of a project
+        private string GetProjectValues(Project project)
+        {
+            return $"ProjectId: {project.ProjectId}, ProjectName: {project.ProjectName}, Description: {project.Description}";
         }
     }
 }

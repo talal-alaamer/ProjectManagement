@@ -30,6 +30,7 @@ namespace ProjectForms
         {
             try
             {
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {
                     MessageBox.Show("Please enter a project name and description.");
@@ -42,7 +43,16 @@ namespace ProjectForms
                     Description = txtDescription.Text.Trim(),
                     ProjectManagerId = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId
                 };
-
+                var auditLog = new Audit
+                {
+                    ChangeType = "Create",
+                    TableName = "Project",
+                    RecordId = project.ProjectId,
+                    CurrentValue = GetProjectValues(project),
+                    OldValue = null,
+                    UserId = userid,
+                };
+                context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
                 context.Projects.Add(project);
                 context.SaveChanges();
 
@@ -86,6 +96,11 @@ namespace ProjectForms
             ProjectManager PM = new ProjectManager();
             PM.Show();
 
+        }
+        //method to get the details of a project
+        private string GetProjectValues(Project project)
+        {
+            return $"ProjectId: {project.ProjectId}, ProjectName: {project.ProjectName}, Description: {project.Description}";
         }
     }
 }

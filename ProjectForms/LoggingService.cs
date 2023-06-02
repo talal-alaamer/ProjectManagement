@@ -34,30 +34,5 @@ namespace ProjectForms
             context.Logs.Add(log);
             context.SaveChanges();
         }
-
-        public void LogUserAction(string action, int userId,string userAction, string TableName)
-        {
-            
-            //var entity = context.YourTableName.Find(recordId);
-
-            // Serialize the entity to capture its old value
-            //var serializer = new JsonSerializer();
-            //var oldValue = serializer.Serialize(entity);
-            // Save the user action details to the "Audit" table
-            var audit = new Audit
-            {
-                Timestamp = BitConverter.GetBytes(DateTime.Now.Ticks),
-                ChangeType = userAction,
-                TableName = TableName,
-                RecordId = 0, // Set the appropriate record ID if applicable
-                OldValue = null,
-                CurrentValue = action,
-                UserId = userId
-            };
-
-            context.Audits.Add(audit);
-            context.SaveChanges();
-
-        }
     }
 }

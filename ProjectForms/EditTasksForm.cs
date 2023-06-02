@@ -29,6 +29,7 @@ namespace ProjectForms
 
         private void EditTasksForm_Load(object sender, EventArgs e)
         {
+            //populating the form contents with the values of the selected task
             txtTaskName.Text = selectedTask.TaskName;
             txtDescription.Text = selectedTask.Description;
             ddlStatus.DataSource = context.TaskStatuses.ToList();
@@ -48,11 +49,24 @@ namespace ProjectForms
                 MessageBox.Show("Please Do not leave the project name and description empty.");
                 return;
             }
+            // saving the new varibles to the task object and auditing the changes and adding them to the audit table
+            int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            var oldvalue = GetTaskValues(selectedTask);
             selectedTask.TaskName = txtTaskName.Text;
             selectedTask.Description = txtDescription.Text;
             selectedTask.StatusId = (int)ddlStatus.SelectedValue;
             selectedTask.AssignDate = dtpAssignDate.Value;
             selectedTask.Deadline = dtpDeadline.Value;
+            var auditLog = new Audit
+            {
+                ChangeType = "Edit",
+                TableName = "Tasks",
+                RecordId = selectedTask.TaskId,
+                CurrentValue = GetTaskValues(selectedTask),
+                OldValue = oldvalue,
+                UserId = userid,
+            };
+            context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
             context.SaveChanges();
 
             MessageBox.Show("Success!");
@@ -64,9 +78,15 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            // closing this form and oppening ManageTasks form
             ManageTasksForm MN = new ManageTasksForm();
             this.Close();
             MN.Show();
+        }
+        // Helper method to get the values of the task
+        private string GetTaskValues(ProjectManagement.Model.Task task)
+        {
+            return $"TaskId: {task.TaskId}, TaskName: {task.TaskName}, Description: {task.Description}, Status: {task.StatusId}";
         }
     }
 }

@@ -80,7 +80,7 @@
             dgvTasks.Name = "dgvTasks";
             dgvTasks.ReadOnly = true;
             dgvTasks.RowTemplate.Height = 25;
-            dgvTasks.Size = new Size(562, 257);
+            dgvTasks.Size = new Size(625, 257);
             dgvTasks.TabIndex = 5;
             // 
             // pictureBox1
@@ -88,7 +88,7 @@
             pictureBox1.BackColor = Color.FromArgb(0, 0, 64);
             pictureBox1.Location = new Point(2, 1);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(937, 118);
+            pictureBox1.Size = new Size(996, 118);
             pictureBox1.TabIndex = 8;
             pictureBox1.TabStop = false;
             // 
@@ -200,9 +200,9 @@
             btnManageStatus.FlatStyle = FlatStyle.Popup;
             btnManageStatus.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnManageStatus.ForeColor = Color.White;
-            btnManageStatus.Location = new Point(40, 291);
+            btnManageStatus.Location = new Point(6, 291);
             btnManageStatus.Name = "btnManageStatus";
-            btnManageStatus.Size = new Size(162, 32);
+            btnManageStatus.Size = new Size(203, 32);
             btnManageStatus.TabIndex = 27;
             btnManageStatus.Text = "Edit Existing Task  ";
             btnManageStatus.UseVisualStyleBackColor = false;
@@ -224,9 +224,9 @@
             btnDelete.FlatStyle = FlatStyle.Popup;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(376, 291);
+            btnDelete.Location = new Point(428, 291);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(162, 32);
+            btnDelete.Size = new Size(201, 32);
             btnDelete.TabIndex = 29;
             btnDelete.Text = "Delete Existing Task";
             btnDelete.UseVisualStyleBackColor = false;
@@ -262,10 +262,10 @@
             groupBox2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             groupBox2.Location = new Point(350, 125);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(581, 335);
+            groupBox2.Size = new Size(637, 335);
             groupBox2.TabIndex = 31;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Select a Task from the table to delete or edit";
+            groupBox2.Text = "Select a Task from the table to delete/edit/add comments to";
             // 
             // btnAddComments
             // 
@@ -274,11 +274,11 @@
             btnAddComments.FlatStyle = FlatStyle.Flat;
             btnAddComments.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAddComments.ForeColor = Color.Black;
-            btnAddComments.Location = new Point(208, 291);
+            btnAddComments.Location = new Point(215, 291);
             btnAddComments.Name = "btnAddComments";
-            btnAddComments.Size = new Size(162, 32);
+            btnAddComments.Size = new Size(207, 32);
             btnAddComments.TabIndex = 30;
-            btnAddComments.Text = "Add Comments";
+            btnAddComments.Text = "Show/Add Comments";
             btnAddComments.UseVisualStyleBackColor = false;
             btnAddComments.Click += btnAddComments_Click;
             // 
@@ -287,7 +287,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(937, 472);
+            ClientSize = new Size(999, 467);
             Controls.Add(label3);
             Controls.Add(label4);
             Controls.Add(pictureBox1);
