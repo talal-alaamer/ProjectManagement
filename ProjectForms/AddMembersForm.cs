@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Areas.Identity;
@@ -65,36 +65,48 @@ namespace ProjectForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (ddlMembers.SelectedItem == null)
+            try
             {
-                MessageBox.Show("Please select a user.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (ddlMembers.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a user.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                //Get the selected user from the drop-down list
+
+
+                User selectedUser = ddlMembers.SelectedItem as User;
+
+                bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
+                if (isMember)
+                {
+                    MessageBox.Show("Selected user is already a member of the project.");
+                    return;
+                }
+
+                // Create a new ProjectMember object and add it to the context
+                ProjectMember projectMember = new ProjectMember
+                {
+                    UserId = selectedUser.UserId,
+                    ProjectId = Global.SelectedProject.ProjectId
+                };
+                context.ProjectMembers.Add(projectMember);
+                context.SaveChanges();
+
+                // Refresh the DataGridView to display the updated list of project members
+                LoadProjectMembers();
+                MessageBox.Show("User added as a project member successfully.");
             }
-
-            // Get the selected user from the drop-down list
-
-
-            User selectedUser = ddlMembers.SelectedItem as User;
-
-            bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
-            if (isMember)
+            catch (Exception ex)
             {
-                MessageBox.Show("Selected user is already a member of the project.");
-                return;
+                MessageBox.Show($"An error occurred: {ex.Message}");
+
+                int id = context.Users.Where(x=> x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
+                LoggingService log = new LoggingService(context);
+                log.LogException(ex, id);
             }
-
-            // Create a new ProjectMember object and add it to the context
-            ProjectMember projectMember = new ProjectMember
-            {
-                UserId = selectedUser.UserId,
-                ProjectId = Global.SelectedProject.ProjectId
-            };
-            context.ProjectMembers.Add(projectMember);
-            context.SaveChanges();
-
-            // Refresh the DataGridView to display the updated list of project members
-            LoadProjectMembers();
-            MessageBox.Show("User added as a project member successfully.");
+           
         }
 
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectForms
 {
@@ -17,12 +17,12 @@ namespace ProjectForms
     {
 
         ProjectManagementDBContext context;
-        List<ProjectManagement.Model.Task> projectTasks;
+        List<ProjectManagementBusinessObjects.Task> projectTasks;
 
         public ProjectDashboard(ProjectManagementDBContext context)
         {
             InitializeComponent();
-            this.projectTasks = new List<ProjectManagement.Model.Task>();
+            this.projectTasks = new List<ProjectManagementBusinessObjects.Task>();
             this.context = context;
 
             this.StartPosition = FormStartPosition.CenterScreen;

@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Model;
+﻿using ProjectManagementBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,6 @@ namespace ProjectForms
             {
                 Source = exception.Source,
                 Exception = exception.ToString(),
-                Timestamp = BitConverter.GetBytes(DateTime.Now.Ticks),
                 UserId = userId
             };
 

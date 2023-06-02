@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectManagement.Model.Audit>
+﻿@model IEnumerable<ProjectManagementBusinessObjects.Audit>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,6 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -61,9 +58,7 @@
                 @Html.DisplayFor(modelItem => item.User.UserId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AuditId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AuditId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AuditId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.AuditId">Details</a>
             </td>
         </tr>
 }

@@ -1,4 +1,4 @@
-﻿@model ProjectManagement.Model.Project
+﻿@model ProjectManagementBusinessObjects.Project
 
 @{
     ViewData["Title"] = "Edit";
@@ -25,9 +25,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProjectManagerId" class="control-label"></label>
-                <select asp-for="ProjectManagerId" class="form-control" asp-items="ViewBag.ProjectManagerId"></select>
+                <input readonly asp-for="ProjectManagerId" class="form-control" value="@ViewBag.ProjectManagerId" />
                 <span asp-validation-for="ProjectManagerId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

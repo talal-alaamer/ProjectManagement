@@ -17,7 +17,7 @@ using ProjectManagement.Areas.Identity.Data;
 using ProjectManagement.Data;
 using System.Linq;
 using System.Configuration;
-using ProjectManagement.Model;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectForms
 {
@@ -60,7 +60,6 @@ namespace ProjectForms
                     MessageBox.Show("Please enter your password");
                     return;
                 }
-
                 var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
                 if (signInResults == true)
                 {
@@ -78,7 +77,7 @@ namespace ProjectForms
             {
                 // Handle any exceptions that may occur during the authentication process and log them
                 MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                /*int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (userid != 0)
                 {
                     LoggingService logger = new LoggingService(context);
@@ -88,6 +87,7 @@ namespace ProjectForms
                 {
                     MessageBox.Show($"No user found: {ex.Message}");
                 }
+                */
             }
         }
 
@@ -101,11 +101,9 @@ namespace ProjectForms
         {
             var services = new ServiceCollection();
             ConfigureServices(services);
-            IServiceProvider serviceProvider;
+            //IServiceProvider serviceProvider;
             serviceProvider = services.BuildServiceProvider();
-
             var userManager = serviceProvider.GetRequiredService<UserManager<Users>>();
-
             var founduser = await userManager.FindByEmailAsync(txtEmail.Text);
 
             if (founduser != null)
