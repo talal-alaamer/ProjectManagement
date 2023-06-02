@@ -35,7 +35,7 @@ namespace ProjectForms
             identityContext = new IdentityContext();
             this.context = new ProjectManagementDBContext();
 
-
+            // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -63,7 +63,6 @@ namespace ProjectForms
                 var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
                 if (signInResults == true)
                 {
-
                     ProjectManager PM = new ProjectManager();
                     PM.Show();
                     this.Hide();

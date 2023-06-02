@@ -1,4 +1,4 @@
-﻿using ProjectManagementBusinessObjects;
+using ProjectManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,12 +15,12 @@ namespace ProjectForms
     public partial class EditCommentForm : Form
     {
         Comment comment;
-        ProjectManagementDBContext Context;
+        ProjectManagementDBContext context;
         public EditCommentForm(Comment Comment, ProjectManagementDBContext context)
         {
             InitializeComponent();
             this.comment = Comment;
-            this.Context = context;
+            this.context = context;
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -33,27 +33,33 @@ namespace ProjectForms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            try
+            if (string.IsNullOrWhiteSpace(txtComment.Text))
             {
-                if (string.IsNullOrWhiteSpace(txtComment.Text))
-                {
-                    MessageBox.Show("Please Do not leave comment text field empty");
-                    return;
-                }
-                comment.CommentText = txtComment.Text;
-                comment.CommentTimestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
-                Context.SaveChanges();
-                MessageBox.Show("Success!");
-                this.Close();
+                MessageBox.Show("Please Do not leave comment text field empty");
+                return;
             }
-            catch (Exception ex)
+
+            var oldvalue = GetCommentValues(comment);
+            int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+
+            comment.CommentText = txtComment.Text;
+            comment.CommentTimestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
+
+            var auditLog = new Audit
             {
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int id = Context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
-                LoggingService log = new LoggingService(Context);
-                log.LogException(ex, id);
-            }
-            
+                ChangeType = "Edit",
+                TableName = "Comment",
+                RecordId = comment.CommentId,
+                CurrentValue = GetCommentValues(comment),
+                OldValue = oldvalue,
+                UserId = userid,
+            };
+
+            context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
+            context.SaveChanges();
+
+            MessageBox.Show("Success!");
+            this.Close();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -64,6 +70,10 @@ namespace ProjectForms
         private void btnClose_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private string GetCommentValues(Comment comment)
+        {
+            return $"CommentId: {comment.CommentId}, TaskId: {comment.TaskId}, Text: {comment.CommentText}";
         }
     }
 }
