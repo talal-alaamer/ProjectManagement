@@ -73,9 +73,7 @@ namespace ProjectForms
                     return;
                 }
 
-                //Get the selected user from the drop-down list
-
-
+                // Get the selected user from the drop-down list
                 User selectedUser = ddlMembers.SelectedItem as User;
 
                 bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
@@ -106,7 +104,6 @@ namespace ProjectForms
                 LoggingService log = new LoggingService(context);
                 log.LogException(ex, id);
             }
-           
         }
 
 

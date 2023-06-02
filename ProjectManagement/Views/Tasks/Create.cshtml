@@ -23,27 +23,23 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AssignDate" class="control-label"></label>
-                <input asp-for="AssignDate" class="form-control" />
-                <span asp-validation-for="AssignDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Deadline" class="control-label"></label>
                 <input asp-for="Deadline" class="form-control" />
                 <span asp-validation-for="Deadline" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
+                <label asp-for="StatusId" class="control-label">Status</label>
                 <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
+                <label asp-for="ProjectId" class="control-label">Project</label>
+                <input readonly class="form-control" value="@ViewBag.ProjectName">
+                <input hidden asp-for="ProjectId" class="form-control" value="@ViewBag.ProjectId">
             </div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
+                <label asp-for="UserId" class="control-label">Assigned User</label>
                 <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
+            </div><br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -52,7 +48,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-id="@ViewBag.projectId">Back to List</a>
 </div>
 
 @section Scripts {

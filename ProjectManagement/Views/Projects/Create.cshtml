@@ -13,7 +13,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProjectName" class="control-label"></label>
+                <label asp-for="ProjectName" class="control-label">Project Name</label>
                 <input asp-for="ProjectName" class="form-control" />
                 <span asp-validation-for="ProjectName" class="text-danger"></span>
             </div>
@@ -23,8 +23,9 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectManagerId" class="control-label"></label>
-                <input readonly asp-for="ProjectManagerId" class="form-control" value="@ViewBag.ProjectManagerId" />
+                <label asp-for="ProjectManagerId" class="control-label">Project Manager</label>
+                <input readonly class="form-control" value="@ViewBag.ProjectManager" />
+                <input hidden asp-for="ProjectManagerId" class="form-control" value="@ViewBag.ProjectManagerId" />
             </div><br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
