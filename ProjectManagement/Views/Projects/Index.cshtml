@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Projects</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,13 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectName)
+                Project Name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectManager)
+                Project Manager
             </th>
             <th></th>
         </tr>
@@ -37,16 +37,15 @@
                 @Html.DisplayFor(modelItem => item.ProjectManager.Email)
             </td>
             <td>
+                    <a class="mx-3" asp-action="Dashboard" asp-route-id="@item.ProjectId">Dashboard</a>
+                    <a class="mx-3" asp-controller="Tasks" asp-action="Index" asp-route-id="@item.ProjectId">Tasks</a>
+                    <a class="mx-3" asp-controller="ProjectMembers" asp-action="Index" asp-route-id="@item.ProjectId">Members</a>
                     @if (item.ProjectManagerId == ViewBag.userId)
                     {
-                        <a class="mx-2" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+                        <a class="mx-3" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
                     }
-                    <a class="mx-2" asp-action="Details" asp-route-id="@item.ProjectId">Details</a>
-                    @if (item.ProjectManagerId == ViewBag.userId)
-                    {
-                        <a class="mx-2" asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
-                    }
-                    <a class="mx-2" asp-controller="Tasks" asp-action="Index" asp-route-id="@item.ProjectId">View Tasks</a>
+                    
             </td>
         </tr>
 }

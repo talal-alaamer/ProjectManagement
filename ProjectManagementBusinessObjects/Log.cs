@@ -16,10 +16,9 @@ namespace ProjectManagementBusinessObjects
         [StringLength(50)]
         public string? Source { get; set; }
         [Column("exception")]
-        [StringLength(1000)]
         public string? Exception { get; set; }
-        [Column("timestamp")]
-        public byte[]? Timestamp { get; set; }
+        [Column("timestamp", TypeName = "datetime")]
+        public DateTime? Timestamp { get; set; }
         [Column("user_id")]
         public int? UserId { get; set; }
 

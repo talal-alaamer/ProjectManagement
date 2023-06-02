@@ -95,9 +95,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Log>(entity =>
             {
-                entity.Property(e => e.Timestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Logs)
@@ -137,6 +135,8 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Task>(entity =>
             {
+                entity.Property(e => e.AssignDate).HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ProjectId)

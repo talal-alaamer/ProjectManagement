@@ -4,34 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-@ViewBag.test
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Tasks</h1>
+
+@if (ViewBag.managerId == ViewBag.userId)
+{
+    <p>
+        <a asp-action="Create" asp-route-id="@ViewBag.projectId">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TaskName)
+                Task Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AssignDate)
+                Assigned User
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
             </th>
             <th></th>
         </tr>
@@ -43,27 +34,22 @@
                 @Html.DisplayFor(modelItem => item.TaskName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssignDate)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Deadline)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Project.ProjectId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status.TaskStatusId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TaskId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TaskId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TaskId">Delete</a>
+                    <a class="mx-3" asp-action="Details" asp-route-id="@item.TaskId">Details</a>
+                    @if (item.UserId == ViewBag.userId || item.Project.ProjectManagerId == ViewBag.userId)
+                    {
+                        <a class="mx-3" asp-action="UpdateStatus" asp-route-id="@item.TaskId">Update Status</a>
+                    }
+                    @if (item.Project.ProjectManagerId == ViewBag.userId)
+                    {
+                        <a class="mx-3" asp-action="Edit" asp-route-id="@item.TaskId">Edit</a>
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.TaskId">Delete</a>
+                    }
             </td>
         </tr>
 }

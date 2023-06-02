@@ -33,30 +33,12 @@ namespace ProjectManagement.Controllers
             return View(await projectManagementDBContext.ToListAsync());
         }
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Projects == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                .Include(p => p.ProjectManager)
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return View(project);
-        }
-
         // GET: Projects/Create
         public async Task<IActionResult> CreateAsync()
         {
             int userId = GetIdAsync().Result;
             ViewBag.ProjectManagerId = userId;
+            ViewBag.ProjectManager = _context.Users.Where(x=>x.UserId == userId).FirstOrDefault().Email;
             return View();
         }
 
@@ -69,12 +51,18 @@ namespace ProjectManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                ProjectMember pm = new ProjectMember();
                 _context.Add(project);
+                await _context.SaveChangesAsync();
+                pm.ProjectId = project.ProjectId;
+                pm.UserId = project.ProjectManagerId;
+                _context.ProjectMembers.Add(pm);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             int userId = GetIdAsync().Result;
             ViewBag.ProjectManagerId = userId;
+            ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
             return View(project);
         }
 
@@ -93,6 +81,7 @@ namespace ProjectManagement.Controllers
             }
             int userId = GetIdAsync().Result;
             ViewBag.ProjectManagerId = userId;
+            ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
             return View(project);
         }
 
@@ -129,6 +118,7 @@ namespace ProjectManagement.Controllers
                 return RedirectToAction(nameof(Index));
             }
             int userId = GetIdAsync().Result;
+            ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
             ViewBag.ProjectManagerId = userId;
             return View(project);
         }
@@ -164,6 +154,10 @@ namespace ProjectManagement.Controllers
             var project = await _context.Projects.FindAsync(id);
             if (project != null)
             {
+                var tasks = _context.Tasks.Where(x => x.ProjectId == project.ProjectId);
+                _context.Tasks.RemoveRange(tasks);
+                var members = _context.ProjectMembers.Where(x => x.ProjectId == project.ProjectId);
+                _context.ProjectMembers.RemoveRange(members);
                 _context.Projects.Remove(project);
             }
             

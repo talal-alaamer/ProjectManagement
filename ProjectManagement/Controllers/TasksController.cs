@@ -29,7 +29,10 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> Index(int id)
         {
             int userId = GetIdAsync().Result;
-            var projectManagementDBContext = _context.Tasks.Where(x=>x.ProjectId==id || x.Project.ProjectManagerId==userId).Include(t => t.Project).Include(t => t.Status).Include(t => t.User);
+            ViewBag.userId = userId;
+            ViewBag.managerId = _context.Projects.Where(x => x.ProjectId == id).FirstOrDefault().ProjectManagerId;
+            ViewBag.projectId = id;
+            var projectManagementDBContext = _context.Tasks.Where(x=>x.ProjectId==id).Include(t => t.Project).Include(t => t.Status).Include(t => t.User);
             return View(await projectManagementDBContext.ToListAsync());
         }
 
@@ -55,11 +58,12 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
-            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "TaskStatusId");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewBag.ProjectId = id;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == id).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status");
+            ViewData["UserId"] = new SelectList(_context.ProjectMembers.Where(x => x.ProjectId == id).Include(y=>y.User), "UserId", "User.Email");
             return View();
         }
 
@@ -74,11 +78,12 @@ namespace ProjectManagement.Controllers
             {
                 _context.Add(task);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = task.ProjectId });
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", task.ProjectId);
-            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "TaskStatusId", task.StatusId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", task.UserId);
+            ViewBag.ProjectId = task.ProjectId;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
+            ViewData["UserId"] = new SelectList(_context.ProjectMembers.Where(x=>x.ProjectId==task.ProjectId).Include(y => y.User), "UserId", "User.Email", task.UserId);
             return View(task);
         }
 
@@ -95,9 +100,10 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", task.ProjectId);
-            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "TaskStatusId", task.StatusId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", task.UserId);
+            ViewBag.ProjectId = task.ProjectId;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
+            ViewData["UserId"] = new SelectList(_context.ProjectMembers.Where(x=>x.ProjectId==task.ProjectId).Include(y => y.User), "UserId", "User.Email", task.UserId);
             return View(task);
         }
 
@@ -131,11 +137,73 @@ namespace ProjectManagement.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = task.ProjectId });
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", task.ProjectId);
-            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "TaskStatusId", task.StatusId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", task.UserId);
+            ViewBag.ProjectId = task.ProjectId;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
+            ViewData["UserId"] = new SelectList(_context.ProjectMembers.Where(x => x.ProjectId == task.ProjectId).Include(y => y.User), "UserId", "User.Email", task.UserId);
+            return View(task);
+        }
+
+        // GET: Tasks/Edit/5
+        public async Task<IActionResult> UpdateStatus(int? id)
+        {
+            if (id == null || _context.Tasks == null)
+            {
+                return NotFound();
+            }
+
+            var task = await _context.Tasks.FindAsync(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            ViewBag.ProjectId = task.ProjectId;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
+            ViewBag.UserId = task.UserId;
+            ViewBag.Email = _context.Users.Where(x => x.UserId == task.UserId).FirstOrDefault().Email;
+            return View(task);
+        }
+
+        // POST: Tasks/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id, [Bind("TaskId,TaskName,Description,AssignDate,Deadline,StatusId,ProjectId,UserId")] ProjectManagementBusinessObjects.Task task)
+        {
+            if (id != task.TaskId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TaskExists(task.TaskId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index), new { id = task.ProjectId });
+            }
+            ViewBag.ProjectId = task.ProjectId;
+            ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
+            ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
+            ViewBag.UserId = task.UserId;
+            ViewBag.Email = _context.Users.Where(x => x.UserId == task.UserId).FirstOrDefault().Email;
             return View(task);
         }
 
@@ -176,7 +244,7 @@ namespace ProjectManagement.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = task.ProjectId });
         }
 
         private bool TaskExists(int id)
