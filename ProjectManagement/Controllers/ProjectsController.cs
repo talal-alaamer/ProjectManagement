@@ -25,6 +25,7 @@ namespace ProjectManagement.Controllers
             _userManager = userManager;
         }
 
+
         // GET: Projects
         public async Task<IActionResult> Index(string projectname, string manager)
         {
