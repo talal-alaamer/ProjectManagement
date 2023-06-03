@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Areas.Identity.Data;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Areas.Identity.Pages.Account
 {
@@ -22,11 +23,13 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ProjectManagementDBContext _context;
 
         public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = new ProjectManagementDBContext();
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async System.Threading.Tasks.Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -115,6 +118,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    Global.userId = _context.Users.Where(x => x.Email == Input.Email).FirstOrDefault().UserId;
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

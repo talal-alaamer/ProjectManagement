@@ -4,25 +4,22 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Comments</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-id="@ViewBag.taskId">Add Comment</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CommentTimestamp)
+                Timestamp
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CommentText)
+                Comment
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Task)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
+                Commenter
             </th>
             <th></th>
         </tr>
@@ -37,17 +34,16 @@
                 @Html.DisplayFor(modelItem => item.CommentText)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Task.TaskId)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CommentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CommentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                @if (item.UserId == ViewBag.userId){
+                        <a class="mx-3" asp-action="Edit" asp-route-id="@item.CommentId">Edit</a>
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.CommentId">Delete</a>
+                }
             </td>
         </tr>
 }
     </tbody>
 </table>
+<a asp-controller="Tasks" asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Tasks</a>
