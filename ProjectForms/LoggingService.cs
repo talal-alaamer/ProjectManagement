@@ -10,9 +10,9 @@ namespace ProjectForms
 {
     internal class LoggingService
     {
-        private ProjectManagementDBContext context;
+        private ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
-        public LoggingService(ProjectManagementDBContext dbContext)
+        public LoggingService(ProjectManagementBusinessObjects.ProjectManagementDBContext dbContext)
         {
             context = dbContext;
         }

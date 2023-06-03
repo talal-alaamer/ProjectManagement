@@ -14,12 +14,12 @@ namespace ProjectForms
 {
     public partial class CreateProjectForm : Form
     {
-        ProjectManagementDBContext context;
+        ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
         public CreateProjectForm()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
 
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -52,7 +52,7 @@ namespace ProjectForms
                     OldValue = null,
                     UserId = userid,
                 };
-                context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
+                context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.Projects.Add(project);
                 context.SaveChanges();
 
@@ -67,21 +67,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
         }
 
@@ -97,6 +83,24 @@ namespace ProjectForms
             PM.Show();
 
         }
+
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
+
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
+            }
+            else
+            {
+                MessageBox.Show($"No user found: {ex.Message}");
+            }
+        }
+
         //method to get the details of a project
         private string GetProjectValues(Project project)
         {

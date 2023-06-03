@@ -172,11 +172,11 @@
             // 
             // btnCancel
             // 
-            btnCancel.BackColor = Color.DarkRed;
+            btnCancel.BackColor = Color.White;
             btnCancel.BackgroundImageLayout = ImageLayout.None;
             btnCancel.FlatStyle = FlatStyle.Popup;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnCancel.ForeColor = Color.White;
+            btnCancel.ForeColor = Color.Black;
             btnCancel.Location = new Point(211, 286);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(102, 32);

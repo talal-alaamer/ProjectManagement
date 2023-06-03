@@ -1,4 +1,5 @@
-using ProjectManagement.Model;
+using ProjectManagement;
+using ProjectManagementBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,13 +15,13 @@ namespace ProjectForms
 {
     public partial class CommentManagementForm : Form
     {
-        private ProjectManagementDBContext context;
-        private ProjectManagement.Model.Task selectedTask;
+        private ProjectManagementBusinessObjects.ProjectManagementDBContext context;
+        private ProjectManagementBusinessObjects.Task selectedTask;
 
-        public CommentManagementForm(ProjectManagement.Model.Task task)
+        public CommentManagementForm(ProjectManagementBusinessObjects.Task task)
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
             selectedTask = task;
 
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -49,109 +50,124 @@ namespace ProjectForms
 
         private void btnAddComment_Click(object sender, EventArgs e)
         {
-
-
-            int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-            if (string.IsNullOrWhiteSpace(txtComment.Text))
+            try
             {
-                MessageBox.Show("Please enter a comment.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                if (string.IsNullOrWhiteSpace(txtComment.Text))
+                {
+                    MessageBox.Show("Please enter a comment.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+
+                Comment newComment = new Comment
+                {
+                    CommentText = txtComment.Text,
+
+                    UserId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId),
+                    TaskId = selectedTask.TaskId
+                };
+
+                var auditLog = new Audit
+                {
+                    ChangeType = "Create",
+                    TableName = "Comment",
+                    RecordId = newComment.CommentId,
+                    CurrentValue = GetCommentValues(newComment),
+                    OldValue = null,
+                    UserId = userid,
+                };
+
+                context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
+                context.Comments.Add(newComment);
+                context.SaveChanges();
+
+                MessageBox.Show("Comment added successfully!", "Success", MessageBoxButtons.OK);
+
+                LoadComments();
+                txtComment.Clear();
             }
-
-
-            Comment newComment = new Comment
-            {
-                CommentText = txtComment.Text,
-
-                UserId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId),
-                TaskId = selectedTask.TaskId
-            };
-
-            var auditLog = new Audit
-            {
-                ChangeType = "Create",
-                TableName = "Comment",
-                RecordId = newComment.CommentId,
-                CurrentValue = GetCommentValues(newComment),
-                OldValue = null,
-                UserId = userid,
-            };
-
-            context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
-            context.Comments.Add(newComment);
-            context.SaveChanges();
-
-            MessageBox.Show("Comment added successfully!", "Success", MessageBoxButtons.OK);
-
-            LoadComments();
-            txtComment.Clear();
+            catch(Exception ex)
+            { 
+                HandleException(ex);
+            }
         
         }
 
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-
-            if (dgvComments.SelectedCells.Count > 0)
-            {
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
-                Comment comment = context.Comments.Find(commentId);
-                if (comment != null)
+            try {
+                if (dgvComments.SelectedCells.Count > 0)
                 {
-                    DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
+                    int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                    int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
+                    Comment comment = context.Comments.Find(commentId);
+                    if (comment != null)
                     {
-                        var auditLog = new Audit
+                        DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (result == DialogResult.Yes)
                         {
-                            ChangeType = "Delete",
-                            TableName = "Comment",
-                            RecordId = commentId,
-                            OldValue = GetCommentValues(comment),
-                            UserId = userid,
-                        };
-                       
-                        context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
-                        context.Comments.Remove(comment);
-                        context.SaveChanges();
-                        LoadComments();
-                        MessageBox.Show("Comment deleted successfully.");
+                            var auditLog = new Audit
+                            {
+                                ChangeType = "Delete",
+                                TableName = "Comment",
+                                RecordId = commentId,
+                                OldValue = GetCommentValues(comment),
+                                UserId = userid,
+                            };
+
+                            context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
+                            context.Comments.Remove(comment);
+                            context.SaveChanges();
+                            LoadComments();
+                            MessageBox.Show("Comment deleted successfully.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to find the selected comment.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Unable to find the selected comment.");
+                    MessageBox.Show("Please select a comment.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Please select a comment.");
+                HandleException(ex);
             }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
-            if (dgvComments.SelectedCells.Count > 0)
+            try
             {
-                int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
-                Comment comment = context.Comments.Find(commentId);
-
-                if (comment != null)
+                if (dgvComments.SelectedCells.Count > 0)
                 {
-                    EditCommentForm editForm = new EditCommentForm(comment, context);
-                    DialogResult result = editForm.ShowDialog();
+                    int commentId = Convert.ToInt32(dgvComments.SelectedCells[0].OwningRow.Cells[0].Value);
+                    Comment comment = context.Comments.Find(commentId);
+
+                    if (comment != null)
+                    {
+                        EditCommentForm editForm = new EditCommentForm(comment, context);
+                        DialogResult result = editForm.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to find the selected comment.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Unable to find the selected comment.");
+                    MessageBox.Show("Please select a comment.");
                 }
             }
-            else
-            {
-                MessageBox.Show("Please select a comment.");
+            catch (Exception ex) 
+            { 
+               HandleException(ex);
             }
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -159,6 +175,23 @@ namespace ProjectForms
             ManageTasksForm manageForm = new ManageTasksForm();
             this.Close();
             manageForm.Show();
+        }
+
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
+
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
+            }
+            else
+            {
+                MessageBox.Show($"No user found: {ex.Message}");
+            }
         }
 
         private string GetCommentValues(Comment comment)

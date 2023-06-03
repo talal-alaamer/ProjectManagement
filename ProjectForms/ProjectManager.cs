@@ -6,16 +6,17 @@ using ProjectManagementBusinessObjects;
 using ProjectForms;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
+
 namespace ProjectForms
 {
     public partial class ProjectManager : Form
     {
-        ProjectManagementDBContext context;
+        ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
         public ProjectManager()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
 
             // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -24,7 +25,7 @@ namespace ProjectForms
 
         private void ProjectManager_Load(object sender, EventArgs e)
         {
-            RefreshDataGridView();
+           RefreshDataGridView();
 
         }
 
@@ -74,7 +75,7 @@ namespace ProjectForms
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
 
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
             try
             {
                 if (dgvProjects.SelectedCells.Count > 0)
@@ -123,7 +124,7 @@ namespace ProjectForms
             int selectedRow = dgvProjects.SelectedCells[0].RowIndex;
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
 
             try
             {
@@ -142,8 +143,6 @@ namespace ProjectForms
                             {
                                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                                
-                               
-
                                 var auditLog = new Audit
                                 {
                                     ChangeType = "Delete",
@@ -154,7 +153,7 @@ namespace ProjectForms
                                 };
                                 // Delete the project and save changes to the database and audit the deletion
                                 
-                                context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
+                                context.Set<Audit>().Add(auditLog);
                                 context.Projects.Remove(Global.SelectedProject);
                                 // Delete all associated tasks explicitly
                                 var selectedTasks = context.Tasks.Where(i => i.ProjectId == selectedPid);
@@ -199,7 +198,7 @@ namespace ProjectForms
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
 
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
             try
             {
 

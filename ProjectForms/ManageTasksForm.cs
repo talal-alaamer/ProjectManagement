@@ -9,20 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectManagement;
-using ProjectManagement.Model;
 using ProjectForms;
+using ProjectManagementBusinessObjects;
 
 namespace ProjectForms
 {
     public partial class ManageTasksForm : Form
     {
 
-        private ProjectManagementDBContext context;
+        private ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
         public ManageTasksForm()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
 
             // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -41,21 +41,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
         }
 
@@ -73,7 +59,7 @@ namespace ProjectForms
                 {
 
                     // Create a new task with the selected project member and other details
-                    var newTask = new ProjectManagement.Model.Task
+                    var newTask = new ProjectManagementBusinessObjects.Task
                     {
                         TaskName = txtTaskName.Text,
                         Description = txtDescription.Text,
@@ -95,7 +81,7 @@ namespace ProjectForms
 
                     // Save the new task to the database and audit the creation
                     context.Tasks.Add(newTask);
-                    context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
+                    context.Set<Audit>().Add(auditLog);
                     context.SaveChanges();
 
                     // Show a success message to the user
@@ -112,21 +98,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
         }
 
@@ -151,19 +123,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
+                HandleException(ex);
             }
         }
 
@@ -191,7 +151,7 @@ namespace ProjectForms
                 if (dgvTasks.SelectedCells.Count > 0)
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
-                    ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                    ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
                     if (selectedTask != null)
                     {
@@ -211,21 +171,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
         }
 
@@ -237,7 +183,7 @@ namespace ProjectForms
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
                     int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                    ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
+                    ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
                     if (selectedTask != null)
                     {
@@ -259,7 +205,7 @@ namespace ProjectForms
                             };
                             // Delete the project and save changes to the database and audit the deletion
                             context.Tasks.Remove(selectedTask);
-                            context.Set<ProjectManagement.Model.Audit>().Add(auditLog);
+                            context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                             context.SaveChanges();
                             LoadTasks();
                         }
@@ -280,48 +226,59 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
 
         }
 
         private void btnAddComments_Click(object sender, EventArgs e)
         {
-            if (dgvTasks.SelectedCells.Count > 0)
+            try
             {
-                int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
-                ProjectManagement.Model.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
-
-                if (selectedTask != null)
+                if (dgvTasks.SelectedCells.Count > 0)
                 {
+                    int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
+                    ProjectManagementBusinessObjects.Task? selectedTask = context.Tasks.FirstOrDefault(p => p.TaskId == selectedTaskid);
 
-                    CommentManagementForm CM = new CommentManagementForm(selectedTask);
-                    this.Close();
-                    CM.Show();
+                    if (selectedTask != null)
+                    {
+
+                        CommentManagementForm CM = new CommentManagementForm(selectedTask);
+                        this.Close();
+                        CM.Show();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a task.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Please select a task.");
+                HandleException(ex);
             }
         }
 
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
+
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
+            }
+            else
+            {
+                MessageBox.Show($"No user found: {ex.Message}");
+            }
+        }
+
+
         // Helper method to get the values of the task
-        private string GetTaskValues(ProjectManagement.Model.Task task)
+        private string GetTaskValues(ProjectManagementBusinessObjects.Task task)
         {
             return $"TaskId: {task.TaskId}, TaskName: {task.TaskName}, Description: {task.Description}, Status: {task.StatusId}";
         }

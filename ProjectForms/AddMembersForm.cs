@@ -17,12 +17,12 @@ namespace ProjectForms
 {
     public partial class AddMembersForm : Form
     {
-        private ProjectManagementDBContext context;
+        ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
         public AddMembersForm()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
 
 
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -67,6 +67,7 @@ namespace ProjectForms
         {
             try
             {
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (ddlMembers.SelectedItem == null)
                 {
                     MessageBox.Show("Please select a user.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -74,7 +75,7 @@ namespace ProjectForms
                 }
 
                 // Get the selected user from the drop-down list
-                User selectedUser = ddlMembers.SelectedItem as User;
+                User? selectedUser = ddlMembers.SelectedItem as User;
 
                 bool isMember = context.ProjectMembers.Any(pm => pm.ProjectId == Global.SelectedProject.ProjectId && pm.UserId == selectedUser.UserId);
                 if (isMember)
@@ -89,6 +90,16 @@ namespace ProjectForms
                     UserId = selectedUser.UserId,
                     ProjectId = Global.SelectedProject.ProjectId
                 };
+                var auditLog = new Audit
+                {
+                    ChangeType = "Create",
+                    TableName = "ProjectMember",
+                    RecordId = projectMember.ProjectMemberId,
+                    CurrentValue = GetProjectMemberValues(projectMember),
+                    OldValue = null,
+                    UserId = userid,
+                };
+                context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.ProjectMembers.Add(projectMember);
                 context.SaveChanges();
 
@@ -98,11 +109,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}");
-
-                int id = context.Users.Where(x=> x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId;
-                LoggingService log = new LoggingService(context);
-                log.LogException(ex, id);
+                HandleException(ex);
             }
         }
 
@@ -110,7 +117,7 @@ namespace ProjectForms
         private void btnCancel_Click(object sender, EventArgs e)
         {
 
-           
+
             // Close the form or dialog without making any changes
             DialogResult = DialogResult.Cancel;
             Close();
@@ -120,25 +127,66 @@ namespace ProjectForms
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int memberId = Convert.ToInt32(dgvMembers.SelectedCells[0].OwningRow.Cells[0].Value);
-            ProjectMember Member = context.ProjectMembers.Find(memberId);
-
-
-            if (Member != null)
+            try
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                int memberId = Convert.ToInt32(dgvMembers.SelectedCells[0].OwningRow.Cells[0].Value);
+                ProjectMember Member = context.ProjectMembers.Find(memberId);
+
+
+                if (Member != null)
                 {
-                    context.ProjectMembers.Remove(Member);
-                    context.SaveChanges();
-                    LoadProjectMembers();
-                    MessageBox.Show("Project Member deleted successfully.");
+                    DialogResult result = MessageBox.Show("Are you sure you want to delete this comment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                        var auditLog = new Audit
+                        {
+                            ChangeType = "Delete",
+                            TableName = "ProjectMember",
+                            RecordId = memberId,
+                            OldValue = GetProjectMemberValues(Member),
+                            UserId = userid,
+                        };
+                        // Delete the project and save changes to the database and audit the deletion
+
+                        context.Set<Audit>().Add(auditLog);
+                        context.ProjectMembers.Remove(Member);
+                        context.SaveChanges();
+                        LoadProjectMembers();
+                        MessageBox.Show("Project Member deleted successfully.");
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Unable to find the selected Project Member.");
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
+
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
             }
             else
             {
-                MessageBox.Show("Unable to find the selected Project Member.");
+                MessageBox.Show($"No user found: {ex.Message}");
             }
         }
+
+        private string GetProjectMemberValues(ProjectMember projectMember)
+        {
+            return $"ProjectMemberId: {projectMember.ProjectMemberId}, UserId: {projectMember.UserId}, ProjectId: {projectMember.ProjectId}";
+        }
+
     }
 }

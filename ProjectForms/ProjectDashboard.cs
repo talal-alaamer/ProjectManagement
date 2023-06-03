@@ -16,10 +16,10 @@ namespace ProjectForms
     public partial class ProjectDashboard : Form
     {
 
-        ProjectManagementDBContext context;
+        ProjectManagementBusinessObjects.ProjectManagementDBContext context;
         List<ProjectManagementBusinessObjects.Task> projectTasks;
 
-        public ProjectDashboard(ProjectManagementDBContext context)
+        public ProjectDashboard(ProjectManagementBusinessObjects.ProjectManagementDBContext context)
         {
             InitializeComponent();
             this.projectTasks = new List<ProjectManagementBusinessObjects.Task>();
@@ -58,18 +58,7 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle the exception
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
-                if (userId != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userId);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
+                HandleException(ex);
             }
         }
 
@@ -102,20 +91,24 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle the exception
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userId = Convert.ToInt32(context.Users.FirstOrDefault(x => x.Email == Global.SelectedUser.Email)?.UserId);
-                if (userId != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userId);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
+                HandleException(ex);
+            }
+        }
 
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
 
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
+            }
+            else
+            {
+                MessageBox.Show($"No user found: {ex.Message}");
             }
         }
 
