@@ -87,17 +87,18 @@ namespace ProjectForms
                 LoadComments();
                 txtComment.Clear();
             }
-            catch(Exception ex)
-            { 
+            catch (Exception ex)
+            {
                 HandleException(ex);
             }
-        
+
         }
 
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 if (dgvComments.SelectedCells.Count > 0)
                 {
                     int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
@@ -164,9 +165,9 @@ namespace ProjectForms
                     MessageBox.Show("Please select a comment.");
                 }
             }
-            catch (Exception ex) 
-            { 
-               HandleException(ex);
+            catch (Exception ex)
+            {
+                HandleException(ex);
             }
         }
 
