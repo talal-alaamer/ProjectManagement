@@ -203,14 +203,14 @@ namespace ProjectManagement.Controllers
                     try
                     {
                         //var oldTask = await _context.Tasks.FindAsync(id);
-                        //Audit audit = new Audit();
-                        //audit.ChangeType = "Edit";
-                        //audit.TableName = "Tasks";
-                        //audit.RecordId = task.TaskId;
+                        Audit audit = new Audit();
+                        audit.ChangeType = "Edit";
+                        audit.TableName = "Tasks";
+                        audit.RecordId = task.TaskId;
                         //audit.OldValue = oldTask.ToString();
-                        //audit.UserId = Global.userId;
-                        //audit.CurrentValue = task.ToString();
-                        //_context.Add(audit);
+                        audit.UserId = Global.userId;
+                        audit.CurrentValue = task.ToString();
+                        _context.Add(audit);
 
                         _context.Tasks.Update(task);
                         await _context.SaveChangesAsync();
@@ -297,6 +297,16 @@ namespace ProjectManagement.Controllers
                 {
                     try
                     {
+                        //var oldTask = await _context.Tasks.FindAsync(id);
+                        Audit audit = new Audit();
+                        audit.ChangeType = "Status Update";
+                        audit.TableName = "Tasks";
+                        audit.RecordId = task.TaskId;
+                        //audit.OldValue = oldTask.StatusId;
+                        audit.UserId = Global.userId;
+                        audit.CurrentValue = task.StatusId.ToString();
+                        _context.Add(audit);
+
                         _context.Update(task);
                         await _context.SaveChangesAsync();
                         var project = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault();

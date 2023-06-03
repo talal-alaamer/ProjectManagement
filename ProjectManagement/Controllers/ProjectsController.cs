@@ -172,14 +172,14 @@ namespace ProjectManagement.Controllers
                     try
                     {
                         //var oldProject = await _context.Projects.FindAsync(id);
-                        //Audit audit = new Audit();
-                        //audit.ChangeType = "Edit";
-                        //audit.TableName = "Project";
-                        //audit.RecordId = project.ProjectId;
+                        Audit audit = new Audit();
+                        audit.ChangeType = "Edit";
+                        audit.TableName = "Project";
+                        audit.RecordId = project.ProjectId;
                         //audit.OldValue = oldProject.ToString();
-                        //audit.UserId = Global.userId;
-                        //audit.CurrentValue = project.ToString();
-                        //_context.Add(audit);
+                        audit.UserId = Global.userId;
+                        audit.CurrentValue = project.ToString();
+                        _context.Add(audit);
 
                         _context.Update(project);
                         await _context.SaveChangesAsync();

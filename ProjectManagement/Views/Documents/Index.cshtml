@@ -7,28 +7,22 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-id="@ViewBag.taskId">Add document</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DocumentName)
+                Document Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UploadTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Path)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Task)
+                Upload Time
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                Uploader
             </th>
             <th></th>
         </tr>
@@ -43,23 +37,21 @@
                 @Html.DisplayFor(modelItem => item.UploadTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Path)
+                @Html.DisplayFor(modelItem => item.Type.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Task.TaskId)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type.DocumentTypeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DocumentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DocumentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DocumentId">Delete</a>
-            </td>
+                    <a class="mx-3">View</a>
+                    <a class="mx-3">Download</a>
+                    @if (item.UserId == ViewBag.userId)
+                    {
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.DocumentId">Delete</a>
+                    }
+                </td>
         </tr>
 }
     </tbody>
 </table>
+<a asp-controller="Tasks" asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Tasks</a>
