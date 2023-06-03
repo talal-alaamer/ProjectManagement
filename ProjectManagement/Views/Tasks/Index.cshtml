@@ -23,8 +23,9 @@
                 <select class="ms-2" asp-for="Status" asp-items="@Model.Statuses.Select(x=> new SelectListItem{Text = x.Status, Value= x.TaskStatusId.ToString()})">
                     <option value="">All</option>
                 </select>
-                <input type="submit" value="Search" class="ms-5" />
-                <a asp-controller="Tasks" asp-action="Index"><input type="button" value="Clear" class="ms-2"></a>
+                <span class="ms-4"></span>
+                <input class="btn btn-primary" type="submit" value="Search" class="ms-5" />
+                <a asp-controller="Tasks" asp-action="Index"><input class="btn btn-primary"  type="button" value="Clear" class="ms-2"></a>
             </form>
         </div>
     </div>
@@ -59,6 +60,7 @@
             <td>
                     <a class="mx-3" asp-action="Details" asp-route-id="@item.TaskId">Details</a>
                     <a class="mx-3" asp-controller="Comments" asp-action="Index" asp-route-id="@item.TaskId">Comments</a>
+                    <a class="mx-3" asp-controller="Documents" asp-action="Index" asp-route-id="@item.TaskId">Documents</a>
                     @if (item.UserId == ViewBag.userId || item.Project.ProjectManagerId == ViewBag.userId)
                     {
                         <a class="mx-3" asp-action="UpdateStatus" asp-route-id="@item.TaskId">Update Status</a>

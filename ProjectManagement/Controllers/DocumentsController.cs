@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    [Authorize]
     public class DocumentsController : Controller
     {
         private readonly ProjectManagementDBContext _context;
@@ -19,40 +22,41 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Documents
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            var projectManagementDBContext = _context.Documents.Include(d => d.Task).Include(d => d.Type).Include(d => d.User);
-            return View(await projectManagementDBContext.ToListAsync());
-        }
-
-        // GET: Documents/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Documents == null)
+            try
             {
-                return NotFound();
+                int userId = Global.userId;
+                ViewBag.userId = userId;
+                ViewBag.taskId = id;
+                ViewBag.projectId = _context.Tasks.Where(x => x.TaskId == id).FirstOrDefault().ProjectId;
+                var projectManagementDBContext = _context.Documents.Where(x => x.TaskId == id).OrderByDescending(x => x.UploadTime).Include(d => d.Task).Include(d => d.Type).Include(d => d.User);
+                return View(await projectManagementDBContext.ToListAsync());
             }
-
-            var document = await _context.Documents
-                .Include(d => d.Task)
-                .Include(d => d.Type)
-                .Include(d => d.User)
-                .FirstOrDefaultAsync(m => m.DocumentId == id);
-            if (document == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-
-            return View(document);
         }
 
         // GET: Documents/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["TaskId"] = new SelectList(_context.Tasks, "TaskId", "TaskId");
-            ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "DocumentTypeId");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
-            return View();
+            try
+            {
+                ViewBag.taskId = id;
+                ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "Type");
+                ViewData["UserId"] = Global.userId;
+                int userId = Global.userId;
+                ViewBag.Username = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Global.LogException(ex, Global.userId);
+                return View();
+            }
         }
 
         // POST: Documents/Create
@@ -60,96 +64,68 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DocumentId,DocumentName,UploadTime,Path,TypeId,UserId,TaskId")] Document document)
+        public async Task<IActionResult> Create([Bind("DocumentId,DocumentName,UploadTime,Path,TypeId,UserId,TaskId")] Document document, IFormFile file)
         {
-            if (ModelState.IsValid)
+            try
             {
+                String path;
+                if(file.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UploadedFiles", file.FileName);
+                    var dbfilePath = Path.Combine("UploadedFiles", file.FileName);
+                    path = filePath;
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    document.Path = dbfilePath.ToString();
+                }
+
                 _context.Add(document);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["TaskId"] = new SelectList(_context.Tasks, "TaskId", "TaskId", document.TaskId);
-            ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "DocumentTypeId", document.TypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", document.UserId);
-            return View(document);
-        }
 
-        // GET: Documents/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Documents == null)
-            {
-                return NotFound();
+                ViewBag.taskId = document.TaskId;
+                ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "Type");
+                ViewData["UserId"] = Global.userId;
+                int userId = Global.userId;
+                ViewBag.Username = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
+                return View(document);
             }
-
-            var document = await _context.Documents.FindAsync(id);
-            if (document == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-            ViewData["TaskId"] = new SelectList(_context.Tasks, "TaskId", "TaskId", document.TaskId);
-            ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "DocumentTypeId", document.TypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", document.UserId);
-            return View(document);
-        }
-
-        // POST: Documents/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DocumentId,DocumentName,UploadTime,Path,TypeId,UserId,TaskId")] Document document)
-        {
-            if (id != document.DocumentId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(document);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DocumentExists(document.DocumentId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["TaskId"] = new SelectList(_context.Tasks, "TaskId", "TaskId", document.TaskId);
-            ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "DocumentTypeId", "DocumentTypeId", document.TypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", document.UserId);
-            return View(document);
         }
 
         // GET: Documents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Documents == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.Documents == null)
+                {
+                    return NotFound();
+                }
 
-            var document = await _context.Documents
-                .Include(d => d.Task)
-                .Include(d => d.Type)
-                .Include(d => d.User)
-                .FirstOrDefaultAsync(m => m.DocumentId == id);
-            if (document == null)
+                var document = await _context.Documents
+                    .Include(d => d.Task)
+                    .Include(d => d.Type)
+                    .Include(d => d.User)
+                    .FirstOrDefaultAsync(m => m.DocumentId == id);
+                if (document == null)
+                {
+                    return NotFound();
+                }
+
+                return View(document);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-
-            return View(document);
         }
 
         // POST: Documents/Delete/5
@@ -157,18 +133,26 @@ namespace ProjectManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Documents == null)
+            try
             {
-                return Problem("Entity set 'ProjectManagementDBContext.Documents'  is null.");
+                if (_context.Documents == null)
+                {
+                    return Problem("Entity set 'ProjectManagementDBContext.Documents'  is null.");
+                }
+                var document = await _context.Documents.FindAsync(id);
+                if (document != null)
+                {
+                    _context.Documents.Remove(document);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            var document = await _context.Documents.FindAsync(id);
-            if (document != null)
+            catch (Exception ex)
             {
-                _context.Documents.Remove(document);
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool DocumentExists(int id)

@@ -151,14 +151,14 @@ namespace ProjectManagement.Controllers
                     try
                     {
                         //var oldComment = await _context.Comments.FindAsync(id);
-                        //Audit audit = new Audit();
-                        //audit.ChangeType = "Edit";
-                        //audit.TableName = "Comments";
-                        //audit.RecordId = comment.CommentId;
+                        Audit audit = new Audit();
+                        audit.ChangeType = "Edit";
+                        audit.TableName = "Comments";
+                        audit.RecordId = comment.CommentId;
                         //audit.OldValue = oldComment.ToString();
-                        //audit.UserId = Global.userId;
-                        //audit.CurrentValue = comment.ToString();
-                        //_context.Add(audit);
+                        audit.UserId = Global.userId;
+                        audit.CurrentValue = comment.ToString();
+                        _context.Add(audit);
 
                         _context.Update(comment);
                         await _context.SaveChangesAsync();
