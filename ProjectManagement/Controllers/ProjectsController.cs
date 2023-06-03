@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Areas.Identity.Data;
 using ProjectManagementBusinessObjects;
@@ -81,7 +83,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,ProjectName,Description,ProjectManagerId")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectId,ProjectName,Description,ProjectManagerId")] ProjectManagementBusinessObjects.Project project)
         {
             try
             {
@@ -158,7 +160,7 @@ namespace ProjectManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjectName,Description,ProjectManagerId")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,ProjectName,Description,ProjectManagerId")] ProjectManagementBusinessObjects.Project project)
         {
             try
             {
@@ -276,11 +278,113 @@ namespace ProjectManagement.Controllers
             }
         }
 
+        public int? CountTasks(int id)
+        {
+            int count = _context.Tasks.Where(x=> x.ProjectId == id).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountOverdue(int id)
+        {
+            int count = _context.Tasks.Where(x => x.ProjectId == id && x.Deadline < DateTime.Now).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountCompleted(int id)
+        {
+            int count = _context.Tasks.Where(x => x.ProjectId == id && x.StatusId == 3).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountComment(int id)
+        {
+            int count = _context.Projects.Where(p => p.ProjectId == id).SelectMany(p => p.Tasks).SelectMany(t => t.Comments).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountMembers(int id)
+        {
+            int count = _context.ProjectMembers.Where(p => p.ProjectId == id).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountDocuments(int id)
+        {
+            int count = _context.Projects.Where(p => p.ProjectId == id).SelectMany(p => p.Tasks).SelectMany(t => t.Documents).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
+        public int? CountActiveTasks()
+        {
+            int count = _context.Tasks.Where(x => x.StatusId == 2).Count();
+            return count == 0 ? null : (int?)count;
+        }
+
         public async Task<IActionResult> Dashboard(int id)
         {
             try
             {
                 var projectManagementDBContext = _context.Projects.Where(x => x.ProjectId == id).Include(p => p.ProjectManager);
+                
+                int? totalTasks = CountTasks(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue = totalTasks ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalTasks = displayValue;
+
+                int? totalComplete = CountCompleted(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue2 = totalComplete ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalComplete = displayValue2;
+
+                int? totalOverdue = CountOverdue(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue3 = totalOverdue ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalOverdue = displayValue3;
+
+                int? totalComment = CountComment(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue4 = totalComment ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalComment = displayValue4;
+
+
+                int? totalMembers = CountMembers(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue5 = totalMembers ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalMembers = displayValue5;
+
+
+                int? totalDocuments = CountDocuments(id);
+
+                // If totalTasks is null, assign a default value of 0
+                int displayValue6 = totalDocuments ?? 0;
+
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalDocuments = displayValue6;
+
+                // Get the total number of active tasks
+                int? totalActive = CountActiveTasks();
+
+                // If totalActive is null, assign a default value of 0
+                int displayValue7 = totalActive ?? 0;
+
+                // Store the total number of active tasks in a ViewBag property
+                ViewBag.TotalActive = displayValue7;
+
                 return View();
             }
             catch (Exception ex)

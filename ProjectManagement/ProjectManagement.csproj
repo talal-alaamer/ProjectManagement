@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Home\assets\**" />
+    <Content Remove="Views\Home\assets\**" />
+    <EmbeddedResource Remove="Views\Home\assets\**" />
+    <None Remove="Views\Home\assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\css\material-dashboard.css.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
@@ -19,8 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Home\assets\" />
-    <Folder Include="wwwroot\assets\css\" />
     <ProjectReference Include="..\ProjectManagementBusinessObjects\ProjectManagementBusinessObjects.csproj" />
   </ItemGroup>
 
