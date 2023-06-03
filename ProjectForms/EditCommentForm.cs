@@ -46,7 +46,6 @@ namespace ProjectForms
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
 
                 comment.CommentText = txtComment.Text;
-                comment.CommentTimestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
 
                 var auditLog = new Audit
                 {

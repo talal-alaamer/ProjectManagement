@@ -42,8 +42,6 @@ namespace ProjectManagement.Controllers
 
                 int totalUsers = _context.Users.Count();
                 ViewData["TotalUsers"] = totalUsers;
-                int totalUsers = _context.Users.Count();
-            ViewData["TotalUsers"] = totalUsers;
 
             // Get the total number of projects
             int? totalProjects = CountProjects();
@@ -81,19 +79,19 @@ namespace ProjectManagement.Controllers
 
         public int? CountProjects()
         {
-            int count = context1.Projects.Count();
+            int count = _dbContext.Projects.Count();
             return count == 0 ? null : (int?)count;
         }
 
         public int? CountTasks()
         {
-            int count = context1.Tasks.Count();
+            int count = _dbContext.Tasks.Count();
             return count == 0 ? null : (int?)count;
         }
 
         public int? CountActiveTasks()
         {
-            int count = context1.Tasks.Where(x=> x.StatusId == 2).Count();
+            int count = _dbContext.Tasks.Where(x=> x.StatusId == 2).Count();
             return count == 0 ? null : (int?)count;
         }
         
