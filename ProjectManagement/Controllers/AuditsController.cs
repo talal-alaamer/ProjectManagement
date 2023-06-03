@@ -10,6 +10,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorize only admins to use this page
     [Authorize(Roles = "Admin")]
     public class AuditsController : Controller
     {
@@ -25,6 +26,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Retrieve the audits and order them from latest to oldest then display them in the view
                 var projectManagementDBContext = _context.Audits.OrderByDescending(x=>x.Timestamp).Include(a => a.User);
                 return View(await projectManagementDBContext.ToListAsync());
             }
@@ -40,11 +42,13 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Validation
                 if (id == null || _context.Audits == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the audit object and validate if it is not null then display it
                 var audit = await _context.Audits
                     .Include(a => a.User)
                     .FirstOrDefaultAsync(m => m.AuditId == id);

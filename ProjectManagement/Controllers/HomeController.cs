@@ -15,7 +15,7 @@ namespace ProjectManagement.Controllers
         private readonly IdentityContext _context;
         private readonly ProjectManagementDBContext _dbContext;
         private readonly ILogger<HomeController> _logger;
-        
+
         public HomeController(UserManager<Users> userManager, SignInManager<Users> signInManager, IdentityContext context, ProjectManagementDBContext dbcontext)
         {
             _userManager = userManager;
@@ -24,59 +24,58 @@ namespace ProjectManagement.Controllers
             _dbContext = dbcontext;
         }
 
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-        
         public async Task<IActionResult> IndexAsync()
         {
-        try
+            try
             {
+                //Check if the user is authenticated and assign the user id to the global class
                 if (User.Identity.IsAuthenticated)
                 {
                     var currentUser = await _userManager.GetUserAsync(User);
                     String email = currentUser.Email;
                     Global.userId = Convert.ToInt32(_dbContext.Users.Where(x => x.Email == email).FirstOrDefault().UserId);
                 }
-
+                
+                //Get the total number of users and add it to a viewbag
                 int totalUsers = _context.Users.Count();
                 ViewData["TotalUsers"] = totalUsers;
 
-            // Get the total number of projects
-            int? totalProjects = CountProjects();
+                // Get the total number of projects
+                int? totalProjects = CountProjects();
 
-            // If totalProjects is null, assign a default value of 0
-            int displayValue = totalProjects ?? 0;
+                // If totalProjects is null, assign a default value of 0
+                int displayValue = totalProjects ?? 0;
 
-            // Store the total number of projects in a ViewBag property
-            ViewBag.TotalProjects = displayValue;
+                // Store the total number of projects in a ViewBag property
+                ViewBag.TotalProjects = displayValue;
 
-            // Get the total number of tasks
-            int? totalTasks = CountTasks();
+                // Get the total number of tasks
+                int? totalTasks = CountTasks();
 
-            // If totalTasks is null, assign a default value of 0
-            int displayValue2 = totalTasks ?? 0;
+                // If totalTasks is null, assign a default value of 0
+                int displayValue2 = totalTasks ?? 0;
 
-            // Store the total number of tasks in a ViewBag property
-            ViewBag.TotalTasks = displayValue2;
+                // Store the total number of tasks in a ViewBag property
+                ViewBag.TotalTasks = displayValue2;
 
-            // Get the total number of active tasks
-            int? totalActive = CountActiveTasks();
+                // Get the total number of active tasks
+                int? totalActive = CountActiveTasks();
 
-            // If totalActive is null, assign a default value of 0
-            int displayValue3 = totalActive ?? 0;
+                // If totalActive is null, assign a default value of 0
+                int displayValue3 = totalActive ?? 0;
 
-            // Store the total number of active tasks in a ViewBag property
-            ViewBag.TotalActive = displayValue3;
+                // Store the total number of active tasks in a ViewBag property
+                ViewBag.TotalActive = displayValue3;
                 return View();
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Global.LogException(ex, Global.userId);
                 return View();
             }
         }
 
+        //Functions to calculate the dashboard statistics
         public int? CountProjects()
         {
             int count = _dbContext.Projects.Count();
@@ -91,22 +90,9 @@ namespace ProjectManagement.Controllers
 
         public int? CountActiveTasks()
         {
-            int count = _dbContext.Tasks.Where(x=> x.StatusId == 2).Count();
+            int count = _dbContext.Tasks.Where(x => x.StatusId == 2).Count();
             return count == 0 ? null : (int?)count;
         }
-        
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            try
-            {
-                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-            }
-            catch (Exception ex)
-            {
-                Global.LogException(ex, Global.userId);
-                return View();
-            }
-        }
+       
     }
 }

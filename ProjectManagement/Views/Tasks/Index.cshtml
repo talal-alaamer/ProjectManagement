@@ -10,7 +10,7 @@
 @if (ViewBag.managerId == ViewBag.userId)
 {
     <p>
-        <a asp-action="Create" asp-route-id="@ViewBag.projectId">Add Task</a>
+        <a class="btn btn-primary" asp-action="Create" asp-route-id="@ViewBag.projectId">Add Task</a>
     </p>
 }
 <div class="container p-3">
@@ -75,4 +75,4 @@
 }
     </tbody>
 </table>
-<a asp-controller="Projects" asp-action="Index">Back to Projects</a>
+<a class="btn btn-primary" asp-controller="Projects" asp-action="Index">Back to Projects</a>

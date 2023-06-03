@@ -22680,7 +22680,8 @@ label,
 }
 
 .form-control {
-  border: none;
+  border: 1px solid;
+  padding: 2%;
 }
 
 .form-control.is-invalid {

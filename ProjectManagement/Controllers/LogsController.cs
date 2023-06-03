@@ -11,6 +11,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorize only admins to use this page
     [Authorize(Roles = "Admin")]
     public class LogsController : Controller
     {
@@ -26,6 +27,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Retrieve the logs and order them from latest to oldest then display them in the view
                 var projectManagementDBContext = _context.Logs.OrderByDescending(x=>x.Timestamp).Include(l => l.User);
                 return View(await projectManagementDBContext.ToListAsync());
             }
@@ -41,11 +43,13 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Validation
                 if (id == null || _context.Logs == null)
                 {
                     return NotFound();
                 }
-
+                
+                //Retrieve the log object and validate if it is not null then display it
                 var log = await _context.Logs
                     .Include(l => l.User)
                     .FirstOrDefaultAsync(m => m.LogId == id);

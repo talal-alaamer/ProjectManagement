@@ -22,6 +22,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ProjectMemberId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Members</a>
+        <a class="btn btn-primary" asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Members</a>
     </form>
 </div>

@@ -15,6 +15,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorization to make sure the user is logged in
     [Authorize]
     public class ProjectsController : Controller
     {
@@ -29,17 +30,25 @@ namespace ProjectManagement.Controllers
 
 
         // GET: Projects
+        //Get values for the search and filter as parameters
         public async Task<IActionResult> Index(string projectname, string manager)
         {
             try
             {
+                //Get the user id and add it to a viewbag to use it in the index page
                 int userId = Global.userId;
                 ViewBag.userId = userId;
+
+                //Retrieve the projects that the user is a member of and order them by alphabetical order
                 var projects = _context.Projects.Where(x => _context.ProjectMembers.Any(y => y.UserId == userId && y.ProjectId == x.ProjectId)).OrderBy(x => x.ProjectName).Include(p => p.ProjectManager).AsQueryable();
+
+                //Check if there is a search string and modify the results
                 if (!String.IsNullOrEmpty(projectname))
                 {
                     projects = projects.Where(x => x.ProjectName.Contains(projectname));
                 }
+
+                //Check if there is a filter condition and modify the results
                 if (!String.IsNullOrEmpty(manager))
                 {
                     if (manager == "1")
@@ -66,6 +75,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Get the current user id and put it in a viewbag so the user can be assigned as a project manager
                 int userId = Global.userId;
                 ViewBag.ProjectManagerId = userId;
                 ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
@@ -89,10 +99,14 @@ namespace ProjectManagement.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    //Create a new project member
                     ProjectMember pm = new ProjectMember();
+
+                    //Add the project to the database
                     _context.Add(project);
                     await _context.SaveChangesAsync();
 
+                    //Create an audit entry
                     Audit audit = new Audit();
                     audit.ChangeType = "Create";
                     audit.TableName = "Project";
@@ -102,11 +116,13 @@ namespace ProjectManagement.Controllers
                     _context.Add(audit);
                     _context.SaveChanges();
 
+                    //Set the project member attributes then add it to the database
                     pm.ProjectId = project.ProjectId;
                     pm.UserId = project.ProjectManagerId;
                     _context.ProjectMembers.Add(pm);
                     await _context.SaveChangesAsync();
 
+                    //Create a new notification for the project manager
                     Notification notification = new Notification();
                     notification.Title = "We have got a leader!";
                     notification.Message = "You have successfully created a new project with the name:" + project.ProjectName + ". You may add members and create new tasks by going to the projects tab.";
@@ -116,6 +132,7 @@ namespace ProjectManagement.Controllers
                     _context.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
+                //Get the current user id and put it in a viewbag so the user can be assigned as a project manager
                 int userId = Global.userId;
                 ViewBag.ProjectManagerId = userId;
                 ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
@@ -129,20 +146,24 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Projects/Edit/5
+        //Get the id as a parameter
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Projects == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the project and do some validation
                 var project = await _context.Projects.FindAsync(id);
                 if (project == null)
                 {
                     return NotFound();
                 }
+                //Get the current user id and put it in a viewbag so the user can be assigned as a project manager
                 int userId = Global.userId;
                 ViewBag.ProjectManagerId = userId;
                 ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
@@ -164,6 +185,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Validation
                 if (id != project.ProjectId)
                 {
                     return NotFound();
@@ -173,16 +195,23 @@ namespace ProjectManagement.Controllers
                 {
                     try
                     {
-                        //var oldProject = await _context.Projects.FindAsync(id);
+                        //Create a new db context to fetch the old project
+                        ProjectManagementDBContext dBContext = new ProjectManagementDBContext();
+
+                        //Create a project object that will store the old values of the project
+                        var oldProject = await dBContext.Projects.FindAsync(id);
+
+                        //Audit the changes
                         Audit audit = new Audit();
                         audit.ChangeType = "Edit";
                         audit.TableName = "Project";
                         audit.RecordId = project.ProjectId;
-                        //audit.OldValue = oldProject.ToString();
+                        audit.OldValue = oldProject.ToString();
                         audit.UserId = Global.userId;
                         audit.CurrentValue = project.ToString();
                         _context.Add(audit);
 
+                        //Update the project in the database
                         _context.Update(project);
                         await _context.SaveChangesAsync();
                     }
@@ -199,6 +228,7 @@ namespace ProjectManagement.Controllers
                     }
                     return RedirectToAction(nameof(Index));
                 }
+                //Get the current user id and put it in a viewbag so the user can be assigned as a project manager
                 int userId = Global.userId;
                 ViewBag.ProjectManager = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
                 ViewBag.ProjectManagerId = userId;
@@ -212,18 +242,22 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Projects/Delete/5
+        //Get the id as a parameter
         public async Task<IActionResult> Delete(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Projects == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the project and do some validation
                 var project = await _context.Projects
                     .Include(p => p.ProjectManager)
                     .FirstOrDefaultAsync(m => m.ProjectId == id);
+
                 if (project == null)
                 {
                     return NotFound();
@@ -239,17 +273,21 @@ namespace ProjectManagement.Controllers
         }
 
         // POST: Projects/Delete/5
+        //Get the id as a parameter
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
+                //Validation then retrieve the project object
                 if (_context.Projects == null)
                 {
                     return Problem("Entity set 'ProjectManagementDBContext.Projects'  is null.");
                 }
                 var project = await _context.Projects.FindAsync(id);
+
+                //Add an audit entry
                 Audit audit = new Audit();
                 audit.OldValue = project.ToString();
                 audit.ChangeType = "Delete";
@@ -259,6 +297,7 @@ namespace ProjectManagement.Controllers
                 _context.Audits.Add(audit);
                 _context.SaveChanges();
 
+                //Delete the project, all of its tasks, and remove all of its members
                 if (project != null)
                 {
                     var tasks = _context.Tasks.Where(x => x.ProjectId == project.ProjectId);
@@ -278,6 +317,7 @@ namespace ProjectManagement.Controllers
             }
         }
 
+        //Functions for dashboard statistics
         public int? CountTasks(int id)
         {
             int count = _context.Tasks.Where(x=> x.ProjectId == id).Count();
@@ -320,10 +360,12 @@ namespace ProjectManagement.Controllers
             return count == 0 ? null : (int?)count;
         }
 
+        //Passing the id as a parameter
         public async Task<IActionResult> Dashboard(int id)
         {
             try
             {
+                //Retrieving the current project
                 var projectManagementDBContext = _context.Projects.Where(x => x.ProjectId == id).Include(p => p.ProjectManager);
                 
                 int? totalTasks = CountTasks(id);

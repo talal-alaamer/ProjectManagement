@@ -16,6 +16,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorization to make sure the user is logged in
     [Authorize]
     public class TasksController : Controller
     {
@@ -29,26 +30,34 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks
+        //Get the project id and search/filters as parameters
         [HttpGet]
         public async Task<IActionResult> Index(int id, string taskname, string status)
         {
             try
             {
+                //Get the manager id and project id and add them to viewbags which are used throughout the index page
                 int userId = Global.userId;
                 ViewBag.userId = userId;
                 ViewBag.managerId = _context.Projects.Where(x => x.ProjectId == id).FirstOrDefault().ProjectManagerId;
                 ViewBag.projectId = id;
 
+                //Retrieve the tasks of the project and order them by alphabetical order
                 var tasks = _context.Tasks.Where(x => x.ProjectId == id).OrderBy(x => x.TaskName).Include(t => t.Project).Include(t => t.Status).Include(t => t.User).AsQueryable();
+
+                //Check if there is a search string and modify the results
                 if (!String.IsNullOrEmpty(taskname))
                 {
                     tasks = tasks.Where(x => x.TaskName.Contains(taskname));
                 }
+
+                //Check if there is a filter condition and modify the results
                 if (!String.IsNullOrEmpty(status))
                 {
                     tasks = tasks.Where(x => x.StatusId == Convert.ToInt32(status));
                 }
 
+                //Create a viewmodel object and assign it the the models required then use it as the view
                 var taskIndexVM = new TaskIndexViewModel();
                 taskIndexVM.Tasks = tasks;
                 taskIndexVM.Statuses = _context.TaskStatuses;
@@ -64,15 +73,18 @@ namespace ProjectManagement.Controllers
 
       
         // GET: Tasks/Details/5
+        //Parameter to get the id
         public async Task<IActionResult> Details(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Tasks == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the task and do some validation
                 var task = await _context.Tasks
                     .Include(t => t.Project)
                     .Include(t => t.Status)
@@ -93,10 +105,12 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks/Create
+        //Parameter to get the project id
         public IActionResult Create(int id)
         {
             try
             {
+                //Viewbags that store the project id, the project name, statuses, and user id to use it for the create form
                 ViewBag.ProjectId = id;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == id).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status");
@@ -121,9 +135,11 @@ namespace ProjectManagement.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    //Add the task to the database
                     _context.Add(task);
                     await _context.SaveChangesAsync();
 
+                    //Audit the changes
                     Audit audit = new Audit();
                     audit.ChangeType = "Create";
                     audit.TableName = "Task";
@@ -133,6 +149,7 @@ namespace ProjectManagement.Controllers
                     _context.Add(audit);
                     _context.SaveChanges();
 
+                    //Create a new notification to the person who is assigned the task
                     var project = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault();
                     Notification notification = new Notification();
                     notification.Title = "A new task awaits";
@@ -143,6 +160,7 @@ namespace ProjectManagement.Controllers
                     _context.SaveChanges();
                     return RedirectToAction(nameof(Index), new { id = task.ProjectId });
                 }
+                //Viewbags that store the project id, the project name, statuses, and user id to use it for the create form
                 ViewBag.ProjectId = task.ProjectId;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
@@ -157,20 +175,24 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks/Edit/5
+        //Pass the id in the parameter
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Tasks == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the task and do some validation
                 var task = await _context.Tasks.FindAsync(id);
                 if (task == null)
                 {
                     return NotFound();
                 }
+                //Viewbags that store the project id, the project name, statuses, and the user id to use for the edit form
                 ViewBag.ProjectId = task.ProjectId;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
@@ -202,19 +224,27 @@ namespace ProjectManagement.Controllers
                 {
                     try
                     {
-                        //var oldTask = await _context.Tasks.FindAsync(id);
+                        //Create a new db context to fetch the old task
+                        ProjectManagementDBContext dBContext = new ProjectManagementDBContext();
+
+                        //Create a task object to store the old task values
+                        var oldTask = await dBContext.Tasks.FindAsync(id);
+
+                        //Audit the changes
                         Audit audit = new Audit();
                         audit.ChangeType = "Edit";
                         audit.TableName = "Tasks";
                         audit.RecordId = task.TaskId;
-                        //audit.OldValue = oldTask.ToString();
+                        audit.OldValue = oldTask.ToString();
                         audit.UserId = Global.userId;
                         audit.CurrentValue = task.ToString();
                         _context.Add(audit);
 
+                        //Update the task
                         _context.Tasks.Update(task);
                         await _context.SaveChangesAsync();
 
+                        //Create a new notification for the user assigned the task
                         var project = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault();
                         Notification notification = new Notification();
                         notification.Title = "Your task has some updates";
@@ -237,6 +267,7 @@ namespace ProjectManagement.Controllers
                     }
                     return RedirectToAction(nameof(Index), new { id = task.ProjectId });
                 }
+                //Viewbags that store the project id, the project name, statuses, and the user id to use for the edit form
                 ViewBag.ProjectId = task.ProjectId;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
@@ -251,20 +282,24 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks/Edit/5
+        //Passing the id as a parameter
         public async Task<IActionResult> UpdateStatus(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Tasks == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieving the task and doing some validation
                 var task = await _context.Tasks.FindAsync(id);
                 if (task == null)
                 {
                     return NotFound();
                 }
+                //Viewbags that store the project id, the project name, statuses, and the user id to use for the edit form
                 ViewBag.ProjectId = task.ProjectId;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
@@ -288,6 +323,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Validation
                 if (id != task.TaskId)
                 {
                     return NotFound();
@@ -297,18 +333,27 @@ namespace ProjectManagement.Controllers
                 {
                     try
                     {
-                        //var oldTask = await _context.Tasks.FindAsync(id);
+                        //Create a new db context to fetch the old task
+                        ProjectManagementDBContext dBContext = new ProjectManagementDBContext();
+
+                        //Creating a task object to store the old task values
+                        var oldTask = await dBContext.Tasks.FindAsync(id);
+
+                        //Audit the changes
                         Audit audit = new Audit();
                         audit.ChangeType = "Status Update";
                         audit.TableName = "Tasks";
                         audit.RecordId = task.TaskId;
-                        //audit.OldValue = oldTask.StatusId;
+                        audit.OldValue = oldTask.StatusId.ToString();
                         audit.UserId = Global.userId;
                         audit.CurrentValue = task.StatusId.ToString();
                         _context.Add(audit);
 
+                        //Update the task in the database
                         _context.Update(task);
                         await _context.SaveChangesAsync();
+
+                        //Create a new notification for the project manager about the status update
                         var project = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault();
                         Notification notification = new Notification();
                         notification.Title = "Task status update";
@@ -331,6 +376,7 @@ namespace ProjectManagement.Controllers
                     }
                     return RedirectToAction(nameof(Index), new { id = task.ProjectId });
                 }
+                //Viewbags that store the project id, the project name, statuses, and the user id to use for the edit form
                 ViewBag.ProjectId = task.ProjectId;
                 ViewBag.ProjectName = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault().ProjectName;
                 ViewData["StatusId"] = new SelectList(_context.TaskStatuses, "TaskStatusId", "Status", task.StatusId);
@@ -346,15 +392,18 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Tasks/Delete/5
+        //Passing the id as parameter
         public async Task<IActionResult> Delete(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Tasks == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieving the task and doing some validation
                 var task = await _context.Tasks
                     .Include(t => t.Project)
                     .Include(t => t.Status)
@@ -375,17 +424,21 @@ namespace ProjectManagement.Controllers
         }
 
         // POST: Tasks/Delete/5
+        //Passing the id as parameter
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
+                //Validation then retrieving the task object
                 if (_context.Tasks == null)
                 {
                     return Problem("Entity set 'ProjectManagementDBContext.Tasks'  is null.");
                 }
                 var task = await _context.Tasks.FindAsync(id);
+
+                //Audit the changes
                 Audit audit = new Audit();
                 audit.OldValue = task.ToString();
                 audit.ChangeType = "Delete";
@@ -395,6 +448,7 @@ namespace ProjectManagement.Controllers
                 _context.Audits.Add(audit);
                 _context.SaveChanges();
 
+                //Create a new notification to the user assigned the task
                 var project = _context.Projects.Where(x => x.ProjectId == task.ProjectId).FirstOrDefault();
                 Notification notification = new Notification();
                 notification.Title = "Something off your chest!";
@@ -403,6 +457,8 @@ namespace ProjectManagement.Controllers
                 notification.UserId = project.ProjectManagerId;
                 _context.Add(notification);
                 _context.SaveChanges();
+
+                //Delete the task and all the comments on it and save it to the database
                 if (task != null)
                 {
                     var comments = _context.Comments.Where(x => x.TaskId == task.TaskId);

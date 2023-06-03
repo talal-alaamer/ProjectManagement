@@ -22,7 +22,7 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="~/assets/css/material-dashboard.css?v=3.1.0" rel="stylesheet" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -63,10 +63,11 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
+    <footer class="mt-auto">
         <div class="container">
-            &copy; 2023 - ProjectManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <center>
+            <p class="fs-5 fw-bolder text-dark">Copyright &copy; <a style="color:blueviolet;" href="#">ProjectManagement</a> 2023 | Contact Us <a style="color:blueviolet;" href="https://outlook.live.com/owa/">admin@Projectmanagement.bh</a></p>
+            </center>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
