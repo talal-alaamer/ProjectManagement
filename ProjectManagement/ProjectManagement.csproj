@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Credentials &amp; Scripts\" />
     <Folder Include="wwwroot\UploadedFiles\" />
   </ItemGroup>
 
