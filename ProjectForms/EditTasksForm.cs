@@ -72,9 +72,7 @@ namespace ProjectForms
                 context.SaveChanges();
 
                 MessageBox.Show("Success!");
-                ManageTasksForm MN = new ManageTasksForm();
                 this.Close();
-                MN.Show();
             }
             catch (Exception ex) 
             {
@@ -85,9 +83,7 @@ namespace ProjectForms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             // closing this form and oppening ManageTasks form
-            ManageTasksForm MN = new ManageTasksForm();
             this.Close();
-            MN.Show();
         }
 
         private void HandleException(Exception ex)

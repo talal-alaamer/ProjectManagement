@@ -102,7 +102,7 @@
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(301, 342);
+            btnDelete.Location = new Point(153, 342);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(148, 34);
             btnDelete.TabIndex = 14;
@@ -116,9 +116,9 @@
             btnClose.FlatStyle = FlatStyle.Flat;
             btnClose.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnClose.ForeColor = Color.Black;
-            btnClose.Location = new Point(352, 29);
+            btnClose.Location = new Point(307, 342);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(95, 34);
+            btnClose.Size = new Size(142, 34);
             btnClose.TabIndex = 13;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = false;
@@ -130,7 +130,7 @@
             btnEdit.FlatStyle = FlatStyle.Flat;
             btnEdit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnEdit.ForeColor = Color.Black;
-            btnEdit.Location = new Point(158, 342);
+            btnEdit.Location = new Point(10, 342);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(137, 34);
             btnEdit.TabIndex = 12;
@@ -144,7 +144,7 @@
             btnAddComment.FlatStyle = FlatStyle.Flat;
             btnAddComment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAddComment.ForeColor = Color.White;
-            btnAddComment.Location = new Point(10, 342);
+            btnAddComment.Location = new Point(306, 29);
             btnAddComment.Name = "btnAddComment";
             btnAddComment.Size = new Size(142, 34);
             btnAddComment.TabIndex = 11;
