@@ -114,11 +114,24 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
 
         public async System.Threading.Tasks.Task OnGetAsync(string returnUrl = null)
         {
-            //Check if there are no roles and make them
+            //Seeding the roles if they don't exists
             if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole("User")).GetAwaiter().GetResult();
+
+                //Seeding an admin user
+                String email = "test_admin@gmail.com";
+                String password = "P@ssw0rd";
+                var user = CreateUser();
+                await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
+                var result = await _userManager.CreateAsync(user, password);
+                await _userManager.AddToRoleAsync(user, "Admin");
+                var myUser = new User();
+                myUser.Email = email;
+                _context.Users.Add(myUser);
+                _context.SaveChanges();
             }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -135,11 +148,10 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                //Create a new user object for the project management db
-                var myUser = new User();
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                //Set the email
+                //Create a new user object for the project management db and set the email
+                var myUser = new User();
                 myUser.Email = user.Email;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
