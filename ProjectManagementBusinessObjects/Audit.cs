@@ -12,8 +12,8 @@ namespace ProjectManagementBusinessObjects
         [Key]
         [Column("audit_id")]
         public int AuditId { get; set; }
-        [Column("timestamp")]
-        public byte[]? Timestamp { get; set; }
+        [Column("timestamp", TypeName = "datetime")]
+        public DateTime? Timestamp { get; set; }
         [Column("change_type")]
         [StringLength(50)]
         public string? ChangeType { get; set; }

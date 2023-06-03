@@ -6,40 +6,27 @@
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this comment?</h3>
 <div>
-    <h4>Comment</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CommentTimestamp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CommentTimestamp)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CommentText)
+            Comment
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CommentText)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Task)
+            Commenter
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Task.TaskId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CommentId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-route-id="@ViewBag.TaskId">Back to List</a>
     </form>
 </div>

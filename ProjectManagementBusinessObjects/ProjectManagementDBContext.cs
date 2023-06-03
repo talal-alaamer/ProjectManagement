@@ -33,7 +33,7 @@ namespace ProjectManagementBusinessObjects
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=JASSIM\\JASSIMSQL;Initial Catalog=ProjectManagement;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                optionsBuilder.UseSqlServer("Server=TALAL\\SQLEXPRESS;Database=ProjectManagement;Trusted_Connection=True;");
             }
         }
 
@@ -41,9 +41,7 @@ namespace ProjectManagementBusinessObjects
         {
             modelBuilder.Entity<Audit>(entity =>
             {
-                entity.Property(e => e.Timestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Audits)
@@ -54,9 +52,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.Property(e => e.CommentTimestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.CommentTimestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Comments)
@@ -72,9 +68,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Document>(entity =>
             {
-                entity.Property(e => e.UploadTime)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.UploadTime).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Documents)

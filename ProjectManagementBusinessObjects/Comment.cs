@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ProjectManagementBusinessObjects
 {
@@ -12,8 +13,8 @@ namespace ProjectManagementBusinessObjects
         [Key]
         [Column("comment_id")]
         public int CommentId { get; set; }
-        [Column("comment_timestamp")]
-        public byte[]? CommentTimestamp { get; set; }
+        [Column("comment_timestamp", TypeName = "datetime")]
+        public DateTime? CommentTimestamp { get; set; }
         [Column("comment_text")]
         [StringLength(1000)]
         public string? CommentText { get; set; }
@@ -28,5 +29,9 @@ namespace ProjectManagementBusinessObjects
         [ForeignKey("UserId")]
         [InverseProperty("Comments")]
         public virtual User? User { get; set; }
+        public override string? ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

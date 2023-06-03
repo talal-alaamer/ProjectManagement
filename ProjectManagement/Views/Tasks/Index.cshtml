@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ProjectManagementBusinessObjects.Task>
+﻿@using ProjectManagement.ViewModels;
+@model TaskIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,9 +10,25 @@
 @if (ViewBag.managerId == ViewBag.userId)
 {
     <p>
-        <a asp-action="Create" asp-route-id="@ViewBag.projectId">Create New</a>
+        <a asp-action="Create" asp-route-id="@ViewBag.projectId">Add Task</a>
     </p>
 }
+<div class="container p-3">
+    <div>
+        <div class="col-12">
+            <form asp-controller="Tasks" asp-action="Index" method="get">
+                <span>Task Name:</span>
+                <input class="ms-2" type="text" name="taskname" value="@Context.Request.Query["taskname"]" />
+                <span class="ms-5">Status:</span>
+                <select class="ms-2" asp-for="Status" asp-items="@Model.Statuses.Select(x=> new SelectListItem{Text = x.Status, Value= x.TaskStatusId.ToString()})">
+                    <option value="">All</option>
+                </select>
+                <input type="submit" value="Search" class="ms-5" />
+                <a asp-controller="Tasks" asp-action="Index"><input type="button" value="Clear" class="ms-2"></a>
+            </form>
+        </div>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -22,13 +39,13 @@
                 Assigned User
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Deadline)
+                Deadline
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Tasks) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TaskName)
@@ -41,6 +58,7 @@
             </td>
             <td>
                     <a class="mx-3" asp-action="Details" asp-route-id="@item.TaskId">Details</a>
+                    <a class="mx-3" asp-controller="Comments" asp-action="Index" asp-route-id="@item.TaskId">Comments</a>
                     @if (item.UserId == ViewBag.userId || item.Project.ProjectManagerId == ViewBag.userId)
                     {
                         <a class="mx-3" asp-action="UpdateStatus" asp-route-id="@item.TaskId">Update Status</a>
@@ -55,3 +73,4 @@
 }
     </tbody>
 </table>
+<a asp-controller="Projects" asp-action="Index">Back to Projects</a>
