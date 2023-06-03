@@ -10,6 +10,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorization to make sure the user is logged in
     [Authorize]
     public class NotificationsController : Controller
     {
@@ -25,6 +26,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Retrieve the notifications and order them from latest to oldest then display them in the view
                 int userId = Global.userId;
                 var projectManagementDBContext = _context.Notifications.Where(x => x.UserId == userId).OrderByDescending(x => x.NotificationId).Include(n => n.User);
                 return View(await projectManagementDBContext.ToListAsync());
@@ -37,15 +39,18 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Notifications/Details/5
+        //Passing the task id as parameter
         public async Task<IActionResult> Details(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Notifications == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the notification object and do some validation
                 var notification = await _context.Notifications
                     .Include(n => n.User)
                     .FirstOrDefaultAsync(m => m.NotificationId == id);
@@ -53,6 +58,8 @@ namespace ProjectManagement.Controllers
                 {
                     return NotFound();
                 }
+
+                //Update the notification status to read once opened and save the changes
                 if (notification.Status == "Unread")
                 {
                     notification.Status = "Read";

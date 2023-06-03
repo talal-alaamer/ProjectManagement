@@ -7,7 +7,7 @@
 <h1>Comments</h1>
 
 <p>
-    <a asp-action="Create" asp-route-id="@ViewBag.taskId">Add Comment</a>
+    <a class="btn btn-primary" asp-action="Create" asp-route-id="@ViewBag.taskId">Add Comment</a>
 </p>
 <table class="table">
     <thead>
@@ -46,4 +46,4 @@
 }
     </tbody>
 </table>
-<a asp-controller="Tasks" asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Tasks</a>
+<a class="btn btn-primary" asp-controller="Tasks" asp-action="Index" asp-route-id="@ViewBag.projectId">Back to Tasks</a>

@@ -114,10 +114,11 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
 
         public async System.Threading.Tasks.Task OnGetAsync(string returnUrl = null)
         {
+            //Check if there are no roles and make them
             if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
                 _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole("Employee")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("User")).GetAwaiter().GetResult();
             }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -134,16 +135,20 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                //Create a new user object for the project management db
                 var myUser = new User();
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                //Set the email
                 myUser.Email = user.Email;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    //Save the user object to the db
                     _context.Users.Add(myUser);
                     _context.SaveChanges();
+                    //Set the user id in the global class upon successful registration
                     Global.userId = myUser.UserId;
                     _logger.LogInformation("User created a new account with password.");
 

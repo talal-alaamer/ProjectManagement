@@ -118,6 +118,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    //Set the user id in the global class upon successful login
                     Global.userId = _context.Users.Where(x => x.Email == Input.Email).FirstOrDefault().UserId;
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

@@ -12,6 +12,7 @@ using ProjectManagementBusinessObjects;
 
 namespace ProjectManagement.Controllers
 {
+    //Authorization to make sure the user is logged in
     [Authorize]
     public class CommentsController : Controller
     {
@@ -25,14 +26,17 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Comments
+        //Passing the task id as parameter
         public async Task<IActionResult> Index(int id)
         {
             try
             {
+                //Get the user id, task id, and project id and add them to viewbags which are used throughout the index page
                 int userId = Global.userId;
                 ViewBag.userId = userId;
                 ViewBag.taskId = id;
                 ViewBag.projectId = _context.Tasks.Where(x => x.TaskId == id).FirstOrDefault().ProjectId;
+                //Retrieve the comments and order them from latest to oldest then display them in the view
                 var projectManagementDBContext = _context.Comments.Where(x => x.TaskId == id).OrderByDescending(x => x.CommentTimestamp).Include(c => c.Task).Include(c => c.User);
                 return View(await projectManagementDBContext.ToListAsync());
             }catch (Exception ex)
@@ -43,14 +47,16 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Comments/Create
+        //Passing the task id as parameter
         public IActionResult Create(int id)
         {
             try {
-            ViewData["TaskId"] = id;
-            int userId = Global.userId;
-            ViewBag.CommenterId = userId;
-            ViewBag.Commenter = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
-            return View();
+                //Viewbags that store the task id and the user id/username to use for the create form
+                ViewData["TaskId"] = id;
+                int userId = Global.userId;
+                ViewBag.CommenterId = userId;
+                ViewBag.Commenter = _context.Users.Where(x => x.UserId == userId).FirstOrDefault().Email;
+                return View();
             }
             catch (Exception ex)
             {
@@ -70,9 +76,11 @@ namespace ProjectManagement.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    //Add the comment to the database
                     _context.Add(comment);
                     await _context.SaveChangesAsync();
 
+                    //Audit the changes
                     Audit audit = new Audit();
                     audit.ChangeType = "Create";
                     audit.TableName = "Comments";
@@ -82,6 +90,7 @@ namespace ProjectManagement.Controllers
                     _context.Add(audit);
                     _context.SaveChanges();
 
+                    //Create a notification for the user responsible of the task
                     var task = _context.Tasks.Where(x=>x.TaskId == comment.TaskId).FirstOrDefault();
                     Notification notification = new Notification();
                     notification.Title = "You have a new comment";
@@ -90,8 +99,10 @@ namespace ProjectManagement.Controllers
                     notification.UserId = task.UserId;
                     _context.Add(notification);
                     _context.SaveChanges();
+
                     return RedirectToAction(nameof(Index), new { id = comment.TaskId });
                 }
+                //Viewbags that store the task id and the user id/username to use for the create form
                 ViewData["TaskId"] = comment.TaskId;
                 int userId = Global.userId;
                 ViewBag.CommenterId = userId;
@@ -105,20 +116,24 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Comments/Edit/5
+        //Passing the task id as parameter
         public async Task<IActionResult> Edit(int? id)
         {
             try
             {
+                //Validation
                 if (id == null || _context.Comments == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the comment and do some validation
                 var comment = await _context.Comments.FindAsync(id);
                 if (comment == null)
                 {
                     return NotFound();
                 }
+                //Viewbags that store the task id and the user id/username to use for the edit form
                 ViewData["TaskId"] = comment.TaskId;
                 int userId = Global.userId;
                 ViewBag.CommenterId = userId;
@@ -141,6 +156,7 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Validation
                 if (id != comment.CommentId)
                 {
                     return NotFound();
@@ -150,16 +166,23 @@ namespace ProjectManagement.Controllers
                 {
                     try
                     {
-                        //var oldComment = await _context.Comments.FindAsync(id);
+                        //Create a new db context to fetch the old comment
+                        ProjectManagementDBContext dBContext = new ProjectManagementDBContext();
+
+                        //Creating an old comment object to get the comment values before updating
+                        var oldComment = await dBContext.Comments.FindAsync(id);
+
+                        //Audit the changes
                         Audit audit = new Audit();
                         audit.ChangeType = "Edit";
                         audit.TableName = "Comments";
                         audit.RecordId = comment.CommentId;
-                        //audit.OldValue = oldComment.ToString();
+                        audit.OldValue = oldComment.ToString();
                         audit.UserId = Global.userId;
                         audit.CurrentValue = comment.ToString();
                         _context.Add(audit);
 
+                        //Save the comment
                         _context.Update(comment);
                         await _context.SaveChangesAsync();
                     }
@@ -176,6 +199,7 @@ namespace ProjectManagement.Controllers
                     }
                     return RedirectToAction(nameof(Index), new { id = comment.TaskId });
                 }
+                //Viewbags that store the task id and the user id/username to use for the edit form
                 ViewData["TaskId"] = comment.TaskId;
                 int userId = Global.userId;
                 ViewBag.CommenterId = userId;
@@ -190,16 +214,21 @@ namespace ProjectManagement.Controllers
         }
 
         // GET: Comments/Delete/5
+        //Passing the task id as parameter
         public async Task<IActionResult> Delete(int? id)
         {
             try
             {
+                //Store the task id in a viewbag to use in the delete form
                 ViewBag.TaskId = _context.Comments.Where(x => x.CommentId == id).FirstOrDefault().TaskId;
+
+                //Validation
                 if (id == null || _context.Comments == null)
                 {
                     return NotFound();
                 }
 
+                //Retrieve the comment and do some validation
                 var comment = await _context.Comments
                     .Include(c => c.Task)
                     .Include(c => c.User)
@@ -225,12 +254,16 @@ namespace ProjectManagement.Controllers
         {
             try
             {
+                //Get the task id of the comment
                 int taskId = Convert.ToInt32(_context.Comments.Where(x => x.CommentId == id).FirstOrDefault().TaskId);
+                //Validation then retrieving the comment
                 if (_context.Comments == null)
                 {
                     return Problem("Entity set 'ProjectManagementDBContext.Comments'  is null.");
                 }
                 var comment = await _context.Comments.FindAsync(id);
+
+                //Auditing the changes
                 Audit audit = new Audit();
                 audit.OldValue = comment.ToString();
                 audit.ChangeType = "Delete";
@@ -240,6 +273,7 @@ namespace ProjectManagement.Controllers
                 _context.Audits.Add(audit);
                 _context.SaveChanges();
 
+                //Removing the comment from the database and saving
                 if (comment != null)
                 {
                     _context.Comments.Remove(comment);
