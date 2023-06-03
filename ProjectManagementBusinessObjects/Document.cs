@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ProjectManagementBusinessObjects
 {
@@ -15,10 +16,9 @@ namespace ProjectManagementBusinessObjects
         [Column("document_name")]
         [StringLength(100)]
         public string? DocumentName { get; set; }
-        [Column("upload_time")]
-        public byte[]? UploadTime { get; set; }
+        [Column("upload_time", TypeName = "datetime")]
+        public DateTime? UploadTime { get; set; }
         [Column("path")]
-        [StringLength(1000)]
         public string? Path { get; set; }
         [Column("type_id")]
         public int? TypeId { get; set; }
@@ -36,5 +36,9 @@ namespace ProjectManagementBusinessObjects
         [ForeignKey("UserId")]
         [InverseProperty("Documents")]
         public virtual User? User { get; set; }
+        public override string? ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

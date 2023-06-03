@@ -24,27 +24,43 @@ namespace ProjectManagement.Controllers
         // GET: Logs
         public async Task<IActionResult> Index()
         {
-            var projectManagementDBContext = _context.Logs.Include(l => l.User);
-            return View(await projectManagementDBContext.ToListAsync());
+            try
+            {
+                var projectManagementDBContext = _context.Logs.OrderByDescending(x=>x.Timestamp).Include(l => l.User);
+                return View(await projectManagementDBContext.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                Global.LogException(ex, Global.userId);
+                return View();
+            }
         }
 
         // GET: Logs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Logs == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.Logs == null)
+                {
+                    return NotFound();
+                }
 
-            var log = await _context.Logs
-                .Include(l => l.User)
-                .FirstOrDefaultAsync(m => m.LogId == id);
-            if (log == null)
+                var log = await _context.Logs
+                    .Include(l => l.User)
+                    .FirstOrDefaultAsync(m => m.LogId == id);
+                if (log == null)
+                {
+                    return NotFound();
+                }
+
+                return View(log);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-
-            return View(log);
         }
 
     }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Audit Trail</h1>
 
 <table class="table">
     <thead>
@@ -13,19 +13,7 @@
                 @Html.DisplayNameFor(model => model.Timestamp)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ChangeType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TableName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecordId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OldValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrentValue)
+                Change Type
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.User)
@@ -43,19 +31,7 @@
                 @Html.DisplayFor(modelItem => item.ChangeType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TableName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecordId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OldValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.AuditId">Details</a>

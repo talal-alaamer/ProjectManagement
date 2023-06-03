@@ -12,12 +12,12 @@ namespace ProjectManagementBusinessObjects
         [Key]
         [Column("notification_id")]
         public int NotificationId { get; set; }
+        [Column("title")]
+        [StringLength(50)]
+        public string? Title { get; set; }
         [Column("message")]
         [StringLength(500)]
         public string? Message { get; set; }
-        [Column("type")]
-        [StringLength(50)]
-        public string? Type { get; set; }
         [Column("status")]
         [StringLength(50)]
         public string? Status { get; set; }

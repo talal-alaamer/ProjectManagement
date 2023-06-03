@@ -144,6 +144,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 {
                     _context.Users.Add(myUser);
                     _context.SaveChanges();
+                    Global.userId = myUser.UserId;
                     _logger.LogInformation("User created a new account with password.");
 
                     if(Input.Role == null || Input.Role == "0")
