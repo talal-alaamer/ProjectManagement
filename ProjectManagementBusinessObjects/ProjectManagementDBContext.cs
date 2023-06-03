@@ -41,9 +41,7 @@ namespace ProjectManagementBusinessObjects
         {
             modelBuilder.Entity<Audit>(entity =>
             {
-                entity.Property(e => e.Timestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Audits)
@@ -54,9 +52,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.Property(e => e.CommentTimestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.CommentTimestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Comments)
@@ -72,9 +68,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Document>(entity =>
             {
-                entity.Property(e => e.UploadTime)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.UploadTime).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Documents)
@@ -95,9 +89,7 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Log>(entity =>
             {
-                entity.Property(e => e.Timestamp)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Logs)
@@ -137,6 +129,8 @@ namespace ProjectManagementBusinessObjects
 
             modelBuilder.Entity<Task>(entity =>
             {
+                entity.Property(e => e.AssignDate).HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ProjectId)

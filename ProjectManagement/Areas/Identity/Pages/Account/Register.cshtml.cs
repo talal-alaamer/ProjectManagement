@@ -144,6 +144,7 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                 {
                     _context.Users.Add(myUser);
                     _context.SaveChanges();
+                    Global.userId = myUser.UserId;
                     _logger.LogInformation("User created a new account with password.");
 
                     if(Input.Role == null || Input.Role == "0")
@@ -182,7 +183,10 @@ namespace ProjectManagement.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            Input = new InputModel()
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem { Text = i, Value = i })
+            };
             // If we got this far, something failed, redisplay form
             return Page();
         }

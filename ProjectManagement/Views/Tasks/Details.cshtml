@@ -11,7 +11,7 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TaskName)
+            Task Name
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TaskName)
@@ -23,7 +23,7 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssignDate)
+            Assign Date
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.AssignDate)
@@ -38,23 +38,22 @@
             @Html.DisplayNameFor(model => model.Project)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Project.ProjectId)
+            @Html.DisplayFor(model => model.Project.ProjectName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status.TaskStatusId)
+            @Html.DisplayFor(model => model.Status.Status)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
+            Assigned User
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.TaskId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-route-id="@Model?.ProjectId">Back to List</a>
 </div>

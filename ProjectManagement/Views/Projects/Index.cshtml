@@ -4,22 +4,46 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Projects</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Project</a>
 </p>
+<div class="container p-3">
+    <div>
+        <div class="col-12">
+            <form asp-controller="Projects" asp-action="Index" method="get">
+                <span>Project Name:</span>
+                <input class="ms-2" type="text" name="projectname" value="@Context.Request.Query["projectname"]" />
+                <span class="ms-5"></span>
+                <span class="ms-5">Status:</span>
+                
+                <input class="ms-2" type="radio" name="manager" value="0" checked>
+                <label>All</label>
+                
+                <input class="ms-4" type="radio" name="manager" value="1">
+                <label>Managed by me</label>
+                
+                <input class="ms-4" type="radio" name="manager" value="2">
+                <label>Not managed by me</label>
+                <span class="ms-4"></span>
+                <input type="submit" value="Search" class="ms-5" />
+                <a asp-controller="Projects" asp-action="Index"><input type="button" value="Clear" class="ms-2"></a>
+            </form>
+        </div>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectName)
+                Project Name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectManager)
+                Project Manager
             </th>
             <th></th>
         </tr>
@@ -37,16 +61,15 @@
                 @Html.DisplayFor(modelItem => item.ProjectManager.Email)
             </td>
             <td>
+                    <a class="mx-3" asp-action="Dashboard" asp-route-id="@item.ProjectId">Dashboard</a>
+                    <a class="mx-3" asp-controller="Tasks" asp-action="Index" asp-route-id="@item.ProjectId">Tasks</a>
+                    <a class="mx-3" asp-controller="ProjectMembers" asp-action="Index" asp-route-id="@item.ProjectId">Members</a>
                     @if (item.ProjectManagerId == ViewBag.userId)
                     {
-                        <a class="mx-2" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+                        <a class="mx-3" asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a>
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
                     }
-                    <a class="mx-2" asp-action="Details" asp-route-id="@item.ProjectId">Details</a>
-                    @if (item.ProjectManagerId == ViewBag.userId)
-                    {
-                        <a class="mx-2" asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
-                    }
-                    <a class="mx-2" asp-controller="Tasks" asp-action="Index" asp-route-id="@item.ProjectId">View Tasks</a>
+                    
             </td>
         </tr>
 }

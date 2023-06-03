@@ -1,56 +1,63 @@
 ﻿@model ProjectManagementBusinessObjects.Task
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "UpdateStatus";
 }
 
-<h1>Create</h1>
+<h1>Update Status</h1>
 
 <h4>Task</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="UpdateStatus">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TaskId" />
             <div class="form-group">
-                <label asp-for="TaskName" class="control-label"></label>
-                <input required asp-for="TaskName" class="form-control" />
+                <label asp-for="TaskName" class="control-label">Task Name</label>
+                <input readonly asp-for="TaskName" class="form-control" />
                 <span asp-validation-for="TaskName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input required asp-for="Description" class="form-control" />
+                <input readonly asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Deadline" class="control-label"></label>
-                <input required asp-for="Deadline" class="form-control" />
+                <input readonly asp-for="Deadline" class="form-control" />
                 <span asp-validation-for="Deadline" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StatusId" class="control-label">Status</label>
-                <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
+                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectId" class="control-label">Project</label>
-                <input required readonly class="form-control" value="@ViewBag.ProjectName">
+                <input readonly class="form-control" value="@ViewBag.ProjectName">
                 <input hidden asp-for="ProjectId" class="form-control" value="@ViewBag.ProjectId">
+                <span asp-validation-for="ProjectId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label">Assigned User</label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <input readonly class="form-control" value="@ViewBag.Email">
+                <input hidden asp-for="UserId" class="form-control" value="@ViewBag.UserId">
+                <span asp-validation-for="UserId" class="text-danger"></span>
             </div><br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" asp-route-id="@ViewBag.projectId">Back to List</a>
+    <a asp-action="Index" asp-route-id="@Model.ProjectId">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

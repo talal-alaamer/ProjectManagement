@@ -35,7 +35,7 @@ namespace ProjectForms
             identityContext = new IdentityContext();
             this.context = new ProjectManagementDBContext();
 
-
+            // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -60,10 +60,9 @@ namespace ProjectForms
                     MessageBox.Show("Please enter your password");
                     return;
                 }
-                var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
+                var signInResults = await VerifyUserNamePassword(email, password);
                 if (signInResults == true)
                 {
-
                     ProjectManager PM = new ProjectManager();
                     PM.Show();
                     this.Hide();
@@ -76,19 +75,8 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
                 MessageBox.Show($"An error occurred: {ex.Message}");
-                /*int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-                */
+                
             }
         }
 
@@ -135,8 +123,5 @@ namespace ProjectForms
             services.AddLogging();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
-
-
-
     }
 }

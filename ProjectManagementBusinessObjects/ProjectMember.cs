@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ProjectManagementBusinessObjects
 {
@@ -23,5 +24,9 @@ namespace ProjectManagementBusinessObjects
         [ForeignKey("UserId")]
         [InverseProperty("ProjectMembers")]
         public virtual User? User { get; set; }
+        public override string? ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

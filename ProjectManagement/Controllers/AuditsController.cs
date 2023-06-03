@@ -23,27 +23,43 @@ namespace ProjectManagement.Controllers
         // GET: Audits
         public async Task<IActionResult> Index()
         {
-            var projectManagementDBContext = _context.Audits.Include(a => a.User);
-            return View(await projectManagementDBContext.ToListAsync());
+            try
+            {
+                var projectManagementDBContext = _context.Audits.OrderByDescending(x=>x.Timestamp).Include(a => a.User);
+                return View(await projectManagementDBContext.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                Global.LogException(ex, Global.userId);
+                return View();
+            }
         }
 
         // GET: Audits/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Audits == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null || _context.Audits == null)
+                {
+                    return NotFound();
+                }
 
-            var audit = await _context.Audits
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.AuditId == id);
-            if (audit == null)
+                var audit = await _context.Audits
+                    .Include(a => a.User)
+                    .FirstOrDefaultAsync(m => m.AuditId == id);
+                if (audit == null)
+                {
+                    return NotFound();
+                }
+
+                return View(audit);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                Global.LogException(ex, Global.userId);
+                return View();
             }
-
-            return View(audit);
         }
 
     }

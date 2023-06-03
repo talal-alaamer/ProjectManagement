@@ -4,19 +4,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Members</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (ViewBag.managerId == ViewBag.userId)
+{
+    <p>
+        <a asp-action="Create" asp-route-id="@ViewBag.projectId">Add Member</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
+                Current Members
             </th>
             <th></th>
         </tr>
@@ -25,17 +25,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Project.ProjectId)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProjectMemberId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProjectMemberId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProjectMemberId">Delete</a>
-            </td>
+                @if (item.Project.ProjectManagerId == ViewBag.userId)
+                {
+                    <td>
+                        <a class="mx-3" asp-action="Delete" asp-route-id="@item.ProjectMemberId">Remove Member</a>
+                    </td>
+                }
         </tr>
 }
     </tbody>
 </table>
+<a asp-controller="Projects" asp-action="Index">Back to Projects</a>

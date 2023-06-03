@@ -6,16 +6,17 @@ using ProjectManagementBusinessObjects;
 using ProjectForms;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
+
 namespace ProjectForms
 {
     public partial class ProjectManager : Form
     {
-        ProjectManagementDBContext context;
+        ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
         public ProjectManager()
         {
             InitializeComponent();
-            context = new ProjectManagementDBContext();
+            context = new ProjectManagementBusinessObjects.ProjectManagementDBContext();
 
             // making the form open up in the center and not allowing the user to resize the forms
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -24,27 +25,30 @@ namespace ProjectForms
 
         private void ProjectManager_Load(object sender, EventArgs e)
         {
-            RefreshDataGridView();
+           RefreshDataGridView();
 
         }
 
         private void RefreshDataGridView()
         {
             int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            // Retrieve projects where the user is either the project manager or a member
             var projects = context.Projects
-    .Where(p => p.ProjectManagerId == userid || p.ProjectMembers.Any(pm => pm.UserId == userid))
-    .Select(p => new
-    {
-        Project_ID = p.ProjectId,
-        Project_Name = p.ProjectName,
-        Description = p.Description,
-        ManagerID = p.ProjectManagerId
-    })
-    .ToList();
+                                   .Where(p => p.ProjectManagerId == userid || p.ProjectMembers.Any(pm => pm.UserId == userid))
+                                   .Select(p => new
+                                             {
+                                             Project_ID = p.ProjectId,
+                                             Project_Name = p.ProjectName,
+                                             Description = p.Description,
+                                             ManagerID = p.ProjectManagerId
+                                             })
+                                             .ToList();
 
             dgvProjects.DataSource = projects;
+
             if (txtFilter.Text != "")
             {
+                // Filter projects based on the specified Project_ID
                 dgvProjects.DataSource = context.Projects.Select(p => new
                 {
                     Project_ID = p.ProjectId,
@@ -71,7 +75,7 @@ namespace ProjectForms
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
 
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
             try
             {
                 if (dgvProjects.SelectedCells.Count > 0)
@@ -117,13 +121,10 @@ namespace ProjectForms
         private void btnDeleteProject_Click(object sender, EventArgs e)
         {
             var selecteduserID = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
-
-
             int selectedRow = dgvProjects.SelectedCells[0].RowIndex;
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
-
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
 
             try
             {
@@ -133,19 +134,30 @@ namespace ProjectForms
                     if (selecteduserID == managerID)
                     {
                         int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
-                        Global.SelectedProject = context.Projects.Include(p => p.Tasks).FirstOrDefault(i => i.ProjectId == selectedPid);
+                        Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
 
                         if (Global.SelectedProject != null)
                         {
                             DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                             if (result == DialogResult.Yes)
                             {
-                                // Delete all associated tasks
-                                context.Tasks.RemoveRange(Global.SelectedProject.Tasks);
-
-                                // Delete the project
+                                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+                               
+                                var auditLog = new Audit
+                                {
+                                    ChangeType = "Delete",
+                                    TableName = "Project",
+                                    RecordId = selectedPid,
+                                    OldValue = GetProjectValues(Global.SelectedProject),
+                                    UserId = userid,
+                                };
+                                // Delete the project and save changes to the database and audit the deletion
+                                
+                                context.Set<Audit>().Add(auditLog);
                                 context.Projects.Remove(Global.SelectedProject);
-
+                                // Delete all associated tasks explicitly
+                                var selectedTasks = context.Tasks.Where(i => i.ProjectId == selectedPid);
+                                context.Tasks.RemoveRange(selectedTasks);
                                 // Save changes to the database
                                 context.SaveChanges();
 
@@ -156,10 +168,7 @@ namespace ProjectForms
                                 MessageBox.Show("No Project has been deleted.");
                             }
                         }
-                        else
-                        {
-                            MessageBox.Show("Please select a project.");
-                        }
+                        
                     }
                     else
                     {
@@ -179,14 +188,6 @@ namespace ProjectForms
 
         }
 
-
-
-
-
-
-
-
-
         private void btnAddMember_Click(object sender, EventArgs e)
         {
 
@@ -197,7 +198,7 @@ namespace ProjectForms
             DataGridViewCell fourthColumnCell = dgvProjects.Rows[selectedRow].Cells[3]; // 4th column index is 3
 
             // Access the value in the 4th column
-            string managerID = fourthColumnCell.Value?.ToString();
+            string? managerID = fourthColumnCell.Value?.ToString();
             try
             {
 
@@ -333,6 +334,11 @@ namespace ProjectForms
             {
                 MessageBox.Show($"No user found: {ex.Message}");
             }
+        }
+        //method to get the details of a project
+        private string GetProjectValues(Project project)
+        {
+            return $"ProjectId: {project.ProjectId}, ProjectName: {project.ProjectName}, Description: {project.Description}";
         }
     }
 }

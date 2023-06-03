@@ -15,11 +15,11 @@ namespace ProjectForms
 {
     public partial class EditProjectsForm : Form
     {
-        private ProjectManagementDBContext context;
+        private ProjectManagementBusinessObjects.ProjectManagementDBContext context;
 
 
 
-        public EditProjectsForm(ProjectManagementDBContext context)
+        public EditProjectsForm(ProjectManagementBusinessObjects.ProjectManagementDBContext context)
         {
             InitializeComponent();
             this.context = context;
@@ -39,10 +39,21 @@ namespace ProjectForms
                     MessageBox.Show("Please Do not leave the project name and description empty.");
                     return;
                 }
-                // Update the project details and members in the database\
-
+                // Update the project details and members in the database and add there changes to the audit table
+                var oldvalue = GetProjectValues(Global.SelectedProject);
+                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 Global.SelectedProject.ProjectName = txtProjectName.Text;
                 Global.SelectedProject.Description = txtDescription.Text;
+                var auditLog = new Audit
+                {
+                    ChangeType = "Edit",
+                    TableName = "Tasks",
+                    RecordId = Global.SelectedProject.ProjectId,
+                    CurrentValue = GetProjectValues(Global.SelectedProject),
+                    OldValue = oldvalue,
+                    UserId = userid,
+                };
+                context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.SaveChanges();
 
                 this.DialogResult = DialogResult.OK;
@@ -52,34 +63,16 @@ namespace ProjectForms
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the authentication process and log them
-                MessageBox.Show($"An error occurred: {ex.Message}");
-                int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
-                if (userid != 0)
-                {
-                    LoggingService logger = new LoggingService(context);
-                    logger.LogException(ex, userid);
-                }
-                else
-                {
-                    MessageBox.Show($"No user found: {ex.Message}");
-                }
-
-
-
+                HandleException(ex);
             }
 
         }
-
-
-
 
         private void ManageProjectsForm_Load(object sender, EventArgs e)
         {
             // Display the project details and members in the text boxes and DataGridView
             txtProjectName.Text = Global.SelectedProject.ProjectName;
             txtDescription.Text = Global.SelectedProject.Description;
-
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -87,6 +80,29 @@ namespace ProjectForms
             this.Close();
             ProjectManager PM = new ProjectManager();
             PM.Show();
+        }
+
+        private void HandleException(Exception ex)
+        {
+            // Handle any exceptions that may occur during the authentication process and log them
+            MessageBox.Show($"An error occurred: {ex.Message}");
+
+            int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+            if (userId != 0)
+            {
+                LoggingService logger = new LoggingService(context);
+                logger.LogException(ex, userId);
+            }
+            else
+            {
+                MessageBox.Show($"No user found: {ex.Message}");
+            }
+        }
+
+        //method to get the details of a project
+        private string GetProjectValues(Project project)
+        {
+            return $"ProjectId: {project.ProjectId}, ProjectName: {project.ProjectName}, Description: {project.Description}";
         }
     }
 }
