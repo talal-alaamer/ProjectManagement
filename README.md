@@ -11,7 +11,7 @@
 - Clone the repository.
 - Run the two SQL scripts found in the “Credentials & Scripts” folder on SSMS.
 - Change the connection string to your database connection string in these destinations:
-1 ProjectManagement\appsettings.json
-2 ProjectManagementBusinessObjects\ProjectManagementDBContext.cs
-3 ProjectManagement\Areas\Identity\Data\IdentityContext.cs
+-- ProjectManagement\appsettings.json
+-- ProjectManagementBusinessObjects\ProjectManagementDBContext.cs
+-- ProjectManagement\Areas\Identity\Data\IdentityContext.cs
 -	Use the credentials provided in the “Credentials & Scripts” folder to access the website and see the sample data. Or optionally, register your own account.
