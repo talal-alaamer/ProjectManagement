@@ -143,11 +143,12 @@ namespace ProjectForms
                         //Select the project and validate it
                         int selectedPid = Convert.ToInt32(dgvProjects.SelectedCells[0].OwningRow.Cells[0].Value);
                         Global.SelectedProject = context.Projects.FirstOrDefault(i => i.ProjectId == selectedPid);
+                        
 
                         if (Global.SelectedProject != null)
                         {
                             //Show a popup for deletion
-                            DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            DialogResult result = MessageBox.Show("Are you sure you want to delete the selected project? make sure you delete all associated tasks and project members before deleteing a project or you will get an error!", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                             if (result == DialogResult.Yes)
                             {
                                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
@@ -161,15 +162,9 @@ namespace ProjectForms
                                     OldValue = GetProjectValues(Global.SelectedProject),
                                     UserId = userid,
                                 };
-
-                                //Delete the project and save changes to the database and audit the deletion
                                 context.Set<Audit>().Add(auditLog);
+                                //Delete the project and save changes to the database and audit the deletion
                                 context.Projects.Remove(Global.SelectedProject);
-
-                                //Delete all associated tasks explicitly
-                                var selectedTasks = context.Tasks.Where(i => i.ProjectId == selectedPid);
-                                context.Tasks.RemoveRange(selectedTasks);
-
                                 //Save changes to the database and refresh the dgv
                                 context.SaveChanges();
                                 RefreshDataGridView();

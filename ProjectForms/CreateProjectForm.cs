@@ -30,7 +30,7 @@ namespace ProjectForms
         {
             try
             {
-                //Retrieve the user id and validate it
+                //Retrieve the user id and v
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {

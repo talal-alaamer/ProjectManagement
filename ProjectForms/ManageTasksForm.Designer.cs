@@ -98,7 +98,7 @@
             label4.BackColor = Color.FromArgb(0, 0, 64);
             label4.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point);
             label4.ForeColor = Color.Transparent;
-            label4.Location = new Point(326, 35);
+            label4.Location = new Point(356, 37);
             label4.Name = "label4";
             label4.Size = new Size(301, 45);
             label4.TabIndex = 12;
@@ -109,7 +109,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ScrollBar;
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(838, 104);
+            label3.Location = new Point(889, 104);
             label3.Name = "label3";
             label3.Size = new Size(80, 15);
             label3.TabIndex = 16;
