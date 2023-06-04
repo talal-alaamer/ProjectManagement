@@ -17,12 +17,10 @@ namespace ProjectForms
             context = dbContext;
         }
 
+        //Function to log exceptions to the database
         public void LogException(Exception exception, int userId)
         {
             // Log the exception
-
-
-            // Save the exception details to the "Log" table
             var log = new Log
             {
                 Source = exception.Source,
@@ -30,6 +28,7 @@ namespace ProjectForms
                 UserId = userId
             };
 
+            //Save the exception details to the "Log" table
             context.Logs.Add(log);
             context.SaveChanges();
         }

@@ -37,7 +37,7 @@
             label2 = new Label();
             label5 = new Label();
             txtDescription = new RichTextBox();
-            button1 = new Button();
+            btnCreate = new Button();
             btnCancel = new Button();
             groupBox1 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -139,19 +139,19 @@
             txtDescription.TabIndex = 17;
             txtDescription.Text = "";
             // 
-            // button1
+            // btnCreate
             // 
-            button1.BackColor = Color.FromArgb(0, 0, 64);
-            button1.FlatStyle = FlatStyle.Popup;
-            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.ForeColor = Color.Transparent;
-            button1.Location = new Point(49, 273);
-            button1.Name = "button1";
-            button1.Size = new Size(114, 35);
-            button1.TabIndex = 18;
-            button1.Text = "Create";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
+            btnCreate.BackColor = Color.FromArgb(0, 0, 64);
+            btnCreate.FlatStyle = FlatStyle.Popup;
+            btnCreate.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnCreate.ForeColor = Color.Transparent;
+            btnCreate.Location = new Point(49, 273);
+            btnCreate.Name = "btnCreate";
+            btnCreate.Size = new Size(114, 35);
+            btnCreate.TabIndex = 18;
+            btnCreate.Text = "Create";
+            btnCreate.UseVisualStyleBackColor = false;
+            btnCreate.Click += btnCreate_Click;
             // 
             // btnCancel
             // 
@@ -171,7 +171,7 @@
             // 
             groupBox1.Controls.Add(btnCancel);
             groupBox1.Controls.Add(txtProjectName);
-            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(btnCreate);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(txtDescription);
@@ -216,7 +216,7 @@
         private Label label2;
         private Label label5;
         private RichTextBox txtDescription;
-        private Button button1;
+        private Button btnCreate;
         private Button btnCancel;
         private GroupBox groupBox1;
     }

@@ -36,6 +36,8 @@ namespace ProjectForms
             LoadProjectMembers();
 
         }
+
+        //Function to populate the ddl with the users
         private void LoadUsers()
         {
 
@@ -46,6 +48,7 @@ namespace ProjectForms
 
         }
 
+        //Function to populate the data grid view with the project members
         private void LoadProjectMembers()
         {
             // Retrieve the project members for the selected project from the database
@@ -67,6 +70,7 @@ namespace ProjectForms
         {
             try
             {
+                //Retrieve the user id and validate it
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (ddlMembers.SelectedItem == null)
                 {
@@ -90,6 +94,8 @@ namespace ProjectForms
                     UserId = selectedUser.UserId,
                     ProjectId = Global.SelectedProject.ProjectId
                 };
+                
+                //Audit the changes
                 var auditLog = new Audit
                 {
                     ChangeType = "Create",
@@ -116,8 +122,6 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-
-
             // Close the form or dialog without making any changes
             DialogResult = DialogResult.Cancel;
             Close();
@@ -129,16 +133,19 @@ namespace ProjectForms
         {
             try
             {
+                //Retrieve the project member
                 int memberId = Convert.ToInt32(dgvMembers.SelectedCells[0].OwningRow.Cells[0].Value);
                 ProjectMember Member = context.ProjectMembers.Find(memberId);
 
-
+                //Display a confirm popup
                 if (Member != null)
                 {
                     DialogResult result = MessageBox.Show("Are you sure you want to remove this member?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
                         int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
+
+                        //Audit the changes
                         var auditLog = new Audit
                         {
                             ChangeType = "Delete",
@@ -147,8 +154,8 @@ namespace ProjectForms
                             OldValue = GetProjectMemberValues(Member),
                             UserId = userid,
                         };
-                        // Delete the project and save changes to the database and audit the deletion
 
+                        // Delete the project and save changes to the database and audit the deletion
                         context.Set<Audit>().Add(auditLog);
                         context.ProjectMembers.Remove(Member);
                         context.SaveChanges();

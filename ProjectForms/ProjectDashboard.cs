@@ -33,25 +33,24 @@ namespace ProjectForms
         {
             LoadProjectTasks();
             DisplayStatistics();
-
             txtProjectID.Text = Global.SelectedProject.ProjectId.ToString();
             txtProjectName.Text = Global.SelectedProject.ProjectName.ToString();
 
 
         }
 
+        //Function to retrieve the project and its tasks
         private void LoadProjectTasks()
         {
-
             try
             {
-                // Retrieve all tasks related to the selected project from the database
+                //Retrieve all tasks related to the selected project from the database
                 var allTasks = context.Tasks
                     .Include(t => t.Status)
                     .Where(t => t.ProjectId == Global.SelectedProject.ProjectId)
                     .ToList();
 
-                // Filter the tasks based on the project's task status
+                //Filter the tasks based on the project's task status
                 projectTasks = allTasks
                     .Where(t => t.Status != null)
                     .ToList();
@@ -62,30 +61,27 @@ namespace ProjectForms
             }
         }
 
-
-
-
+        //Function to display the dashboard stats
         private void DisplayStatistics()
         {
-
             try
             {
-                // Calculate and display the statistics based on the project tasks
+                //Calculate and display the statistics based on the project tasks
 
-                // Number of tasks completed
+                //Number of tasks completed
                 int tasksCompleted = projectTasks.Count(t => t.Status.Status == "Completed");
                 lblCompletedTasks.Text = tasksCompleted.ToString();
 
-                // Number of tasks in progress (excluding completed and overdue tasks)
-                int tasksInProgress = projectTasks.Count(t => t.Status.Status == "Ongoin");
+                //Number of tasks in progress (excluding completed and overdue tasks)
+                int tasksInProgress = projectTasks.Count(t => t.Status.Status == "Ongoing");
                 lblPendingTasks.Text = tasksInProgress.ToString();
 
-                // Number of tasks overdue
+                //Number of tasks overdue
                 DateTime today = DateTime.Today;
                 int overdueTasks = projectTasks.Count(t => t.Deadline < today && t.Status.Status != "Completed");
                 lblOverdueTasks.Text = overdueTasks.ToString();
 
-                // Number of tasks not started
+                //Number of tasks not started
                 int tasksNotStarted = projectTasks.Count(t => t.Status.Status == "Not started");
                 lblNotStarted.Text = tasksNotStarted.ToString();
             }
@@ -97,7 +93,7 @@ namespace ProjectForms
 
         private void HandleException(Exception ex)
         {
-            // Handle any exceptions that may occur during the authentication process and log them
+            //Handle any exceptions that may occur during the authentication process and log them
             MessageBox.Show($"An error occurred: {ex.Message}");
 
             int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);

@@ -34,12 +34,14 @@ namespace ProjectForms
         {
             try
             {
+                //Validation for empty fields
                 if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {
                     MessageBox.Show("Please Do not leave the project name and description empty.");
                     return;
                 }
-                // Update the project details and members in the database and add there changes to the audit table
+
+                // Update the project details and members in the database and add the changes to the audit table
                 var oldvalue = GetProjectValues(Global.SelectedProject);
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 Global.SelectedProject.ProjectName = txtProjectName.Text;
@@ -53,9 +55,10 @@ namespace ProjectForms
                     OldValue = oldvalue,
                     UserId = userid,
                 };
+
+                //Save the changes to the database and hide the form
                 context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.SaveChanges();
-
                 this.DialogResult = DialogResult.OK;
                 this.Close();
                 ProjectManager PM = new ProjectManager();
@@ -77,6 +80,7 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            //Close the form
             this.Close();
             ProjectManager PM = new ProjectManager();
             PM.Show();

@@ -49,6 +49,7 @@ namespace ProjectForms
                 string email = txtEmail.Text;
                 string password = txtPassword.Text;
 
+                //Validation for inputs
                 if (string.IsNullOrEmpty(email))
                 {
                     MessageBox.Show("Please enter your email");
@@ -60,7 +61,11 @@ namespace ProjectForms
                     MessageBox.Show("Please enter your password");
                     return;
                 }
+
+                //Verify the credentials
                 var signInResults = await VerifyUserNamePassword(email, password);
+
+                //Redirect to the home page if the credentials are valid
                 if (signInResults == true)
                 {
                     ProjectManager PM = new ProjectManager();
@@ -80,28 +85,26 @@ namespace ProjectForms
             }
         }
 
+        //Toggle visibility of the password field
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
         }
 
-
+        //Function to verify the credentials
         public async Task<bool> VerifyUserNamePassword(string userName, string password)
         {
             var services = new ServiceCollection();
             ConfigureServices(services);
-            //IServiceProvider serviceProvider;
             serviceProvider = services.BuildServiceProvider();
             var userManager = serviceProvider.GetRequiredService<UserManager<Users>>();
             var founduser = await userManager.FindByEmailAsync(txtEmail.Text);
-
             if (founduser != null)
             {
                 var passCheck = await userManager.CheckPasswordAsync(founduser, password) == true;
-
                 if (passCheck)
                 {
-                    //save into global class
+                    //Save into global class
                     Global.SelectedUser = founduser;
                 }
                 return passCheck;
@@ -109,17 +112,18 @@ namespace ProjectForms
             return false;
         }
 
+        //Function to configure the identity services
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<IdentityContext>();
 
-            // Register UserManager & RoleManager
+            //Register UserManager & RoleManager
             services.AddIdentity<Users, IdentityRole>()
                .AddEntityFrameworkStores<IdentityContext>()
                .AddDefaultTokenProviders();
 
-            // UserManager & RoleManager require logging and HttpContext dependencies
+            //UserManager & RoleManager require logging and HttpContext dependencies
             services.AddLogging();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
