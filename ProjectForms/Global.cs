@@ -10,6 +10,7 @@ namespace ProjectForms
 {
     public static class Global
     {
+        //Global class to store the current user and current project so that it can be accessed from anywhere
         public static Users SelectedUser;
 
         public static Project SelectedProject;

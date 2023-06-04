@@ -49,6 +49,7 @@ namespace ProjectForms
         {
             try
             {
+                //Validation for input fields
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (string.IsNullOrWhiteSpace(txtTaskName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {
@@ -69,6 +70,8 @@ namespace ProjectForms
                         ProjectId = Global.SelectedProject.ProjectId,
 
                     };
+
+                    //Audit the changes
                     var auditLog = new Audit
                     {
                         ChangeType = "Create",
@@ -79,18 +82,18 @@ namespace ProjectForms
                         UserId = userid,
                     };
 
-                    // Save the new task to the database and audit the creation
+                    //Save the new task to the database and audit the creation
                     context.Tasks.Add(newTask);
                     context.Set<Audit>().Add(auditLog);
                     context.SaveChanges();
 
-                    // Show a success message to the user
+                    //Show a success message to the user
                     MessageBox.Show("Task created successfully!");
 
-                    // Clear the input fields
+                    //Clear the input fields
                     ClearFields();
 
-                    // Refresh the DataGridView to show the updated task list
+                    //Refresh the DataGridView to show the updated task list
                     LoadTasks();
 
 
@@ -102,11 +105,12 @@ namespace ProjectForms
             }
         }
 
+        //Function to refresh the data grid view
         private void LoadTasks()
         {
             try
             {
-                // Load and display the tasks for the selected project
+                //Load and display the tasks for the selected project
                 var tasks = context.Tasks
                     .Where(t => t.ProjectId == Global.SelectedProject.ProjectId).Select(i => new
                     {
@@ -127,6 +131,7 @@ namespace ProjectForms
             }
         }
 
+        //Clear the text fields
         private void ClearFields()
         {
             txtTaskName.Text = string.Empty;
@@ -137,7 +142,7 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            // Close the form or dialog without making any changes
+            //Close the form or dialog without making any changes
             DialogResult = DialogResult.Cancel;
             Close();
             ProjectManager PM = new ProjectManager();
@@ -148,6 +153,7 @@ namespace ProjectForms
         {
             try
             {
+                //Retrieve the selected task and validate it
                 if (dgvTasks.SelectedCells.Count > 0)
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
@@ -155,7 +161,7 @@ namespace ProjectForms
 
                     if (selectedTask != null)
                     {
-
+                        //Open the task edit form
                         EditTasksForm ET = new EditTasksForm(context, selectedTask);
                         ET.ShowDialog();
                     }
@@ -179,6 +185,7 @@ namespace ProjectForms
         {
             try
             {
+                //Retrieve the task and validate it
                 if (dgvTasks.SelectedCells.Count > 0)
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
@@ -187,14 +194,18 @@ namespace ProjectForms
 
                     if (selectedTask != null)
                     {
+                        //Display popup message
                         DialogResult result = MessageBox.Show("Are you sure you want to delete the selected task?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (result == DialogResult.Yes)
                         {
+                            //Remove the comments of the task
                             var selectedComment = context.Comments.FirstOrDefault(p => p.TaskId == selectedTaskid);
                             if (selectedComment != null)
                             {
                                 context.Comments.RemoveRange(selectedComment);
                             }
+                            
+                            //Audit the changes
                             var auditLog = new Audit
                             {
                                 ChangeType = "Delete",
@@ -203,7 +214,8 @@ namespace ProjectForms
                                 OldValue = GetTaskValues(selectedTask),
                                 UserId = userid,
                             };
-                            // Delete the project and save changes to the database and audit the deletion
+
+                            //Delete the task and save changes to the database and audit the deletion
                             context.Tasks.Remove(selectedTask);
                             context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                             context.SaveChanges();
@@ -235,6 +247,7 @@ namespace ProjectForms
         {
             try
             {
+                //Get the selected task and validate it
                 if (dgvTasks.SelectedCells.Count > 0)
                 {
                     int selectedTaskid = Convert.ToInt32(dgvTasks.SelectedCells[0].OwningRow.Cells[0].Value);
@@ -242,7 +255,7 @@ namespace ProjectForms
 
                     if (selectedTask != null)
                     {
-
+                        //Open the comments form
                         CommentManagementForm CM = new CommentManagementForm(selectedTask);
                         this.Close();
                         CM.Show();
@@ -261,7 +274,7 @@ namespace ProjectForms
 
         private void HandleException(Exception ex)
         {
-            // Handle any exceptions that may occur during the authentication process and log them
+            //Handle any exceptions that may occur during the authentication process and log them
             MessageBox.Show($"An error occurred: {ex.Message}");
 
             int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
@@ -277,7 +290,7 @@ namespace ProjectForms
         }
 
 
-        // Helper method to get the values of the task
+        //Helper method to get the values of the task
         private string GetTaskValues(ProjectManagementBusinessObjects.Task task)
         {
             return $"TaskId: {task.TaskId}, TaskName: {task.TaskName}, Description: {task.Description}, Status: {task.StatusId}";

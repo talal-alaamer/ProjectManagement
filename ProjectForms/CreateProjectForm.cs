@@ -26,10 +26,11 @@ namespace ProjectForms
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnCreate_Click(object sender, EventArgs e)
         {
             try
             {
+                //Retrieve the user id and validate it
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 if (string.IsNullOrWhiteSpace(txtProjectName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text))
                 {
@@ -37,12 +38,15 @@ namespace ProjectForms
                     return;
                 }
 
+                //Create a new project
                 Project project = new Project
                 {
                     ProjectName = txtProjectName.Text.Trim(),
                     Description = txtDescription.Text.Trim(),
                     ProjectManagerId = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault().UserId
                 };
+
+                //Audit the changes
                 var auditLog = new Audit
                 {
                     ChangeType = "Create",
@@ -52,10 +56,13 @@ namespace ProjectForms
                     OldValue = null,
                     UserId = userid,
                 };
+
+                //Save the changes to the database
                 context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.Projects.Add(project);
                 context.SaveChanges();
 
+                //Display a success message and hide the form
                 if (MessageBox.Show("Project created successfully!", "Success", MessageBoxButtons.OK) == DialogResult.OK)
                 {
                     this.Close();
@@ -71,11 +78,13 @@ namespace ProjectForms
             }
         }
 
+        //Add the manager email to the textbox
         private void frmCreateProject_Load(object sender, EventArgs e)
         {
             txtProjectManagerId.Text = context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId.ToString();
         }
 
+        //Hide the form and go back
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

@@ -31,7 +31,7 @@ namespace ProjectForms
 
         private void EditTasksForm_Load(object sender, EventArgs e)
         {
-            //populating the form contents with the values of the selected task
+            //Populating the form contents with the values of the selected task
             txtTaskName.Text = selectedTask.TaskName;
             txtDescription.Text = selectedTask.Description;
             ddlStatus.DataSource = context.TaskStatuses.ToList();
@@ -46,12 +46,13 @@ namespace ProjectForms
         {
             try
             {
+                //Validation for empty fields
                 if (string.IsNullOrWhiteSpace(txtTaskName.Text) || string.IsNullOrWhiteSpace(txtDescription.Text) || ddlStatus.SelectedValue == null)
                 {
                     MessageBox.Show("Please Do not leave the project name and description empty.");
                     return;
                 }
-                // saving the new varibles to the task object and auditing the changes and adding them to the audit table
+                //Saving the new varibles to the task object and auditing the changes and adding them to the audit table
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
                 var oldvalue = GetTaskValues(selectedTask);
                 selectedTask.TaskName = txtTaskName.Text;
@@ -68,6 +69,8 @@ namespace ProjectForms
                     OldValue = oldvalue,
                     UserId = userid,
                 };
+
+                //Saving the changes to the database, showing a success message and hiding the form
                 context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.SaveChanges();
 
@@ -82,13 +85,13 @@ namespace ProjectForms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            // closing this form and oppening ManageTasks form
+            //Closing this form and oppening ManageTasks form
             this.Close();
         }
 
         private void HandleException(Exception ex)
         {
-            // Handle any exceptions that may occur during the authentication process and log them
+            //Handle any exceptions that may occur during the authentication process and log them
             MessageBox.Show($"An error occurred: {ex.Message}");
 
             int userId = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
@@ -103,7 +106,7 @@ namespace ProjectForms
             }
         }
 
-        // Helper method to get the values of the task
+        //Helper method to get the values of the task
         private string GetTaskValues(ProjectManagementBusinessObjects.Task task)
         {
             return $"TaskId: {task.TaskId}, TaskName: {task.TaskName}, Description: {task.Description}, Status: {task.StatusId}";

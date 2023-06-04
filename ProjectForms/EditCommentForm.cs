@@ -27,6 +27,7 @@ namespace ProjectForms
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
+        //Populate the input field
         private void EditCommentForm_Load(object sender, EventArgs e)
         {
             txtComment.Text = comment.CommentText;
@@ -36,17 +37,21 @@ namespace ProjectForms
         {
             try
             {
+                //Validation for empty comments
                 if (string.IsNullOrWhiteSpace(txtComment.Text))
                 {
                     MessageBox.Show("Please Do not leave comment text field empty");
                     return;
                 }
 
+                //Store the old value
                 var oldvalue = GetCommentValues(comment);
                 int userid = Convert.ToInt32(context.Users.Where(x => x.Email == Global.SelectedUser.Email).FirstOrDefault()?.UserId);
 
+                //Update the comment
                 comment.CommentText = txtComment.Text;
 
+                //Audit the changes
                 var auditLog = new Audit
                 {
                     ChangeType = "Edit",
@@ -57,24 +62,22 @@ namespace ProjectForms
                     UserId = userid,
                 };
 
+                //Save the changes to the database
                 context.Set<ProjectManagementBusinessObjects.Audit>().Add(auditLog);
                 context.SaveChanges();
 
+                //Display a success message and hide the form
                 MessageBox.Show("Success!");
                 this.Close();
             }
-            catch (Exception ex) 
-            { 
-              HandleException(ex);
+            catch (Exception ex)
+            {
+                HandleException(ex);
             }
         }
 
+        //Close the form
         private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnClose_Click_1(object sender, EventArgs e)
         {
             this.Close();
         }
